@@ -1,0 +1,423 @@
+{\rtf1\ansi\ansicpg936\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fnil\fcharset134 STHeitiSC-Light;\f1\fnil\fcharset0 Menlo-Regular;\f2\fswiss\fcharset0 Helvetica;
+\f3\fnil\fcharset134 STSongti-SC-Regular;\f4\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red251\green2\blue7;\red33\green255\blue255;\red170\green12\blue145;
+\red15\green116\blue1;\red63\green110\blue116;\red38\green71\blue75;\red28\green2\blue207;\red196\green26\blue22;
+\red100\green56\blue32;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww17280\viewh13140\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs84 \cf0 \'b5\'da\'ce\'e5\'cc\'ec \'b7\'c9\'bb\'fa\'b4\'f3\'d5\'bd\
+\'c9\'cf\'ce\'e7\'a3\'ba\'c5\'f6\'d7\'b2\'b4\'a6\'c0\'ed\
+\
+\pard\pardeftab720
+
+\f1\fs40 \cf2 ====== \'a0
+\f0 \'c5\'f6\'d7\'b2\'b4\'a6\'c0\'ed
+\f1  ======
+\fs28 \cf0 \
+\
+\pard\pardeftab720
+
+\f2\i\b\fs40 \cf3 \ul \ulc3 6.04 \'a0\'97 \'97 \'a0\'97 \'a0 \'a0GamePlayScene.h \'97 \'97 \'a0\'97\'a0
+\i0\b0\fs28 \cf0 \ulnone \
+\
+\pard\pardeftab720
+
+\f1 \cf4 private\cf0 :\cf4 \
+\cf0 \'a0 \'a0\'a0\cf5 // 
+\f3 \'d3\'ce\'cf\'b7\'cb\'f9\'b5\'c3\'b7\'d6\'ca\'fd
+\f1 \
+\cf0 \'a0 \'a0 \cf4 int\cf0  score;\
+\'a0 \'a0\'a0\
+\
+\cf4 public\cf0 :\cf4 \
+\pard\pardeftab720
+
+\f2 \cf0 \'a0 \'a0 \'a0\
+\pard\pardeftab720
+
+\f1 \cf0 \'a0 \'a0\cf5 // 
+\f3 \'b2\'e3\'bd\'f8\'c8\'eb\'ca\'b1\'b5\'f7\'d3\'c3\'b5\'c4\'b7\'bd\'b7\'a8\'a3\'ac\'c5\'f6\'d7\'b2\'ca\'c2\'bc\'fe\'bc\'e0\'cc\'fd\'d4\'da\'b4\'cb\'b4\'a6\'c9\'f9\'c3\'f7\'b6\'a8\'d2\'e5
+\f4 \
+
+\f1 \cf0 \'a0 \'a0 \cf4 virtual\cf0  \cf4 void\cf0  onEnter();\
+\'a0 \'a0 \cf5 // 
+\f3 \'b3\'f5\'ca\'bc\'bb\'af\'b7\'d6\'ca\'fd
+\f1 \
+\cf0 \'a0 \'a0 \cf4 void\cf0  initScoreLabel();\
+\'a0 \'a0 \cf5 // 
+\f3 \'b7\'c9\'bb\'fa\'b1\'ac\'d5\'a8\'b6\'af\'bb\'ad
+\f1 \
+\cf0 \'a0 \'a0 \cf4 void\cf0  explosionEfect(\cf6 cocos2d\cf0 ::\cf6 Vec2\cf0  vec, \cf4 int\cf0  tag);\
+\'a0 \'a0 \cf5 // 
+\f3 \'b7\'c9\'bb\'fa\'b1\'ac\'d5\'a8\'b6\'af\'bb\'ad\'b2\'a5\'b7\'c5\'cd\'ea\'d6\'ae\'ba\'f3\'b5\'c4\'bb\'d8\'b5\'f7\'ba\'af\'ca\'fd
+\f4 \
+
+\f1 \cf0 \'a0 \'a0 \cf4 void\cf0  explosionRemove(\cf6 Node\cf0  * sprite);\
+\'a0 \'a0 \cf5 // 
+\f3 \'cd\'a3\'d6\'b9\'cb\'f9\'d3\'d0\'b5\'c4\'b6\'a8\'ca\'b1\'c6\'f7
+\f4 \
+
+\f1 \cf0 \'a0 \'a0 \cf4 void\cf0  stopAllSchedule();\
+\'a0\'a0 \'a0\
+\'a0 \'a0 \cf5 // 
+\f3 \'d3\'ce\'cf\'b7\'bd\'e1\'ca\'f8\'c2\'df\'bc\'ad
+\f1 \
+\cf0 \'a0 \'a0 \cf4 void\cf0  gameOver();
+\f2 \'a0\'a0
+\f1 \
+\pard\pardeftab720
+
+\f2 \cf0 \
+\pard\pardeftab720
+
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f2\i\b\fs40 \cf3 \ul 6.05 \'a0 \'a0 GamePlayScene.cpp, initEnvironment \'a0\'97\'97\'97 \'a0
+\i0\b0\fs28 \cf0 \ulnone \
+\
+\'a0 \'a0\'a0
+\f1 \cf4 void\cf0  \cf6 GamePlayScene\cf0 ::initEnvironment()
+\f2 \
+\pard\pardeftab720
+
+\f1 \cf0 \{\
+\'a0 \'a0\'a0. . . . .\
+\'a0 \'a0\'a0\cf5 \
+\'a0 \'a0 // 
+\f3 \'b3\'f5\'ca\'bc\'bb\'af\'b7\'d6\'ca\'fd\'b1\'ea\'c7\'a9
+\f1 \
+\cf0 \'a0 \'a0 \cf7 initScoreLabel\cf0 ();\cf7 \
+\cf0 \}\
+\pard\pardeftab720
+
+\f2 \cf0 \
+\pard\pardeftab720
+
+\i\b\fs40 \cf3 6.06 \'a0 GamePlayScene.cpp, initScoreLabel \'a0\'97 \'97 \'a0\'97\'a0
+\i0\b0\fs28 \cf0 \
+\
+\pard\pardeftab720
+
+\f1 \cf4 void\cf0  \cf6 GamePlayScene\cf0 ::initScoreLabel()\
+\{\
+\'a0 \'a0 \cf5 // 
+\f3 \'b3\'f5\'ca\'bc\'bb\'af\'b7\'d6\'ca\'fd\'ce\'aa
+\f1  0\
+\cf0 \'a0 \'a0 \cf6 score\cf0  = \cf8 0\cf0 ;\
+\'a0\'a0 \'a0\
+\'a0 \'a0 \cf5 // 
+\f3 \'cc\'ed\'bc\'d3\'b7\'d6\'ca\'fd
+\f1 \
+\cf0 \'a0 \'a0 \cf5 //auto label = Label::createWithTTF("", "fonts/MarkerFelt.ttf", 24);\
+\cf0 \'a0 \'a0 \cf4 auto\cf0  label = \cf6 cocos2d\cf0 ::\cf6 Label\cf0 ::\cf7 createWithSystemFont\cf0 (\cf9 "
+\f3 \'b7\'d6\'ca\'fd
+\f1 :0"\cf0 , \cf9 "Arial"\cf0 , \cf8 24\cf0 );\
+\'a0 \'a0 label->\cf7 setTag\cf0 (\cf8 100\cf0 );\
+\'a0 \'a0 label->\cf7 setPosition\cf0 (\cf6 Vec2\cf0 (\cf8 0\cf0 , \cf6 visibleOrigin\cf0 .\cf6 y\cf0  + \cf6 visibleSize\cf0 .\cf6 height\cf0  -\cf6 \
+\cf0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 label->\cf7 getContentSize\cf0 ().\cf6 height\cf0 /\cf8 2\cf0 ));\
+\'a0 \'a0 label->\cf7 setHorizontalAlignment\cf0 (\cf6 TextHAlignment\cf0 ::\cf7 RIGHT\cf0 );\cf7 \
+\cf0 \'a0 \'a0 label->\cf7 setAnchorPoint\cf0 (\cf6 Vec2\cf0 (\cf8 0\cf0 , \cf8 0.5\cf0 ));\
+\'a0 \'a0 \cf4 this\cf0 ->\cf7 addChild\cf0 (label, \cf8 1\cf0 );\
+\}\
+\pard\pardeftab720
+
+\f2\i\b\fs40 \cf3 \
+6.07 \'a0 \'97 \'97 \'a0\'97 \'a0Collision Handling \'a0\'97 \'97 \'a0\'97\'a0
+\i0\b0\fs28 \cf0 \
+\
+\'a0 \'a0 \'a0 \'a0 \'a0 01. 
+\f0 \'b5\'b1\'c1\'bd\'b8\'f6\'bf\'c9\'d2\'d4\'bb\'a5\'cf\'e0\'c5\'f6\'d7\'b2\'b5\'c4\'ca\'b5\'cc\'e5\'c5\'f6\'d7\'b2\'ba\'f3\'a3\'ac\'b4\'a5\'b7\'a2
+\f2  onContactBegin 
+\f0 \'ca\'c2\'bc\'fe\'a3\'bb
+\f2 \
+\'a0 \'a0 \'a0 \'a0 \'a0 02. 
+\f0 \'c8\'bb\'ba\'f3\'cd\'a8\'b9\'fd\'b2\'b6\'d7\'bd\'b5\'c4\'b2\'ce\'ca\'fd
+\f2 PhysicsContact
+\f0 \'c0\'e0\'bb\'f1\'c8\'a1\'b5\'bd\'cf\'e0\'b9\'d8\'b5\'c4\'d0\'c5\'cf\'a2\'a3\'bb
+\f2 \
+\'a0 \'a0 \'a0 \'a0 \'a0 03. 
+\f0 \'c5\'f6\'d7\'b2\'d2\'bb\'b0\'e3\'ca\'c7\'c1\'bd\'b8\'f6\'ca\'b5\'cc\'e5\'bd\'f8\'d0\'d0\'c5\'f6\'d7\'b2\'b5\'c4\'a3\'ac\'ce\'d2\'c3\'c7\'bf\'c9\'d2\'d4\'cd\'a8\'b9\'fd
+\f2  contact.getShapeA()->getBody()->getNode();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 
+\f0 \'ba\'cd
+\f2  contact.getShapeA()->getBody()->getNode(); 
+\f0 \'c0\'b4\'bb\'f1\'c8\'a1\'c1\'bd\'b8\'f6\'c5\'f6\'d7\'b2\'b5\'c4\'ca\'b5\'cc\'e5\'a3\'bb
+\f2 \
+\'a0 \'a0 \'a0 \'a0 \'a0 04. 
+\f0 \'d2\'b2\'be\'cd\'ca\'c7\'d2\'bb\'b8\'f6\'bd\'da\'b5\'e3\'a3\'ac\'d3\'ce\'cf\'b7\'c0\'ef\'ca\'c7\'ce\'d2\'bb\'fa\'a1\'a2\'b5\'d0\'bb\'fa\'bb\'f2\'d7\'d3\'b5\'af\'be\'ab\'c1\'e9\'a3\'bb
+\f2 \
+\'a0 \'a0 \'a0 \'a0 \'a0 05. 
+\f0 \'d7\'ee\'ba\'f3\'be\'cd\'ca\'c7\'c5\'d0\'b6\'cf\'ca\'c7\'c4\'c4\'d6\'d6\'c5\'f6\'d7\'b2\'a3\'ac\'ca\'c7\'ce\'d2\'bb\'fa\'ba\'cd\'b5\'d0\'bb\'fa\'a3\'ac\'bb\'f2\'d5\'df\'ca\'c7\'b5\'d0\'bb\'fa\'ba\'cd\'d7\'d3\'b5\'af\'a3\'ac\'c8\'bb\'ba\'f3\'bd\'f8\'d0\'d0\'b2\'bb\'cd\'ac\'b5\'c4\'b4\'a6\'c0\'ed\'a1\'a3
+\f2 \
+\
+
+\i\b\fs40 \cf3 6.08 \'a0 \'97 \'97 \'a0\'97 \'a0GamePlayScene.cpp, onEnter \'97 \'a0\'97 \'a0\'97 \'a0\'a0
+\i0\b0\fs28 \cf0 \
+\
+\pard\pardeftab720
+
+\f1 \cf5 /* 
+\f3 \'b2\'e3\'bd\'f8\'c8\'eb\'b5\'c4\'ca\'b1\'ba\'f2\'bb\'e1\'b5\'f7\'d3\'c3\'b8\'c3\'ba\'af\'ca\'fd\'a3\'ac\'bd\'f8\'d0\'d0\'ce\'ef\'c0\'ed\'ca\'c0\'bd\'e7\'b5\'c4\'c5\'f6\'d7\'b2\'bc\'ec\'b2\'e2
+\f1  */
+\f4 \
+\pard\pardeftab720
+
+\f1 \cf4 void\cf0  \cf6 GamePlayScene\cf0 ::onEnter()\cf6 \
+\cf0 \{\
+\'a0 \'a0 \cf6 Layer\cf0 ::\cf7 onEnter\cf0 ();\
+\'a0 \'a0 \cf4 auto\cf0  listener = \cf6 EventListenerPhysicsContact\cf0 ::\cf7 create\cf0 ();\cf6 \
+\cf0 \'a0 \'a0 listener -> \cf6 onContactBegin\cf0  = [=](\cf6 PhysicsContact\cf0 & contact) \{\
+\'a0 \'a0 \'a0 \'a0 \cf4 auto\cf0  spriteA = (\cf6 Sprite\cf0  *)contact.\cf7 getShapeA\cf0 ()->\cf7 getBody\cf0 ()->\cf7 getNode\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \cf4 auto\cf0  spriteB = (\cf6 Sprite\cf0  *)contact.\cf7 getShapeB\cf0 ()->\cf7 getBody\cf0 ()->\cf7 getNode\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \cf4 int\cf0  tag1 = spriteA->\cf7 getTag\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \cf4 int\cf0  tag2 = spriteB->\cf7 getTag\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \cf6 Vec2\cf0  vec1 = spriteA->\cf7 getPosition\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \cf6 Vec2\cf0  vec2 = spriteB->\cf7 getPosition\cf0 ();\
+\'a0\'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'b5\'d0\'bb\'fa\'ba\'cd\'d7\'d3\'b5\'af\'c5\'f6\'d7\'b2\'c5\'f6\'d7\'b2
+\f1 \
+\cf0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'b5\'d0\'bb\'fa
+\f1  105 
+\f3 \'bb\'f2
+\f1  104
+\f3 \'a3\'ac\'d7\'d3\'b5\'af
+\f1  106
+\f3 \'a3\'ac\'ce\'d2\'bb\'fa
+\f1  103\
+\cf0 \'a0 \'a0 \'a0 \'a0 \cf4 if\cf0  (tag1 + tag2 == \cf8 210\cf0  || tag1 + tag2 == \cf8 211\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 SimpleAudioEngine\cf0 ::\cf7 getInstance\cf0 ()->\cf7 playEffect\cf0 (\cf9 "sounds/use_bomb.wav"\cf0 );\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'bc\'d3\'b7\'d6\'a3\'ac\'c8\'e7\'b9\'fb\'ca\'c7
+\f1  104 
+\f3 \'d4\'f2\'ca\'c7\'d0\'a1\'b5\'d0\'bb\'fa
+\f1  500 
+\f3 \'b7\'d6\'a3\'ac
+\f1 105 
+\f3 \'ca\'c7\'b4\'f3\'b5\'d0\'bb\'fa
+\f1  1000 
+\f3 \'b7\'d6
+\f1 \
+\cf0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 if\cf0  (tag1 == \cf8 104\cf0  || tag2 == \cf8 104\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 score\cf0  += \cf8 500\cf0 ;\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \} \cf4 else\cf0  \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 score\cf0  += \cf8 1000\cf0 ;\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 auto\cf0  scoreSpire = (\cf6 Label\cf0  *)\cf4 this\cf0 ->\cf7 getChildByTag\cf0 (\cf8 100\cf0 );\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 scoreSpire->\cf7 setString\cf0 (\cf6 String\cf0 ::\cf7 createWithFormat\cf0 (\cf9 "
+\f3 \'b7\'d6\'ca\'fd
+\f1 :%d"\cf0 , \cf6 score\cf0 )->\cf6 _string\cf0 );\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'c1\'a3\'d7\'d3\'cc\'d8\'d0\'a7
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 auto\cf0  *system = \cf6 ParticleSystemQuad\cf0 ::\cf7 create\cf0 (\cf9 "particle_texture.plist"\cf0 );\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 if\cf0  (tag1 == \cf8 104\cf0  || tag1 == \cf8 105\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'d2\'c6\'b3\'fd\'b5\'d0\'bb\'fa\'ba\'cd\'d7\'d3\'b5\'af
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 enemyList\cf0 .\cf7 eraseObject\cf0 (spriteA);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 bulletList\cf0 .\cf7 eraseObject\cf0 (spriteB);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 system->\cf7 setPosition\cf0 (vec1);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'c6\'f4\'b6\'af\'b6\'af\'bb\'ad
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 this\cf0 ->\cf7 explosionEfect\cf0 (vec1, tag1);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \} \cf4 else\cf0  \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 enemyList\cf0 .\cf7 eraseObject\cf0 (spriteB);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 bulletList\cf0 .\cf7 eraseObject\cf0 (spriteA);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'c6\'f4\'b6\'af\'b6\'af\'bb\'ad
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 this\cf0 ->\cf7 explosionEfect\cf0 (vec2, tag2);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 system->\cf7 setPosition\cf0 (vec2);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'c1\'a3\'d7\'d3\'cc\'d8\'d0\'a7\'bc\'d3\'c8\'eb\'b2\'e3\'d6\'d0
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 this\cf0 ->\cf7 addChild\cf0 (system);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 spriteA->\cf7 removeFromParent\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 spriteB->\cf7 removeFromParent\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'b5\'d0\'bb\'fa\'d3\'eb\'ce\'d2\'bb\'fa\'c5\'f6\'d7\'b2
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \} \cf4 else\cf0  \cf4 if\cf0  ((tag1+tag2) == \cf8 207\cf0  || (tag1+tag2) == \cf8 208\cf0 ) \{\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 SimpleAudioEngine\cf0 ::\cf7 getInstance\cf0 ()->\cf7 playEffect\cf0 (\cf9 "sounds/game_over.wav"\cf0 );\cf9 \
+\cf0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'d0\'de\'b8\'c4\'d3\'ce\'cf\'b7\'d7\'b4\'cc\'ac\'ce\'aa\'bd\'e1\'ca\'f8\'d7\'b4\'cc\'ac
+\f1  Game_State_Over\
+\cf0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 gameState\cf0  = \cf7 Game_State_Over\cf0 ;\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'cd\'a3\'d6\'b9\'cb\'f9\'d3\'d0\'b5\'c4\'b6\'a8\'ca\'b1\'c6\'f7
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf7 stopAllSchedule\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'d3\'ce\'cf\'b7\'bd\'e1\'ca\'f8\'c2\'df\'bc\'ad
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 if\cf0  (tag1 == \cf8 103\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 this\cf0 ->\cf7 explosionEfect\cf0 (vec2, tag2);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 this\cf0 ->\cf7 explosionEfect\cf0 (vec1, tag1);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \} \cf4 else\cf0  \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 this\cf0 ->\cf7 explosionEfect\cf0 (vec1, tag1);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 this\cf0 ->\cf7 explosionEfect\cf0 (vec2, tag2);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'ca\'b9\'d3\'c3
+\f1  UserDefault 
+\f3 \'b4\'e6\'b4\'a2\'d0\'a9\'d3\'c3\'bb\'a7\'ca\'fd\'be\'dd\'b7\'d6\'ca\'fd
+\f1 \
+\cf0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 UserDefault\cf0  *userDefault = \cf6 UserDefault\cf0 ::\cf7 getInstance\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 int\cf0  topScore = userDefault->\cf7 getIntegerForKey\cf0 (\cf9 "topScore"\cf0 );\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 if\cf0  (topScore < \cf6 score\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 userDefault->\cf7 setIntegerForKey\cf0 (\cf9 "topScore"\cf0 , \cf6 score\cf0 );\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \} \cf4 else\cf0  \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 userDefault->\cf7 setIntegerForKey\cf0 (\cf9 "topScore"\cf0 , topScore);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 userDefault->\cf7 setIntegerForKey\cf0 (\cf9 "currentScore"\cf0 , \cf6 score\cf0 );\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 spriteA->\cf7 removeFromParent\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 spriteB->\cf7 removeFromParent\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \} \cf4 else\cf0 \{ \}\
+\'a0 \'a0 \'a0 \'a0 \cf4 return\cf0  \cf4 true\cf0 ;\
+\'a0 \'a0 \};\
+\'a0 \'a0 \cf5 // 
+\f3 \'d7\'a2\'b2\'e1\'bc\'e0\'cc\'fd\'c6\'f7
+\f1 \
+\cf0 \'a0 \'a0 \cf6 EventDispatcher\cf0  *eventDispatcher = \cf6 Director\cf0 ::\cf7 getInstance\cf0 ()->\cf7 getEventDispatcher\cf0 ();\
+\'a0 \'a0 eventDispatcher->\cf7 addEventListenerWithSceneGraphPriority\cf0 (listener, \cf4 this\cf0 );\cf7 \
+\cf0 \}\
+\
+\pard\pardeftab720
+
+\f2\i\fs40 \cf3 \ul 6.09 \'a0GamePlayScene.cpp, stopAllSchedule
+\i0\fs28 \cf0 \ulnone \
+\
+\pard\pardeftab720
+
+\f1 \cf5 /* 
+\f3 \'cd\'a3\'d6\'b9\'cb\'f9\'d3\'d0\'b5\'c4\'b6\'a8\'ca\'b1\'c6\'f7
+\f1  */
+\f4 \
+\pard\pardeftab720
+
+\f1 \cf4 void\cf0  \cf6 GamePlayScene\cf0 ::stopAllSchedule()\
+\{\
+\'a0 \'a0 \cf4 this\cf0 ->\cf7 unscheduleAllSelectors\cf0 ();\cf7 \
+\cf0 \}\
+\pard\pardeftab720
+
+\f2 \cf0 \
+\
+\pard\pardeftab720
+
+\i\fs40 \cf3 \ul 6.10 \'a0GamePlayScene.cpp, explosionEfect
+\i0\fs28 \cf0 \ulnone \
+\
+\'a0 \'a0 \'a0
+\f1 \cf5 /* 
+\f3 \'b7\'c9\'bb\'fa\'b1\'ac\'d5\'a8\'b6\'af\'bb\'ad
+\f1  */
+\f2 \cf0 \
+\pard\pardeftab720
+
+\f1 \cf4 void\cf0  \cf6 GamePlayScene\cf0 ::explosionEfect(\cf6 Vec2\cf0  vec, \cf4 int\cf0  tag)\
+\{\
+\'a0 \'a0 \cf4 float\cf0  timeDelay = \cf8 0.1\cf0 ;\
+\'a0 \'a0 \cf6 Vector\cf0 <\cf6 SpriteFrame\cf0 *> animationframe;\
+\'a0 \'a0 \cf5 // 
+\f3 \'d0\'a1\'b5\'d0\'bb\'fa\'b6\'af\'bb\'ad\'d6\'a1
+\f1 \
+\cf0 \'a0 \'a0 \cf4 if\cf0  (tag == \cf8 104\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \cf4 for\cf0  (\cf4 int\cf0  i = \cf8 1\cf0 ; i < \cf8 5\cf0 ; i++) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 auto\cf0  string = \cf6 cocos2d\cf0 ::\cf6 __String\cf0 ::\cf7 createWithFormat\cf0 (\cf9 "enemy1_down%d.png"\cf0 , i);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 SpriteFrame\cf0  * sf=\cf6 SpriteFrame\cf0 ::\cf7 create\cf0 (string->\cf7 getCString\cf0 (),\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 Rect\cf0 (\cf8 0\cf0 , \cf8 0\cf0 , \cf8 57\cf0 , \cf8 43\cf0 ));\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 animationframe.\cf7 pushBack\cf0 (sf);\
+\'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \} \cf4 else\cf0  \cf4 if\cf0  (tag == \cf8 105\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \cf4 for\cf0 (\cf4 int\cf0  i = \cf8 1\cf0 ; i < \cf8 5\cf0 ; i++) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 auto\cf0  string = \cf6 cocos2d\cf0 ::\cf6 __String\cf0 ::\cf7 createWithFormat\cf0 (\cf9 "enemy2_down%d.png"\cf0 , i);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 SpriteFrame\cf0  * sf=\cf6 SpriteFrame\cf0 ::\cf7 create\cf0 (string->\cf7 getCString\cf0 (),\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 Rect\cf0 (\cf8 0\cf0 , \cf8 0\cf0 , \cf8 69\cf0 , \cf8 95\cf0 ));\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 animationframe.\cf7 pushBack\cf0 (sf);\
+\'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \} \cf4 else\cf0  \{\
+\'a0 \'a0 \'a0 \'a0 timeDelay = \cf8 0.5\cf0 ;\
+\'a0 \'a0 \'a0 \'a0 \cf4 for\cf0 (\cf4 int\cf0  i=\cf8 1\cf0 ;i<\cf8 5\cf0 ;i++) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 auto\cf0  string = \cf6 cocos2d\cf0 ::\cf6 __String\cf0 ::\cf7 createWithFormat\cf0 (\cf9 "hero_blowup_n%d.png"\cf0 , i);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 SpriteFrame\cf0  * sf = \cf6 SpriteFrame\cf0 ::\cf7 create\cf0 (string->\cf7 getCString\cf0 (),\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 Rect\cf0 (\cf8 0\cf0 , \cf8 0\cf0 , \cf8 102\cf0 , \cf8 126\cf0 ));\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 animationframe.\cf7 pushBack\cf0 (sf);\
+\'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \}\
+\'a0 \'a0 \cf6 Animation\cf0  * ani = \cf6 Animation\cf0 ::\cf7 createWithSpriteFrames\cf0 (animationframe, timeDelay);\
+\'a0 \'a0 \cf4 auto\cf0  blanksprite = \cf6 Sprite\cf0 ::\cf7 create\cf0 ();\
+\'a0 \'a0 blanksprite->\cf7 setTag\cf0 (tag);\
+\'a0 \'a0 \cf6 Action\cf0  *act = \cf6 Sequence\cf0 ::\cf7 create\cf0 (\cf6 Animate\cf0 ::\cf7 create\cf0 (ani),\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf6 CCCallFuncN\cf0 ::\cf7 create\cf0 (blanksprite, \cf10 callfuncN_selector\cf0 (\cf6 GamePlayScene\cf0 ::\cf7 explosionRemove\cf0 )),\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 NULL\cf0 );\
+\'a0 \'a0 \cf4 this\cf0 ->\cf7 addChild\cf0 (blanksprite);\
+\'a0 \'a0 blanksprite->\cf7 setPosition\cf0 (vec);\
+\'a0 \'a0 blanksprite->\cf7 runAction\cf0 (act);\
+\}\
+\pard\pardeftab720
+
+\f2\i\b\fs40 \cf3 \
+\pard\pardeftab720
+\cf3 \ul 6.11 \'a0GamePlayScene.cpp, explosionRemove
+\i0\b0\fs28 \cf0 \ulnone \
+\
+\pard\pardeftab720
+
+\f1 \cf5 /* 
+\f3 \'c9\'be\'b3\'fd\'b1\'ac\'d5\'a8\'b6\'af\'bb\'ad\'b1\'be\'c9\'ed
+\f1  */
+\f4 \
+\pard\pardeftab720
+
+\f1 \cf4 void\cf0  \cf6 GamePlayScene\cf0 ::explosionRemove(\cf6 Node\cf0  * sprite)\
+\{\
+\'a0 \'a0 sprite->\cf7 removeFromParentAndCleanup\cf0 (\cf4 true\cf0 );\cf7 \
+\cf0 \'a0 \'a0 \cf4 if\cf0  (sprite->\cf7 getTag\cf0 () == \cf8 103\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \cf6 SimpleAudioEngine\cf0 ::\cf7 getInstance\cf0 ()->\cf7 stopBackgroundMusic\cf0 (\cf9 "sounds/game_music.wav"\cf0 );\cf7 \
+\cf0 \'a0 \'a0 \'a0 \'a0 \cf5 // 
+\f3 \'d3\'ce\'cf\'b7\'bd\'e1\'ca\'f8
+\f1 \cf0 \
+\'a0 \'a0 \'a0 \'a0 \cf7 gameOver\cf0 ();\
+\'a0 \'a0 \}\
+\}\
+\
+\pard\pardeftab720
+
+\f2\i\b\fs40 \cf3 6.12 \'a0GamePlayScene.cpp, gameOver
+\i0\b0\fs28 \cf0 \
+\pard\pardeftab720
+
+\f1 \cf0 \
+\pard\pardeftab720
+\cf5 /* 
+\f3 \'d3\'ce\'cf\'b7\'bd\'e1\'ca\'f8
+\f1  */\
+\pard\pardeftab720
+\cf4 void\cf0  \cf6 GamePlayScene\cf0 ::gameOver()\
+\{\
+\'a0 \'a0\cf5 \'a0 \'a0 CCLOG(\cf9 "
+\f3 \'d3\'ce\'cf\'b7\'bd\'e1\'ca\'f8
+\f1 "\cf5 );\
+\cf0 \}\
+\
+\pard\pardeftab720
+
+\f0\fs86 \cf0 \'cf\'c2\'ce\'e7\'a3\'ba\'c8\'c3\'cb\'fb\'c3\'c7\'d7\'d4\'bc\'ba\'d0\'b4\'bd\'e1\'ca\'f8\'d2\'b3\'c3\'e6\
+\pard\pardeftab720
+
+\f1\fs28 \cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs84 \cf0 \
+}

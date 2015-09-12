@@ -1,0 +1,31 @@
+
+
+01. Compiling Error in Linux
+
+    1.01  cocos2d-x-3.2 Compiling Error on Linux
+
+          1.1.01  Description
+
+                  /Users/minggo/SourceCode/cocos2d-x/build/../cocos/./3d/CCBundleReader.cpp:94:23: error:
+                      return type of out-of-line definition of 'cocos2d::BundleReader::tell
+                      differs from that in the declaration
+                      ssize_t BundleReader::tell()
+                  /Users/minggo/SourceCode/cocos2d-x/build/../cocos/./3d/CCBundleReader.h:90:14: note: 
+                      previous declaration is here
+                      long int tell();
+
+          1.1.02  Solution
+
+                  vi /home/abraham/My_Project/MyGame/cocos2d/cocos/3d/CCBundleReader.h
+
+                  //long int tell();
+                  ssize_t tell();
+
+    1.02  cocos2d-2.2.5 Compiling Error on Linux
+
+          1.2.01  Description
+
+          1.2.02  Solution
+
+                  vi ./extensions/CocoStudio/Reader/WidgetReader/LabelReader/LabelReader.cpp
+                  Add: #include <algorithm>

@@ -1,0 +1,1252 @@
+
+/*
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Copyleft (C) 2009-2014
+ * COEO - China Open Education Organization
+ * "+++New Life+++" Team for Computer Science
+ * Free as in freedom. The Truth Will Free You.
+ * 张开自由的翅膀，真理要释放你。
+ * To teach the inexperienced the ropes 
+ * and give our young people a grasp on reality.
+ * 教导没有经验的得以丰富，给予青年人开启真理的钥匙。
+ * The old life is gone; a new life burgeons!
+ * 告别飘逝的过去，拥抱怒放的新生！
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * This file is available to you under a choice of one of two licenses.
+ *
+ * GPL
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
+ *
+ * THE FILE IS DISTRIBUTED AS-IS, WITHOUT WARRANTY OF ANY KIND, AND THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE
+ * ARE EXPRESSLY DISCLAIMED.
+ *
+ * See the GNU General Public License * for more details.
+ *
+ * http://www.opensource.org/licenses/gpl-license.html
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * 
+ * BSD
+ *
+ *  Alternatively you can redistribute this file under the terms of the
+ *  BSD license as stated below:
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *  3. The names of its contributors may not be used to endorse or promote
+ *     products derived from this software without specific prior written
+ *     permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ *  TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Description:
+ *     This file describe the Cocos2d programming.
+ *
+ * Original Date:
+ *     Aug-13-2014
+ *
+ * Modified Date:
+ *     Sep-09-2014
+ *
+ * Authors:
+ *     Yuhui    <abrahambenyu@gmail.com>
+ *
+ * Current Version:
+ *     0.1.5
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+00. Table of Contents
+
+    01. Introduction
+    02. New Project
+    03. Start a Complete Game
+    04. Adding Rotating Turret
+    05. Violent Monsters and More Hurdle
+    06. Conclusion
+    07. Homework
+    08. Traps and Pitfalls
+    09. Diligence
+
+
+01. Introduction
+
+    01. 目前已经有许多非常好的教程来教你如何使用 cocos2d-x 了；
+    02. 但关于 cocos2d-x-3.0 以后的资料非常少；
+    03. 同时很多人真正想要的是一个非常简单，但也是可以跑起来能玩的游戏；
+    04. 这个游戏包括怎么使用动画、碰撞检测和播放声音，这就够了，并不需要使用太多高级的特性。
+
+02. New Project
+
+    01. 打开一个 "终端"；
+    02. cd ~/Serving/Sources
+    03. ./setup.py
+    04. cocos new Ninjia -p org.openeducation.ninjia -l cpp -d ~/Serving/Sources/
+
+03. Start a Complete Game
+
+    3.01  Adding a Sprite
+
+          3.1.01  Copy Picture into Project
+
+                  01. 在我们增加一个精灵之前，我们需要一些图片；你可以自己去创建一些，或者使用原英文作者的
+                      夫人这个项目所创建的图片: a Player image, a Projectile image, and a Target image；
+                  02. 一旦你获得了这些图片，你就可以把它们用鼠标拖到 xcode 的 Resource 文件夹中去；
+                  03. 并且保证 "Copy items into destination group’s folder (if needed)" 勾上了。
+
+          3.1.02  Location Description
+
+                  01. 现在，我们拥有自己的图片了，我们先得计算一下，应该把 player 放在哪里；
+                  02. 请注意，cocos2d-x 坐标系的原点在屏幕的左下角，即（０，０）位置在左下角，这与一般的窗口坐标
+                      系统在左上角有所区别；
+                  03. x 方向往右是正，y 方向往上是正，由于项目是landscape（横版）模式，这就意味着右上角的坐标是 (960, 640);
+                  04. 还有需要注意的是，当我们设置一个对象的位置的时候，这个位置是相对于所加精灵的中心点来加的，因此，如果我们想让我们的 player 精灵与屏幕的左边界水平对齐，并且垂直居中的话，
+                      那么对于 x 轴：我们需要设置为 [player sprite's width] / 2，y 坐标设置为
+                      [window height] / 2。
+
+          3.1.03  Picture Descripiton
+          
+                  图 Description_Sprite_Location 更清楚的说明了精灵的位置。
+
+          3.1.04  New Class
+
+                  01. 左键点击 Ninjia 下的 Classes 下的 AppDelegate.cpp；
+                  02. 然后点击菜单的 File —> New —> File… —> iOS —> C and C++ —> C++ Class；
+                  03. Next —> Save As: GameLayer, Where (Classes), Targets (MyGame iOS) —> Create。
+
+          3.1.05  GameLayer.h
+
+                  #ifndef __Ninjia__GameLayer__
+                  #define __Ninjia__GameLayer__
+
+                  #include <iostream>
+                  
+                  #include "cocos2d.h"
+
+                  class GameLayer : public cocos2d::Layer
+                  {
+                  public:
+                      // there's no 'id' in cpp, so we recommend returning the class
+                      // instance pointer
+                      static cocos2d::Scene* createScene();
+
+                      // Here's a difference. Method 'init' in cocos2d-x returns bool,
+                      // instead of returning 'id' in cocos2d-iphone
+                      virtual bool init();
+    
+                      // a selector callback
+                      void menuCloseCallback(cocos2d::Ref* pSender);
+    
+                      // implement the "static create()" method manually
+                      CREATE_FUNC(GameLayer);
+                  };
+
+                  #endif /* defined(__Ninjia__GameLayer__) */
+
+          3.1.06  GameLayer.cpp
+
+                  下面先让我们的男主角先上场吧，他已经都迫不及待了！
+
+                  USING_NS_CC;
+
+                  Scene* GameLayer::createScene()
+                  {
+                      // 'scene' is an autorelease object
+                      auto scene = Scene::create();
+    
+                      // 'layer' is an autorelease object
+                      auto layer = GameLayer::create();
+
+                      // add layer as a child to scene
+                      scene->addChild(layer);
+
+                      // return the scene
+                      return scene;
+                  }
+
+                  /** on "init" you need to initialize your instance */
+                  bool GameLayer::init()
+                  {
+                      // 执行父类的 super() 方法
+                      if ( !Layer::init() ) {
+                          return false;
+                      }
+    
+                      Size visibleSize = Director::getInstance()->getVisibleSize();
+                      // 创建精灵，并填写它的矩形值
+                      auto player = Sprite::create("Player.png", Rect(0, 0, 27, 40));
+                      // 设置精灵的初始位置
+                      player->setPosition(Point(player->getContentSize().width / 2,
+                                                visibleSize.height / 2));
+                      // 把精灵加入到当前背景层中
+                      this->addChild(player, 0);
+
+                      return true;
+                  }
+
+          3.1.07  AppDelegate.cpp
+          
+                      #include "AppDelegate.h"
+                  (1) //#include "HelloWorldScene.h"
+
+                  (2) #include "GameLayer.h"
+
+                      USING_NS_CC;
+
+                      AppDelegate::AppDelegate() {
+
+                      }
+
+                      AppDelegate::~AppDelegate()
+                      {
+                      }
+
+                      bool AppDelegate::applicationDidFinishLaunching() {
+                          // initialize director
+                          auto director = Director::getInstance();
+                          auto glview = director->getOpenGLView();
+                          if(!glview) {
+                              glview = GLView::create("My Game");
+                              director->setOpenGLView(glview);
+                          }
+
+                          // turn on display FPS
+                          director->setDisplayStats(true);
+
+                          // set FPS. the default value is 1.0/60 if you don't call this
+                          director->setAnimationInterval(1.0 / 60);
+
+                          // create a scene. it's an autorelease object
+                  (3)     //auto scene = HelloWorld::createScene();
+                  (4)     auto scene = GameLayer::createScene();
+
+                          // run
+                          director->runWithScene(scene);
+
+                          return true;
+                      }
+
+          3.1.08  Building, Troubleshooting, Thinking
+          
+                  01. 编译并运行，你的精灵这时候应该出现在正确的位置上了；
+                  02. 但是，这个前景默认是黑的，对于这张忍者图片来说，白色的背景可能看起来更好一些；
+                  03. 在 Cocos2d-X 里面，有一种非常简单的方式来改变层的背景颜色，那就是使用 LayerColor类；
+                  04. 好，跟我来吧！点击 GameLayer.h，然后把 GameLayer 类继承声明改成下面这样：
+
+          3.1.09  Change Background Color
+
+                  3.1.9.01  GameLayer.h
+          
+                            //class GameLayer : public cocos2d::Layer
+                            class GameLayer : public cocos2d::LayerColor
+
+                  3.1.9.02  GameLayer.cpp
+
+                            //if ( !Layer::init() ) {
+                            //    return false;
+                            //}
+                            if ( !LayerColor::initWithColor(Color4B(255, 255, 255, 255)) ) {
+                                return false;
+                            }
+
+    3.02  Moving Target
+
+          3.2.01  Overture
+          
+                  01. 接下来，我们想增加一些目标怪物来与我们的忍者战斗；
+                  02. 为了使事情变得更加有趣，我想让这些目标可以移动--实际上这也并不是很难！
+                  03. 因此，让我们先在屏幕的右边靠外一点点创建一些目标，然后设置一个 action，并使之从右边移动到左边。
+
+          3.2.02  GameLayer.h
+
+                  //class GameLayer : public cocos2d::Layer
+                  class GameLayer : public cocos2d::LayerColor
+                  {
+                  public:
+                      // there's no 'id' in cpp, so we recommend returning the class instance pointer
+                      static cocos2d::Scene* createScene();
+
+                      // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+                      virtual bool init();
+
+                  (1) void addTarget();
+
+                  (2) void spriteMoveFinished(Node* sender);
+
+                  (3) void gameLogic(float dt);
+
+                      // a selector callback
+                      void menuCloseCallback(cocos2d::Ref* pSender);
+
+                      // implement the "static create()" method manually
+                      CREATE_FUNC(GameLayer);
+                  };
+
+          3.2.03  GameLayer.cpp - addTarget()
+
+                  void GameLayer::addTarget()
+                  {
+                      Sprite *target = Sprite::create("Target.png", Rect(0, 0, 27, 40));
+                      Size winSize = Director::getInstance()->getWinSize();
+
+                      // Determine where to spawn the target along the Y axis
+                      int minY = target->getContentSize().height/2;
+                      int maxY = winSize.height-minY;
+                      int rangeY = maxY-minY;
+                      int actualY = rand() % rangeY + minY;
+                      target->setPosition(Point(winSize.width+target->getContentSize().width/2, actualY));
+                      this->addChild(target);
+
+                      // Create the target slightly off-screen along the right edge,
+                      // and along a random position along the Y axis as calculated above
+                      int actualDuration = rand() % 2 + 2;
+                      FiniteTimeAction *actionMove = MoveTo::create(actualDuration, Point(0-target->getContentSize().width/2, actualY));
+
+                      //const std::function<void(Node*)> &func
+                      //FiniteTimeAction *actionMoveDone = CallFuncN::create(std::bind(&GameLayer::spriteMoveFinished, this, target));
+                      FiniteTimeAction *actionMoveDone = CallFuncN::create( [this](Node *sender)->void{ std::cout << "remove target" << std::endl; this->removeChild(sender); });
+    
+                      target->runAction(Sequence::create(actionMove,actionMoveDone, NULL));
+                  }
+
+
+          3.2.04  Explaination addTarget()
+
+
+                  3.2.4.01  rand()
+
+                            01. srand() 和 rand() 是 C 标准库函数；
+                            02. 这里已是 Cocos2d-X 3.0 的写法。
+
+                  3.2.4.02  MoveTo
+
+                            01. MoveTo，我们使用 MoveTo Action 让目标从屏幕右边一直往左移动，
+                                直到移出屏幕；
+                            02. 注意，这里我们可以指定这个过程要花费多长时间，这里使用了变化的时间
+                                间隔 2-4 秒。
+
+                  3.2.4.03  CallFuncN
+
+                            01. 它可以让你为某个执行此 Action 的对象指定一个回调函数；
+                            02. 我们指定的回调函数是：spriteMoveFinished---目前并没有，到后面会具体给；
+                            03. 最让人迷惑的是 actionMoveDone 的初始化，由于用了 C++11 的新特性，
+                                CallFuncN::create 的参数是：const std::function<void(Node*)> &func，
+                                std::bind 可以帮助我们生成这一参数；
+                            04. 这里用 CallFuncN 回调了 spriteMoveFinished 方法，我们需要在
+                                HelloWorldScene.h 里声明并在 GameLayer.cpp 里实现；
+                            05. 在调试时用 std::bind 这种方法一直报 Thread breakpoint 错误，后来我使用
+                                Lambda 表达式，lambda 表达式见后面 Conclusion 里的 "6.01  Lambda"。
+
+                  3.2.4.04  Sequence
+
+                            01. 它允许我们把一系列的 Action 组成一个 Action序列，并且这些 acton 可以按顺序
+                                执行；
+                            02. 一次执行完所有的 Action；
+                            03. 在上面的例子中，我们让对象首先执行 MoveTo，等 MoveTo 完成后，马上就会执行
+                                CallFuncN　Action。
+
+          3.2.05  GameLayer.cpp - spriteMoveFinished()
+
+                  接下来, 为 CallFuncN　Action 增加一个回调函数；
+                  我们可以在 addTarget() 前面增加下面的代码：
+
+                  void GameLayer::spriteMoveFinished(Node* sender)
+                  {
+                      Sprite* sprite = (Sprite *)sender;
+                      this->removeChild(sprite);
+                  }
+
+                  01. 这个函数的目的是当精灵飞出屏幕之后，需要移除出当前的 scene；
+                  02. 这个非常重要，这样的话我们就不会因为屏幕外面积累太多没有用到的精灵而造成内存泄漏；
+                  03. 注意，其实还有其它更好的方式来解决这个问题，比如使用一组可以重用的精灵等；
+                  04. 不过，对于初学者来说，我们在里，尽量简单化。
+
+          3.2.06  GameLayer.cpp - init()
+
+                  01. 在我们继续之前，还有最后一件事没做，我们需要调用这个方法来创建我们的目标怪物；
+                  02. 而且，为了使事情变得更加有趣，我们会随着时间连续不断地发射一些怪物出来；
+                  03. 我们可以使用 Cocos2d-X 的定时 scheduler，并指定一个回调函数来完成此功能；
+                  04. 一秒钟调用一次回调函数就可以了；
+                  05. 因此，在 init 函数返回之前，我们再加入下面的代码：
+    
+                  this->schedule(schedule_selector(GameLayer::gameLogic), 1.0f);
+                  
+          3.2.07  GameLayer.cpp - gameLogic()
+
+                  然后简单的实现一下这个回调函数，如下：
+
+                  void GameLayer::gameLogic(float dt)
+                  {
+                      this->addTarget();
+                  }
+
+          3.2.08  Building, Troubleshooting, Thinking
+
+                  现在编译再运行一下工作，你可以看到怪物在屏幕上面 Happy 地移动了！
+
+    3.03  Launch Darts
+
+          3.3.01  Overture
+
+                  01. 在这里，我们的忍者需要有一些行动了--因此让我们增加一些射击吧！这里有许许多多
+                      实现射击的方式，但是在这个游戏里面，我们想让用户触摸一下屏幕，然后飞盘就会从
+                      player 开始，沿着你触摸的位置发射出来；
+                  02. 我们使用 MoveTo　Action 来实现这个功能；但是，为了使用这个功能，我们必须首先
+                      来做一些数学题；
+                  03. 这是因为，MoveTo 需要我们为飞盘指定目的地；但是我们又不能使用触摸点，因为触摸点
+                      仅仅代表飞盘飞的方向，我们实际上想让子弹超过触摸点，然后飞出屏幕之外去。
+
+          3.3.02  Picture Descripiton
+
+                  01. 图 Launch_Frisbee.png 解释了这个问题；
+                  02. 因此，就像你看到的，在触摸点和 player 之间有一个小的三角形，由 origin 点，
+                      offx 和 offy 组成；
+                  03. 我们只需要画一个更大的三角形，同时使用一样的比率就行了；
+                  04. 然后我们就可以根据比例算出飞盘飞出屏幕的位置。
+
+          3.3.03  Touch Event Introduction
+
+                  01. 首先我们需要让 GameLayer 能接收 Touch 事件；
+                  02. cocos2d-x 3.0 增加了新的事件分发机制，并且让 setTouchEnabled 为 deprecated
+                      方法，对某个方法和类标注 deprecated 的意思就是这个方法或类不再建议使用；
+                  03. 所以我们继承虚函数 onEnter，并重写。
+
+          3.3.04  Touch Event - GameLayer.h
+
+                  在 public: 关键字下面添加方法： virtual void onEnter();
+
+          3.3.05  Touch Event - GameLayer.cpp
+
+                  void GameLayer::onEnter()
+                  {
+                      LayerColor::onEnter();
+    
+                      auto listener = EventListenerTouchOneByOne::create();
+                      listener->setSwallowTouches(true);
+                      listener->onTouchBegan = [=](cocos2d::Touch* touch,
+                                                   cocos2d::Event* event) {
+                          return true;
+                      };
+    
+                      listener->onTouchEnded = CC_CALLBACK_2(GameLayer::onTouchEnded, this);
+                      _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+                  }
+
+          3.3.06  Description Touch Event
+
+                  01. 事件监听器包含以下几种：
+                      . 屏幕触摸事件 (EventListenerTouch)
+                      . 键盘响应事件 (EventListenerKeyboard)
+                      . 加速记录事件 (EventListenerAcceleration)
+                      . 鼠标响应事件 (EventListenerMouse)
+                      . 自定义的事件 (EventListenerCustom)
+                  02. 其中的触摸监听类型触摸事件分为 EventListenerTouchOneByOne 和
+                      EventListenerTouchAllAtOnce，EventListenerTouchOneByOne 表示的是单点触摸；
+                      而 EventListenerTouchAllAtOnce 表示的就是多点触摸；
+                  03. 而我们以前的 ccTouchBegan，ccTouchEnd，ccTouchMoved 等方法都已经 deprecated了，
+                      取而代之的是让监听器绑定事件处理函数，上面绑定的 onTouchEnded 我在后面马上会添加进去，
+                      onTouchEnded 响应的是触摸点击结束事件，onTouchMove 没有写出来，反正本游戏用不着；
+                      至于那个看起来高端大气得 onTouchBegan，其实是为了用一下 3.0 引入了 C++11 的特征，
+                      哪个东西在 C++11 里学名叫 Lambda 函数，其实就是匿名函数，跟 onTouchEnded 那种绑定个
+                      类函数得写法效果一样，主要是这里必须写 onTouchBegan 并且返回 true，表示监听器已经接收到了。
+                  04. 监听器创建完成后我们把它绑定给 _eventDispatcher 事件分发器，_eventDispatcher 是 Node
+                      的属性，通过它管理当前节点（如 场景 、层、精灵等 ）的所有事件分发情况。
+
+          3.3.07  GameLayer.h - onTouchEnded()
+
+                  在 GameLayer.h 中添加声明：
+                  void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+
+          3.3.08  GameLayer.cpp - onTouchEnded()
+
+                  在 GameLayer.cpp 中添加函数定义：
+                  
+                  void GameLayer::onTouchEnded(Touch* touch, Event* event)
+                  {
+                      // Choose touch to work with
+                      Size visibleSize = Director::getInstance()->getVisibleSize();
+                      auto touchPoint = touch->getLocation();
+                      auto projectile = Sprite::create("Projectile.png", Rect(0, 0, 20, 20));
+                      projectile->setPosition(Point(20, visibleSize.height / 2));
+    
+                      // Determine offset of location to projectile
+                      int offX = touchPoint.x - projectile->getPosition().x;
+                      int offY = touchPoint.y - projectile->getPosition().y;
+    
+                      // Bail out if we are shooting down or backwards
+                      if (offX <= 0)  return;
+
+                      // Ok to add now - we've double checked position
+                      this->addChild(projectile);
+    
+                      // Determine where we wish to shoot the projectile to
+                      int realX = visibleSize.width + (projectile->getContentSize().width / 2);
+                      float ratio = (float)offY / (float)offX;
+                      int realY = (realX * ratio) + projectile->getPosition().y;
+                      auto realDest = Point(realX, realY);
+    
+                      // Determine the length of how far we're shooting
+                      int offRealX = realX - projectile->getPosition().x;
+                      int offRealY = realY - projectile->getPosition().y;
+                      float length = sqrtf((offRealX * offRealX) + (offRealY * offRealY));
+                      float velocity = 960 / 1;
+                      float realMoveDuration = length / velocity;  // 960pixels/1sec
+
+                      // Move projectile to actual endpoint
+                      projectile->runAction(Sequence::create(MoveTo::create(realMoveDuration, realDest),
+                                            CallFuncN::create([this](Node *sender)->void{ this->removeChild(sender); }), NULL));
+                  }
+
+          3.3.09  Explaination onTouchEnded()
+
+                  01. auto touchPoint = touch->getLocation(); 我们选择一个 touch 来处理，获得它在当前 view 中的位置；
+                  02. 接下来，我们加载飞盘精灵并且设置它的初始位置，然后，我们计算出它需要飞往何处，使用 player 和 touch
+                      之间的向量并且根据前面描述的算法计算出来；
+                  03. 注意，这个算法并不完美，我们强迫子弹飞出屏幕 x 轴的外边--即使在它已经飞出屏幕 y 轴的外边界了，
+                      这里有许多方向来解决这个问题，比如检查飞出屏幕的最短距离，或者使用一个游戏回调函数来检查一个飞盘是否飞出，
+                      飞出就移出场景，但是，在这里，我们尽量保持简单；
+                  04. 最后一件事情就是，决定飞盘移动的时间，我们想让子弹以常量速度飞行，不管飞行方向如何；因此，我们不得不再做
+                      一点点数学；我们能够使用 Pythagorean Theorem 来计算我们移动了多久，记得几何学中，三角形的斜边等于两个
+                      直角边的平方和再开根号；
+                  05. 一旦我们得到了距离，我们就可以通过除了速度来得到时间，因为速度 = 距离/时间，换句话说：时间 = 距离/速度；
+                  06. 余下的部分就和设置我们 target 一样了。
+
+          3.3.10  Building, Troubleshooting, Thinking
+
+                  现在编译再运行一下工作，你可以看到忍者可以发射飞盘了，可是怎么打不死怪物？
+
+    3.04  Collision Detection
+
+          3.4.01  Overture
+
+                  01. 现在，我们可以看到飞镖到处乱飞了！但是，我们的忍者真正想做的，是能够放倒一些怪物，
+                      好吧，让我们增加一些代码来检测什么时候我们的飞镖与怪物相撞了；
+                  02. 在 Cocos2d-x 里面，有许多方法可以解决这个问题，包括使用 cocos2d-x 内置的开源物理引擎
+                      box２d和chipmunk；
+                  03. 然而，为了使事情变得简单一点，在这里我们自己实现了一个简单的碰撞检测。
+
+          3.4.02  Classification for Darts and Monsters
+
+                  我们首先需要分类整理当前场景中存在的飞镖和怪物；
+
+                  01. 在 GameLayer 类里面增加下面的声明：
+                      private:
+                          cocos2d::Vector<cocos2d::Sprite*> _targets;
+                          cocos2d::Vector<cocos2d::Sprite*> _projectiles;
+                  02. 现在，我们修改 addTarget() 方法，把一个新的 target 加到 targets 数组里面，
+                      并且为这个 target 设置一个 tag，以便将来使用：
+                          this->addChild(target);
+                      (1) target->setTag(1);
+                      (2) _targets.pushBack(target);
+                  03. 然后，修改 onTouchEnded 方法，同样的，把新增加的 projectile 加到 projectiles 数组里面，
+                      并为之设置一个 tag 供后面使用：
+                          // Ok to add now - we've double checked position
+                          this->addChild(projectile);
+                      (1) projectile->setTag(2);
+                      (2) _projectiles.pushBack(projectile);
+                  04. 最后，修改你的 spriteMoveFinished 方法，基于 tag 标签来从正确的数组中移除相应的 sprite；
+                      void GameLayer::spriteMoveFinished(Node* sender)
+                      {
+                          Sprite *sprite = (Sprite *)sender;
+                      (1)     if (1 == sprite->getTag()) {
+                              //target
+                      (3)     _targets.eraseObject(sprite);
+                      (2) } else if (2 == sprite->getTag()) {
+                              // projectile
+                      (4)     _projectiles.eraseObject(sprite);
+                          }
+                          this->removeChild(sprite);
+                      }
+
+          3.4.03  Building, Troubleshooting, Thinking
+
+                  01. 编译并运行程序，确保一切都 ok；
+                  02. 目前来说，应该没有什么可见的差别；
+                  03. 但是，接下来我们就会去实现真正的碰撞检测了。
+
+          3.4.04  GameLayer.h - update()
+
+                  virtual void update(float t);
+
+          3.4.05  Real Collision Detection, GameLayer.cpp - update()
+
+                  在 GameLayer 里面增加如下方法：
+
+                  void GameLayer::update(float t)
+                  {
+                      Vector<Sprite*> targetsToDelete;
+                      Vector<Sprite*> projectilesToDelete;
+
+                      for (int i = 0; i < _projectiles.size(); i++) {
+        
+                          auto projectile = _projectiles.at(i);
+                          auto projectileRect = Rect(projectile->getPositionX() -
+                                                     projectile->getContentSize().width / 2,
+                                                     projectile->getPositionY() -
+                                                     projectile->getContentSize().height / 2,
+                                                     projectile->getContentSize().width,
+                                                     projectile->getContentSize().height);
+        
+                          for (int j = 0; j < _targets.size(); j++) {
+            
+                              auto target = _targets.at(j);
+                              auto targetRect = Rect(target->getPositionX() -
+                                                     target->getContentSize().width / 2,
+                                                     target->getPositionY() -
+                                                     target->getContentSize().height / 2,
+                                                     target->getContentSize().width,
+                                                     target->getContentSize().height);
+            
+                              if (projectileRect.intersectsRect(targetRect)) {
+                                  targetsToDelete.pushBack(target);
+                              }
+                          }
+        
+                          // C++11 的 range-based for 循环
+                          for (Sprite* t : targetsToDelete) {
+                              _targets.eraseObject(t);
+                              this->removeChild(t);
+                          }
+        
+                          if (targetsToDelete.size() > 0) {
+                              projectilesToDelete.pushBack(projectile);
+                          }
+        
+                          targetsToDelete.clear();
+                      }
+    
+                      for (const auto& p : projectilesToDelete) {
+                          _projectiles.eraseObject(p);
+                          this->removeChild(p);
+                      }
+    
+                      projectilesToDelete.clear();
+                  }
+
+          3.4.06  Description update()
+
+                  01. 上面的代码应该非常清楚，我们仅仅通过遍历 projectiles 和 targets 数组，为每个 projectile
+                      和 target 创建边界矩形，然后使用 intersectsRect 来检测碰撞；
+                  02. 如果发现有碰撞了，我们就从场景中移除精灵，同时也把它移除出数组；
+                  03. 注意，我们不得不添加一个 toDelete 数组，因为我们不能在遍历一个数组的时候去删除数组中的对象；
+                  04. 当然，还有许多方式可以实现类似的逻辑，我们只不过挑选了简单的方法。
+
+          3.4.07  scheduleUpdate()
+
+                  01. 在你真正完成之前，还差最后一件事情；
+                  02. 在你的 init() 方法里面调用下面的函数：
+
+                      this->schedule(schedule_selector(GameLayer::gameLogic), 1.0f);
+                  (1) this->scheduleUpdate();
+
+          3.4.08  Building, Troubleshooting, Thinking
+
+                  编译并运行，现在，当你的飞镖和怪物相碰的时候，他们都会消失啦！
+
+    3.05  Accomplishment Touch Event
+
+          3.5.01  Overture
+
+                  01. 我们离制作一个可以玩的游戏（但是非常简单）的目标已经越来越近了；
+                  02. 我们仅仅需要增加一些音效和背景音乐（试想哪个游戏没有声音呢！），
+                      再增加一点点简单的逻辑就更好了。
+
+          3.5.02  Background Music and Music Effect
+
+                  3.5.2.01  Introduction
+
+                            01. 首先，把一些背景音乐和音效拖到工程的 resource 文件夹中；
+                            02. 拷贝 "background-music-aac.caf" 和 "pew-pew-lei.caf" 到工程的
+                                Resources 目录下，然后加到工程里，也可以自己自制一些；
+                            03. 同时准备了上面音乐的 mp3 版和 wav 版，方便大家在其他平台调试。
+
+                  3.5.2.02  Header File for Audio Engine
+
+                            然后，在 GameLayer.cpp 文件里导入下面的头文件：
+
+                  3.5.2.03  Play Background Music
+
+                            在 init() 函数 return 之前，添加播放背景音乐的简易代码：
+
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("background-music-aac.caf");
+
+                  3.5.2.04  Play Bullet Music
+
+                            然后，在你的 onTouchesEnded() 方法里面添加音效代码：
+
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pew-pew-lei.caf");
+
+                  3.5.2.05  Building, Troubleshooting, Thinking
+
+                            现在有声音了，但背景音乐放一下就停了，请把反复一直播放音乐的代码补上。
+
+          3.5.03  Scene for "Win" or "Lose"
+
+                  3.5.3.01  Introduction
+
+                            现在，让我们创建一个新的场景，来作为 "You　Win" 或者 "You　Lose" 的标志。
+
+                  3.5.3.02  New Class
+
+                            01. 右键点击 Ninjia 下的 Classes；
+                            02. 然后点击 New File… —> iOS —> C and C++ —> C++ Class；
+                            03. Next —> Save As: GameOver, Where (Classes),
+                                Targets (Ninjia iOS) —> Create。
+
+                  3.5.3.03  GameOver.h - Source Code
+
+                            #ifndef __SampleGame1__GameOverScene__
+                            #define __SampleGame1__GameOverScene__
+
+                            #include "cocos2d.h"
+
+                            class GameOverLayer : public cocos2d::LayerColor
+                            {
+                            public:
+
+                                GameOverLayer() : _label(NULL) {};
+
+                                virtual ~GameOverLayer();
+
+                                virtual bool init();
+
+                                CREATE_FUNC(GameOverLayer);
+
+                                void gameOverDone();
+
+                                CC_SYNTHESIZE_READONLY(cocos2d::LabelTTF*, _label, Label);
+                            };
+
+                            class GameOverScene : public cocos2d::Scene
+                            {
+                            public:
+
+                                GameOverScene() : _layer(NULL) {};
+
+                                ~GameOverScene();
+
+                                virtual bool init();
+
+                                CREATE_FUNC(GameOverScene);
+
+                                CC_SYNTHESIZE_READONLY(GameOverLayer*, _layer, Layer);
+                            };
+
+                            #endif /* defined(__Ninjia__GameOver__) */
+
+                  3.5.3.04  GameOver.h - Description
+
+                            01. 上面的声明就是一个场景和一个层，及其他们的构造函数和析构函数；下面主要介绍上面出现的另一个东西CC_SYNTHESIZE_READONLY宏。CC_SYNTHESIZE_READONLY(varType, varName, funName)声明一个成员变量以及getfunName函数，没有set函数。简单的举例：
+                            02. init() 函数是熟人，gameOverDone 后面要用到的事件处理函数；
+                            03. CREATE_FUNC 宏用于创建一个静态方法返回自身的一个实例，上面的就对应
+                                GameOverScene::create() 方法，返回的对象是一个 Scene* 的对象；
+                            04. 下面主要介绍上面出现的另一个东西 CC_SYNTHESIZE_READONLY宏，
+                                CC_SYNTHESIZE_READONLY(varType, varName, funName) 声明一个成员变量以及
+                                getfunName 函数，没有 set 函数，简单的举例：
+                                CC_SYNTHESIZE_READONLY(cocos2d::LabelTTF*, _label, Label);
+                                等价于下面代码：
+                                private: ocos2d::LabelTTF*  _label； public: ocos2d::LabelTTF* getLabel() {return  _label};
+
+                  3.5.3.05  GameOver.cpp - Source Code
+
+                            #include "GameOverScene.h"
+                            #include "GameLayer.h"
+
+                            USING_NS_CC;
+
+                            bool GameOverScene::init()
+                            {
+                            	if(Scene::init()) {
+                            		this->_layer = GameOverLayer::create();
+                            		this->_layer->retain();
+	                            	this->addChild(_layer);
+	                            	return true;
+                            	} else {
+	                            	return false;
+	                            }
+                            }
+
+                            GameOverScene::~GameOverScene()
+                            {
+                            	if (_layer) {
+	                            	_layer->release();
+	                            	_layer = NULL;
+	                            }
+                            }
+
+                            bool GameOverLayer::init()
+                            {
+	                            if (LayerColor::initWithColor(Color4B(255, 255, 255, 255))) {
+
+		                            auto winSize = Director::getInstance()->getWinSize();
+		                            this->_label = LabelTTF::create("","Artial", 32);
+		                            _label->retain();
+		                            _label->setColor( Color3B(0, 0, 0) );
+		                            _label->setPosition( Point(winSize.width/2, winSize.height/2) );
+
+		                            this->addChild(_label);
+
+		                            this->runAction(Sequence::create(DelayTime::create(3),
+                                        CallFunc::create(CC_CALLBACK_0(GameOverLayer::gameOverDone,
+                                                                       this)), NULL));
+                                    return true;
+	                            } else {
+	                            	return false;
+	                            }
+                            }
+
+                            void GameOverLayer::gameOverDone()
+                            {
+                            	Director::getInstance()->replaceScene(GameLayer::createScene());
+                            }
+
+                            GameOverLayer::~GameOverLayer()
+                            {
+                            	if (_label) {
+	                            	_label->release();
+	                            	_label = NULL;
+	                            }
+                            }
+
+                  3.5.3.06  GameOver.cpp - Description
+
+                            01. 注意，这里有两个不同的对象：场景和层；
+                            02. 场景可以包含任意数量的层，但是此例中只有一个层；
+                            03. 这个层只是在屏幕的中间放置了一个 label，然后运行了一个 action；
+                            04. 这个 action 的作用就是，等待 ３ 秒钟，然后调用一个回调函数切换回 GameLayer 场景。
+
+          3.5.06  Accomplishment Game Logic
+
+                  3.5.6.01  Introduction
+
+                            最后，让我们增加一些基本的游戏逻辑。
+
+                  3.5.6.02  Destroy Darts
+
+                            01. 首先，让我们来追踪 player 销毁的飞镖 projectiles，在 GameLayer 类里面增加一个
+                                成员变量，如下所示：
+                                private:
+                                    cocos2d::Vector<cocos2d::Sprite*> _targets;
+                                    cocos2d::Vector<cocos2d::Sprite*> _projectiles;
+                                (1) int _projectilesDestroyed;
+                            02. 在 GameLayer.cpp 里面，导入我们的 GameOver 类：
+                                #include "GameOver.h"
+                            03. 在 update() 方法里，增加（销毁的 projectile）计数，同时检测游戏胜利的条件；
+                                并在 targetsToDelete 循环里，紧接着 this->removeChild(target) 的地方添加
+                                如下代码：
+                                // C++11 的 range-based for 循环
+                                for (Sprite* t : targetsToDelete) {
+                                    _targets.eraseObject(t);
+                                    this->removeChild(t);
+            
+                                (1) _projectilesDestroyed++;
+                                (2) if (_projectilesDestroyed > 10) {
+                                (3)     auto gameOverScene = GameOverScene::create();
+                                (4)     gameOverScene->getLayer()->getLabel()->setString("You Win!");
+                                (5)     Director::getInstance()->replaceScene(gameOverScene);
+                                    }
+                                }
+
+                  3.5.6.03  When You Lose
+
+                            最后，让我们这样设计，只要有一个怪物穿过了屏幕左边，你就输了；
+
+                            01. 在 GameLayer.h 里添加下面的代码：
+                                void loseGame();
+                            02. 在 GameLayer.cpp 里添加如下代码：
+                                void GameLayer::loseGame()
+                                {
+                                    auto gameOverScene = GameOverScene::create();
+                                    gameOverScene->getLayer()->getLabel()->setString("You Lose :(");
+                                    Director::getInstance()->replaceScene(gameOverScene);
+                                }
+                            03. 在 GameLayer.cpp 的 void GameLayer::addTarget() 里修改如下代码：
+                                FiniteTimeAction *actionMoveDone = CallFuncN::create([this](Node *sender)->void{ std::cout << "remove target" << std::endl; this->loseGame(); this->removeChild(sender); });
+
+                  3.5.6.04  Building, Troubleshooting, Thinking
+
+                            01. 继续，编译并运行程序！
+                            02. 现在，你的游戏可以实现胜利或者失败的场景了！:)
+
+04. Adding Rotating Turret
+
+    4.01  Preparations
+
+          4.1.01  Introduction
+
+                  01. 接下来我们将介绍如何旋转炮塔来改变射击的方向，许多游戏都有这个功能，包大家熟悉的塔防游戏；
+                  02. 我们将详细地讲解如何实现这个功能，即如何把旋转炮塔的功能添加到一个游戏当中去；
+                  03. 我们使用新的 Player2.png 和 Projectile2.png 图片，然后把它们加到工程里面，
+                      在这之前，先从工程里删除旧的 Player.png 和 Projectile.png 图片；
+                  04. 下面，我们修改代码，把每个 sprite 添加进去。
+
+          4.1.02  Source Code
+
+                  GameLayer.cpp
+
+                  bool GameLayer::init() {
+                      ... ...
+                      // 创建精灵
+                  (1) //auto player = cocos2d::Sprite::create("Player.png", Rect(0, 0, 27, 40));
+                  (2) auto player   = Sprite::create("Player2.png");
+                  }
+
+                  void GameLayer::onTouchEnded(cocos2d::Touch *touch,
+                                               cocos2d::Event *event)
+                  {
+                  (3) //auto projectile = Sprite::create("Projectile.png", Rect(0, 0, 20, 20));
+                  (4) auto projectile   = Sprite::create("Projectile2.png");
+                  }
+
+          4.1.03  Building, Troubleshooting, Thinking
+
+                  01. 编译并运行我们的程序。
+                  02. 如果一切顺利的话，你将会看到一个炮塔正在发射子弹。
+
+          4.1.04  Explaination
+
+                  01. 注意，这一次我们并没有指定精灵的宽度和高度，而是让 Cocos2d-x 替我们来处理这些事情；
+                  02. 这并不是很好，因为炮塔在射击的时候并没有面朝那个方向；
+                  03. 因此，接下来让我们来解决这个问题。
+
+    4.02  Rotate and Shoot
+
+          4.2.01  Save Player Sprite Reference
+
+                  4.2.1.01  Introduction
+
+                            01. 在我们旋转炮塔之前，首先，我们需要保存 Player 精灵的引用，
+                                以便后面旋转它的时候使用；
+                            02. 打开 HelloWorldScene.h，然后修改类文件并包含以下成员变量；
+                            03. 然后修改 init() 方法中的代码，注意是修改！不是增加！
+                                把 Player 对象加入到层 (layer) 中。
+
+                  4.2.1.02  Source Code
+
+                            GameLayer.h
+
+                            class GameLayer : public cocos2d::LayerColor
+                            {
+                            private:
+                                cocos2d::Vector<cocos2d::Sprite*> _targets;
+                                cocos2d::Vector<cocos2d::Sprite*> _projectiles;
+                                int _projectilesDestroyed;
+                            (1) cocos2d::Sprite* _player;
+                                ... ...
+                            }
+
+                            GameLayer.cpp
+
+                            void GameLayer::onTouchEnded(cocos2d::Touch *touch,
+                                                         cocos2d::Event *event)
+                            {
+                                ... ...
+                            (1) //auto player = Sprite::create("Player2.png");
+                            (2) //player->setPosition(Point(player->getContentSize().width / 2,
+                                //                          visibleSize.height / 2));
+                            (3) //this->addChild(player);
+    
+                            (4) _player = Sprite::create("Player2.png");
+                            (5) _player->setPosition(Point(_player->getContentSize().width/2,
+                                                           visibleSize.height / 2));
+                            (6) this->addChild(_player);
+                                ... ...
+                            }
+
+          4.2.02  Calculating the Angle of Rotation
+
+                  4.2.2.01  Angle
+
+                            01. 好了，现在让我们取出 player 对象的引用并且旋转它吧；
+                            02. 为了旋转它，我们首先需要计算出旋转的角度；
+                            03. 为了解决这个问题，想想我们在高中时候学过的三角代数吧；
+                            04. 还记得 sin, cos, tan 吗？
+                            05. 为了便于理解，下面使用一张图 Analysis_Principle1.png 来解释一下；
+                                公式为：tan　=　对面 / 邻边。
+                            06. 如上所示，我们想要旋转的角度是 arctangent (angle)，
+                                即对 offY/offX 求 arctangent 运算。
+
+                  4.2.2.02  Convert Angle in Radians
+
+                            01. 然而，这里还有两件事情，我们需要放在心上；
+                            02. 首先，当我们计算 actangent (offY/offX) 的时候，这个结果是弧度，
+                                但是 Cocos2d-x 使用的却是角度；
+                            03. 还好，Cocos2d-x 提供了一个非常方便的宏，可以使得角度和弧度之间方便转化。
+
+                  4.2.2.03  Positive and Negative Direction
+
+                            01. 第二点，我们假定上面的图中 angle 的偏转是正 20 度，
+                                但是，Cocos2d-x 里面顺时针方向为正（而不是上图所示的逆时针为正）；
+                            02. 让我们看到下面这个图 Player2WithAngle.png；
+                            03. 因此，为了得到正确的方向，我们把运算结果乘以一个 -1 就可以了；
+                            04. 比如，如果我们把上面那幅图片里的角度乘以 -1 的话，我们就得够得到 -20 度，
+                                这个角度其实就是逆时针方向的 20 度。
+
+                  4.2.2.04  Source Code
+
+                            void GameLayer::onTouchEnded(cocos2d::Touch *touch,
+                                                         cocos2d::Event *event)
+                            {
+                                ... ...
+                                // Determine angle to face
+                            (1) float angleRadians = atanf((float)offRealY / (float)offRealX);
+                            (2) float angleDegrees = CC_RADIANS_TO_DEGREES(angleRadians);
+                            (3) float cocosAngle   = -1 * angleDegrees;
+                            (4) _player->setRotation(cocosAngle);
+    
+                                // 让 projectile 精灵移动
+                                projectile->runAction(Sequence::create(MoveTo::create(realMoveDuration, realDest),
+                                    CallFuncN::create([this](Node* sender)->void{this->removeChild(sender);}), NULL));
+                            }
+
+                  3.2.2.05  Building, Troubleshooting, Thinking
+
+                            01. 继续，编译并运行程序！
+                            02. 现在，我们的炮塔在射击的时候可以改变方向了。
+
+          4.2.03  What Next?
+
+                  01. 目前来说还不错，但是有有一点点怪；
+                  02. 因为，这个炮塔好像突然一下跳到一个方向射击，有点不够流畅；
+                  03. 下面我们就来解决这个问题。
+
+    4.03  Shoot After Rotate
+
+          4.3.01  Reflactoring
+
+                  我们一起来重构下我们的代码。
+
+          4.3.02  GameLayer.h
+
+                  首先，打开 GameLayer.h，然后在的类里添加如下成员变量：
+
+                  cocos2d::Sprite *_nextProjectile;
+
+                  void finishShoot();
+
+          4.3.03  bool GameLayer::init()
+
+                  然后在 init 方法里面初始化 _nextProjectitle：
+
+                  _nextProjectile = NULL;
+
+          4.3.04  void GameLayer::onTouchEnded()
+
+                  void GameLayer::onTouchEnded(cocos2d::Touch *touch,
+                                               cocos2d::Event *event)
+                  {
+                  (1)  if (NULL != _nextProjectile) return;
+
+                       // Choose touch to work with
+                       Size visibleSize = Director::getInstance()->getVisibleSize();
+                       auto touchPoint  = touch->getLocation();
+
+                       // Set up initial location of projectile
+                       //auto projectile = Sprite::create("Projectile.png", Rect(0, 0, 20, 20));
+                  (2)  //auto projectile = Sprite::create("Projectile2.png");
+                  (3)  _nextProjectile   = Sprite::create("Projectile2.png");
+                  (4)  //projectile->setPosition(Point(20, visibleSize.height / 2));
+                  (5)  _nextProjectile->setPosition(Point(20, visibleSize.height / 2));
+
+                       // 决定 projectile 的位置偏移量
+                  (6)  //int offX = touchPoint.x - projectile->getPosition().x;
+                  (7)  int offX = touchPoint.x   - _nextProjectile->getPosition().x;
+                  (8)  //int offY = touchPoint.y - projectile->getPosition().y;
+                  (9)  int offY = touchPoint.y   - _nextProjectile->getPosition().y;
+
+                       // 如果点的位置太靠左边
+                       if (offX <= 0)  return;
+
+                       // Play a sound!
+                  (10) CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pew-pew-lei.caf");
+    
+                  (11) //this->addChild(projectile);
+
+                       // Set tag
+                  (12) //projectile->setTag(2);
+                  (13) _nextProjectile->setTag(2);
+                  (14) //_projectiles.pushBack(projectile);
+
+                       // 决定你想把 projectile 发射到哪里
+                  (15) //int realX   = visibleSize.width + projectile->getContentSize().width / 2;
+                  (16) int realX     = visibleSize.width + _nextProjectile->getContentSize().width / 2;
+                       float ratio   = (float)offY / (float)offX;
+                  (17) // int realY  = (realX * ratio) + projectile->getPosition().y;
+                  (18) int realY     = (realX * ratio) + _nextProjectile->getPosition().y;
+                       auto realDest = Point(realX, realY);
+    
+                       // 计算射出的距离
+                  (19) //int offRealX = realX - projectile->getPosition().x;
+                       int offRealX   = realX - _nextProjectile->getPosition().x;
+                  (20) //int offRealY = realY - projectile->getPosition().y;
+                       int offRealY   = realY - _nextProjectile->getPosition().y;
+                       float length   = sqrtf((offRealX * offRealX) + (offRealY * offRealY));
+                       float velocity = 960 / 1;
+                       float realMoveDuration = length / velocity;  // 960 pixels/1sec
+    
+                       // Determine angle to face
+                       float angleRadians = atanf((float)offRealY / (float)offRealX);
+                       float angleDegrees = CC_RADIANS_TO_DEGREES(angleRadians);
+                       float cocosAngle   = -1 * angleDegrees;
+                  (21) // _player->setRotation(cocosAngle);
+                       // Would take 0.5 seconds to rotate 0.5 radians, or half a circle
+                  (22) float rotateSpeed    = 0.5 / M_PI;
+                  (23) float rotateDuration = fabsf(angleRadians * rotateSpeed);
+    
+                       // 让 projectile 精灵移动
+                  (24) //projectile->runAction(Sequence::create(MoveTo::create(realMoveDuration, realDest),
+                             CallFuncN::create([this](Node* sender)->void{this->removeChild(sender);}), NULL));
+                  (25) _player->runAction(Sequence::create(RotateTo::create(rotateDuration, cocosAngle),
+                           CallFuncN::create(CC_CALLBACK_0(GameLayer::finishShoot, this)), NULL));
+    
+                       // Move projectile to actual endpoint
+                  (26) _nextProjectile->runAction(Sequence::create(MoveTo::create(realMoveDuration, realDest),
+                           CallFuncN::create(CC_CALLBACK_1(GameLayer::spriteMoveFinished, this)), NULL));
+                  }
+
+          4.3.05  void GameLayer::finishShoot()
+
+                  void HelloWorld::finishShoot()
+                  {
+                      // Ok to add now - we've finished rotation!
+                      this->addChild(_nextProjectile);
+                      // Add to projectiles vector
+                      _projectiles.pushBack(_nextProjectile);
+    
+                      _nextProjectile = NULL;
+                  }
+
+          4.3.06  Reflactoring Summarizing
+
+                  这看上去好像有许多代码，但是，实际上我们改动的并不多--大部分只是做一些小小的重构；
+                  下面是我们所修改的内容的一个列表：
+
+                  01. 在函数开头检查 nextProjectile 的值是否为 NULL；
+                      这意味着我们当前的 touch 事件正发生在射击过程之中；
+                      也就是说，炮塔已经发射出一个子弹了；
+                  02. 之前，我们使用一个 projectile 的局部变量，并把它加入到了当前的场景中；
+                      在这个版本中，我们增加了一个 nextProjectile 的成员变量，但是并没有马上加到当前场景中；
+                      因为后要还要使用；
+                  03. 定义炮塔旋转的角度，半秒钟旋转半个圆，记住！一个圆有 2PI 个弧度；
+                  04. 计算旋转特定的角度需要多长时间，这里是拿弧度乘以速度；
+                  05. 接下来，我们使用一个 sequence action 来旋转我们的炮塔；
+                      最后，回调一个函数 finishShoot()，把 projectile 加入到当前场景当中去。
+
+          4.3.07  Building, Troubleshooting, Thinking
+
+                  好，大功告成！编译并运行工程，现在炮塔可以旋转，并且很流畅地射击了！
+
+    4.04  What's Next
+
+          接下来将教来讲解如何添加更猛的怪物和更多的关卡！
+
+05. Violent Monsters and More Hurdle
+
+    5.01  Introduction
+    5.02  Violent Monsters
+    5.03  More Hurdle
+
+06. Conclusion
+
+    6.01  Lambda
+    
+          6.1.01  Introduction
+
+                  C++ 11 中 的 Lambda 表达式用于定义并创建匿名的函数对象，以简化编程工作。
+
+          6.1.02  Syntax
+
+                  [函数对象参数] (操作符重载函数参数) mutable或exception声明 ->返回值类型 {函数体}
+
+                  01. 可以看到，Lambda主要分为五个部分；
+                  02. [函数对象参数]、(操作符重载函数参数)、mutable或exception声明、->返回值类型、{函数体}；
+                  03. 下面分别进行介绍。
+
+          6.1.03  Five Main Parts
+
+                  6.1.3.01  [Function Object Parameter]
+
+                            01. [函数对象参数]，标识一个 Lambda 的开始，这部分必须存在，不能省略；
+                            02. 函数对象参数是传递给编译器自动生成的函数对象类的构造函数的；
+                            03. 函数对象参数只能使用那些到定义 Lambda 为止时 Lambda 所在作用范围内可见的
+                                局部变量（包括Lambda所在类的this）；
+                            04. 函数对象参数有以下形式：
+                                a. 空：没有使用任何函数对象参数；
+                                b. =： 函数体内可以使用 Lambda 所在作用范围内所有可见的局部变量（包括 Lambda
+                                   所在类的 this），并且是值传递方式（相当于编译器自动为我们按值传递了所有局部变量）；
+                                c. &：函数体内可以使用 Lambda 所在作用范围内所有可见的局部变量（包括 Lambda
+                                   所在类的this），并且是引用传递方式（相当于编译器自动为我们按引用传递了所有
+                                   局部变量）；
+                                d. this；函数体内可以使用 Lambda 所在类中的成员变量；
+                                e. a；将 a 按值进行传递，按值进行传递时，函数体内不能修改传递进来的 a 的拷贝，
+                                   因为默认情况下函数是 const 的，要修改传递进来的a的拷贝，可以添加 mutable
+                                   修饰符；
+                                f. &a，将 a 按引用进行传递；
+                                g. a, &b：将 a 按值进行传递，b 按引用进行传递；
+                                h. =，&a, &b：除 a 和 b 按引用进行传递外，其他参数都按值进行传递；
+                                i. &, a, b：除 a 和 b 按值进行传递外，其他参数都按引用进行传递。
+
+                  6.1.3.02  (Operator Overloading Function Parameters)
+
+                            01. (操作符重载函数参数)，标识重载的()操作符的参数，没有参数时，这部分可以省略；
+                            02. 参数可以通过按值（如：(a,b)）和按引用（如：(&a,&b)）两种方式进行传递。
+
+                  6.1.3.03  Mutable or Exception Declaration
+
+                            01. mutable 或 exception 声明，这部分可以省略；
+                            02. 按值传递函数对象参数时，加上 mutable 修饰符后，可以修改按值传递进来的拷贝
+                                （注意是能修改拷贝，而不是值本身）；exception声明用于指定函数抛出的异常，
+                                如抛出整数类型的异常，可以使用 throw(int)；
+
+                  6.1.3.04  ->Return Value Type
+
+                            01. ->返回值类型，标识函数返回值的类型，当返回值为 void；
+                            02. 或者函数体中只有一处return的地方（此时编译器可以自动推断出返回值类型）时，
+                                这部分可以省略。
+
+                  6.1.3.05  {Function Body}
+
+                            {函数体}，标识函数的实现，这部分不能省略，但函数体可以为空。
+
+    6.02
+
+07. Homework
+
+    7.01  对 Ninjia 项目添加如下功能：
+          01. 添加一个提示框，提示当前你已经打中了多少个怪物了；
+          02. 增加一些很酷的动画，比如怪物被击中后不是直接消失，而是用一段动画来模拟死去；
+              （可以参考 cocs2d-x　TestCp p里面的 ActionsTest，EffectsTest 和 EffectsAdvancedTest）；
+          03. 增加更多的图片和声音资源，和更多的游戏逻辑；
+          04. 按心情发挥吧！
+
+08. Traps and Pitfalls
+
+09. Diligence

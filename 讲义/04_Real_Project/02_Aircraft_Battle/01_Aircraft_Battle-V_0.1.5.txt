@@ -1,0 +1,1736 @@
+
+/*
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Copyleft (C) 2009-2015
+ * COEO - China Open Education Organization
+ * "+++New Life+++" Team for Computer Science
+ * Free as in freedom. The Truth Will Free You.
+ * 张开自由的翅膀，真理要释放你。
+ * To teach the inexperienced the ropes 
+ * and give our young people a grasp on reality.
+ * 教导没有经验的得以丰富，给予青年人开启真理的钥匙。
+ * The old life is gone; a new life burgeons!
+ * 告别飘逝的过去，拥抱怒放的新生！
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * This file is available to you under a choice of one of two licenses.
+ *
+ * GPL
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
+ *
+ * THE FILE IS DISTRIBUTED AS-IS, WITHOUT WARRANTY OF ANY KIND, AND THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE
+ * ARE EXPRESSLY DISCLAIMED.
+ *
+ * See the GNU General Public License * for more details.
+ *
+ * http://www.opensource.org/licenses/gpl-license.html
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * 
+ * BSD
+ *
+ *  Alternatively you can redistribute this file under the terms of the
+ *  BSD license as stated below:
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *  3. The names of its contributors may not be used to endorse or promote
+ *     products derived from this software without specific prior written
+ *     permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ *  TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Description:
+ *     This file describe the Cocos2d project Aircraft Battle.
+ *
+ * Original Date:
+ *     Aug-13-2014
+ *
+ * Modified Date:
+ *     Aug-18-2014
+ *
+ * Authors:
+ *     Yuhui    <abrahambenyu@gmail.com>
+ *
+ * Current Version:
+ *     0.1.5
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+00. Table of Contents
+
+    01. Overture
+    02. Environment and New Project
+    03. Game Menu, Scene and Layer
+    04. Using the Physical Engine
+    05. Background, Aircraft, Physical
+    06. Collision, Score, Music
+    07. The End, Game Over Scene
+    08. Conclusion
+    09. Homework
+    10. Traps and Pitfalls
+    11. Diligence
+
+
+01. Overture
+
+    01. 目前已经有许多非常好的教程来教你如何使用 cocos2d-x 了；
+    02. 但关于 cocos2d-x-3.0 以后的资料非常少；
+    03. 同时很多人真正想要的是一个非常简单，但也是可以跑起来能玩的游戏；
+    04. 这个游戏包括怎么使用动画、碰撞检测和播放声音，这就够了，并不需要使用太多高级的特性。
+
+02. Environment and New Project
+
+    2.01  New Project for Aircraft
+
+          01. 打开一个 "终端"；
+          02. cd ~/Serving/Tarballs/cocos2d-x-3.4
+          03. ./setup.py (中间会有提示，敲回车跳过)
+          04. source ~/.bash_profile
+          05. cocos new AircraftBattle -p org.openeducation.aircraftbattle -l cpp -d ~/Source/Cocos2d-X/
+
+    2.02  New File for GameMenuScene
+
+          01. 先鼠标左键点击，AppDelegate.h；
+          02. File --> New --> File --> iOS --> C and C++；
+          03. --> C++ Class --> Next（或双击）；
+          04. --> Save As: GameMenuScene；
+          05. --> Create.
+
+03. Game Menu, Scene and Layer
+
+    3.01  Introduction
+
+    3.02  GameMenuScene.h
+
+          #ifndef __AircraftBattle__GameMenuScene__
+          #define __AircraftBattle__GameMenuScene__
+
+          #include <iostream>
+
+          (1) #include "cocos2d.h"
+
+          (2) class GameMenuScene : public cocos2d::Layer
+          {
+          (3) private:
+          (4)     cocos2d::Size visibleSize;
+          (5)     cocos2d::Vec2 visibleOrigin;
+
+          (6) public:
+                  // there's no 'id' in cpp
+                  // so we recommend returning the class instance pointer
+          (7)     static cocos2d::Scene *createScene();
+
+                  // Here's a difference. Method 'init' in cocos2d-x returns bool,
+                  // instead of returning 'id' in cocos2d-iphone
+          (8)     virtual bool init();
+    
+          (9)     void initEnvironment();
+          (10)    void initBackground();
+          (11)    void initMainMenu();
+          (12)    void initAircraft();
+
+                  // 菜单项的回调处理方法
+          (13)    void menuCloseCallback(cocos2d::Ref* pSender);
+          (14)    void menuStartCallback(cocos2d::Ref* pSender);
+
+                  // 定时器回调的背景滚动方法
+          (15)    void backgroundMove(float f);
+
+                  // CREATE_FUNC 先调用构造函数（CCLayer类node方法中调用构造函数）
+                  // 再调用 init 方法进行初始化（子类中先调用父类的 init 方法）
+                  // 最后又设置创建出的对象为自动释放内存
+                  // 这样其他人在使用这个类的时候，只要是用 create() 函数创建出来的对象
+                  // 不用费心去管理释放内存了
+          (16)    CREATE_FUNC(GameMenuScene);
+          };
+
+          #endif /* defined(__AircraftBattle__GameMenuScene__) */
+
+    3.03  GameMenuScene.cpp
+
+          3.3.01  Header and Namespace
+
+                  #include “GameMenuScene.h”
+
+                  // 使用 cocos2d 命名空间
+                  // 加上这个后，不用写 cocos2d:: 前缀了
+                  (1) USING_NS_CC;
+
+          3.3.02  createScene
+
+                  (1) Scene* GameMenuScene::createScene()
+                  {
+                      // 'scene' is an autorelease object
+                  (2) auto scene = Scene::create();
+
+                      // 'layer' is an autorelease object
+                  (3) auto layer = GameMenuScene::create();
+
+                      // add layer as a child to scene
+                  (4) scene->addChild(layer);
+
+                      // return the scene
+                  (5) return scene;
+                  }
+
+          3.3.03  init
+
+                  /* on "init" you need to initialize your instance */
+                  (1) bool GameMenuScene::init()
+                  {
+                      //////////////////////////////
+                      // 1. super init first
+                  (2) if (!Layer::init()) {
+                  (3)     return false;
+                      }
+
+                  (4) initEnvironment();
+                  (5) initBackground();
+                  (6) initMainMenu();
+                  (7) initAircraft();
+
+                  (8) return true;
+                  }
+
+          3.3.04  initEnvironment
+
+                  /* 初始化程序基本属性 */
+                  (1) void GameMenuScene:: initEnvironment()
+                  {
+                      // 表示获得视图（可视区域）的大小
+                      // 如果 DesignResolutionSize 跟屏幕尺寸一样大
+                      // 则 getVisibleSize 等于 getWinSize
+                  (2) visibleSize = Director::getInstance()->getVisibleSize();
+                      // 表示可视区域的起点坐标，这在处理相对位置的时候非常有用
+                      // 确保节点在不同分辨率下的位置一致
+                  (3) visibleOrigin = Director::getInstance()->getVisibleOrigin();
+
+                  // 播放背景音乐，循环播放
+                  (4) CocosDenshion::SimpleAudioEngine::getInstance()->
+                          playBackgroundMusic("sounds/game_music.wav");
+                  }
+
+          3.3.05  initBackground
+
+                  /* 初始化游戏背景 */
+                  (1) void GameMenuScene::initBackground()
+                  {
+                      // 创建背景精灵
+                  (2) auto bg1 = Sprite::create("background.png");
+                  (3) bg1->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,0));
+                      // AnchorPoint 的默认位置 Layer 的是左下，而其他的 node 是中心点
+                      // 节点的原点是父节点的左下角
+                  (4) bg1->setAnchorPoint(Vec2(0.5, 0));
+                  (5) bg1->setTag(101);
+                  (6) this->addChild(bg1, 0);
+
+                      // 第二张背景图，是跟在第一张的上面，无缝连接，两张图形成不间断的地图滚动 
+                  (7) auto bg2 = Sprite::create("background.png");
+                  (8) bg2->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,
+                          bg1->getPositionY()+bg1->getContentSize().height));
+                  (9) bg2->setAnchorPoint(Vec2(0.5, 0));
+                  (10) bg2->setTag(102);
+                  (11) this->addChild(bg2, 0);
+
+                      // 背景滚动的定时器，0.01 执行一次传入的函数
+                  (12) this->schedule(schedule_selector(GameMenuScene::backgroundMove), 0.01);
+                  }
+
+          3.3.06  initMainMenu
+
+                  /* 初始化开始和关闭游戏菜单 */
+                  (1) void GameMenuScene::initMainMenu()
+                  {
+                      // 这个是开始游戏菜单选项
+                      // GameMenuScene::menuStartCallback 是按钮的回调函数
+                      // 即点击这个菜单按钮的时候会执行该函数
+                  (2) auto startItem = MenuItemImage::create("game_start.png",
+                          "game_start2.png",
+                          CC_CALLBACK_1(GameMenuScene::menuStartCallback,
+                          this));
+                      // 设置开始游戏菜单按钮的位置
+                  (3) startItem->setPosition(Vec2(visibleSize.width/2 + visibleOrigin.x,
+                          visibleSize.height/2 + visibleOrigin.y));
+
+                      // 这个是结束游戏菜单选项
+                  (4) auto closeItem = MenuItemImage::create("game_exit.png",
+                          "game_exit2.png",
+                          CC_CALLBACK_1(GameMenuScene::menuCloseCallback,
+                          this));
+                      // 设置结束游戏菜单按钮的位置
+                  (5) closeItem->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,
+                          visibleSize.height/2 + visibleOrigin.y - startItem->getContentSize().height));
+
+                      // 把菜单项添加到菜单精灵中
+                  (6) auto menu = Menu::create(startItem, closeItem, NULL);
+                  (7) menu->setPosition(Vec2::ZERO);
+
+                      // 把菜单精灵添加到当前的层中
+                  (8) this->addChild(menu, 1);
+                  }
+
+          3.3.07  initAircraft
+
+                  /* 添加飞机和动画 */
+                  (1) void GameMenuScene:: initAircraft()
+                  {
+                      // 添加飞机
+                  (2) auto aircraft = Sprite::create("hero1.png");
+                  (3) aircraft->setPosition(visibleSize.width/2+visibleOrigin.x, 200);
+                  (4) this->addChild(aircraft);
+
+                      // 飞机添加动画
+                  (5) Animation *animation = Animation::create();
+                  (6) SpriteFrame *spriteFrame1 = SpriteFrame::create("hero1.png",
+                          Rect(0, 0, 102, 126));
+                  (7) SpriteFrame *spriteFrame2 = SpriteFrame::create("hero2.png",
+                          Rect(0, 0, 102, 126));
+
+                  (8) animation->addSpriteFrame(spriteFrame1);
+                  (9) animation->addSpriteFrame(spriteFrame2);
+                       // 设置两帧之间的时间间隔
+                  (10) animation->setDelayPerUnit(0.15f);
+                  (11) Animate *animate = Animate::create(animation);
+
+                      // 开始执行动画
+                  (12) aircraft->runAction(RepeatForever::create(animate));
+                  }
+
+          3.3.08  menuCloseCallback
+
+                  /* 退出游戏，系统默认退出的回调函数 */
+                  (1) void GameMenuScene::menuCloseCallback(Ref* pSender)
+                  {
+                      // 结束导演实例
+                  (2) Director::getInstance()->end();
+
+                      // 退出程序
+                  (3) exit(0);
+                  }
+
+          3.3.9  menuStartCallback
+
+                  /* 开始游戏 */
+                  (1) void GameMenuScene::menuStartCallback(Ref* pSender)
+                  {
+                      // 开始游戏
+                  (2) CCLOG("开始游戏");
+                  }
+
+          3.3.10  backgroundMove
+
+                  /* 背景滚动的回调方法 */
+                  (1) void GameMenuScene::backgroundMove(float f) 
+                  {
+                      // 背景滚动逻辑
+                  (2) auto bg1 = this->getChildByTag(101);
+                  (3) auto bg2 = this->getChildByTag(102);
+                      // 当第二张图片退出屏幕时，把第一张图片设置到屏幕中，
+                      // 由于背景图片的高度是大于屏幕的高度的，所以判断逻辑要复杂点
+                  (4) if (bg2 -> getPositionY() + bg2->getContentSize().height <=
+                          Director::getInstance()->getVisibleSize().height) {
+                  (5)     bg1->setPositionY(-bg1->getContentSize().height +
+                              Director::getInstance()->getVisibleSize().height);
+                      }
+                  (6) bg1->setPositionY(bg1->getPositionY() - 3);
+                  (7) bg2->setPositionY(bg1->getPositionY() + bg1->getContentSize().height);
+                  }
+
+    3.04  AppDelegate.h
+
+          (1) #include "SimpleAudioEngine.h"
+
+          (2) void preloadMusic();
+
+    3.05  AppDelegate.cpp
+
+          3.5.01  Header and Namespace
+
+                  #include "AppDelegate.h"
+                  (1) //#include "HelloWorldScene.h"
+                  (2) #include "GameMenuScene.h"
+
+                  USING_NS_CC;
+                  (3) using namespace CocosDenshion;
+
+          3.5.02  applicationDidFinishLaunching
+
+                  bool AppDelegate::applicationDidFinishLaunching() {
+                      // initialize director
+                      auto director = Director::getInstance();
+                      auto glview = director->getOpenGLView();
+                      if(!glview) {
+                          // 设置游戏名称，就是窗口左上方显示的 title
+                  (1)     glview = GLView::create("飞机大战");
+                          // 设置窗口大小
+                  (2)     glview->setFrameSize(480, 800);
+                          director->setOpenGLView(glview); 
+                      }
+                      // 为了适配手机端
+                  (3) glview->setDesignResolutionSize(480, 800, ResolutionPolicy::SHOW_ALL);
+                      // turn on display FPS
+                      director->setDisplayStats(true);
+
+                      // set FPS. the default value is 1.0/60 if you don't call this
+                      director->setAnimationInterval(1.0 / 60);
+
+                      // create a scene. it's an autorelease object
+                  (4) auto scene = GameMenuScene::createScene();
+
+                      // run
+                      director->runWithScene(scene);
+
+                      // 初始化音乐
+                  (5) preloadMusic();
+
+                      return true;
+                  }
+
+          3.5.03  Play Music
+
+                  3.5.3.01  Introduction
+
+                            01. 播放音乐 Cocos2d 也帮我们做了很多的包装工作，以至于我们想播放音乐时，只需一行代码；
+                            02. 现在播放音乐这一块只剩下：我们该在哪播放音乐，又是在哪停止音乐；
+                            03. 这个跟我们的游戏逻辑有相当大的联系。
+
+                  3.5.3.02  Music Format
+
+                            01. 注意：音乐最好是 wav 格式；
+                            02. 我试着播放 mp3 格式，发现会延迟几秒钟才能播放音乐；
+                            03. 所以最好是用工具转下格式。
+
+                  3.5.3.03  Preload
+
+                            01. 音乐缓冲，就是在我们还未开始游戏前，我们得把他缓冲好，
+                                要不然下次播放音乐的时候在加载音乐会很卡，小音乐就算了；
+                            02. 所以一般的做法就是在游戏开始初始化的时候；
+                            03. 即 AppDelegate::applicationDidFinishLaunching() 中进行 preload，预先读取。
+
+                  3.5.3.04  Header and Namespace
+
+                            01. 写这些代码前要 #include "SimpleAudioEngine.h”；
+                            02. 还有那些类的命名空间是 CocosDenshion；
+                            03. 不想每次都用命名空间去调用类就直接 using namespace CocosDenshion。
+
+                  3.5.3.05  Source Code
+
+                            // 预读背景音乐
+                            SimpleAudioEngine::getInstance()->preloadBackgroundMusic("sounds/game_music.wav");
+
+                            // 预读音效
+                            SimpleAudioEngine::getInstance()->preloadEffect("sounds/game_over.wav");
+
+                            // 播放音效，一次性，播完即止
+                            SimpleAudioEngine::getInstance()->playEffect("sounds/game_over.wav");
+
+                            // 播放背景音乐，循环播放
+                            SimpleAudioEngine::getInstance()->playBackgroundMusic("sounds/game_music.wav");
+
+                            // 停止播放背景音乐
+                            SimpleAudioEngine::getInstance()->stopBackgroundMusic("sounds/game_music.wav");
+
+          3.5.04  preloadMusic
+
+                  /* 初始化音乐 */
+                  (1) void AppDelegate::preloadMusic()
+                  {
+                      // 预读背景音乐
+                  (2) SimpleAudioEngine::getInstance()->preloadBackgroundMusic("sounds/game_music.wav");
+
+                      // 预读各种音效
+                  (3) SimpleAudioEngine::getInstance()->preloadEffect("sounds/game_over.wav");
+                  (4) SimpleAudioEngine::getInstance()->preloadEffect("sounds/bullet.wav");
+                  (5) SimpleAudioEngine::getInstance()->preloadEffect("sounds/use_bomb.wav");
+                  }
+
+    3.06  Resources
+
+          3.6.01  Images
+
+                  01. 把图片文件 "background.png" 拖到工程的 Resources 文件夹下；
+                  02. 把图片文件 "game_start.png" 拖到工程的 Resources 文件夹下；
+                  03. 把图片文件 "game_start2.png" 拖到工程的 Resources 文件夹下；
+                  04. 把图片文件 "game_exit.png" 拖到工程的 Resources 文件夹下；
+                  05. 把图片文件 "game_exit2.png" 拖到工程的 Resources 文件夹下；
+                  06. 把图片文件 "hero1.png" 拖到工程的 Resources 文件夹下；
+                  07. 把图片文件 "hero2.png" 拖到工程的 Resources 文件夹下。
+
+          3.6.02  Musics
+
+                  01. 把整个文件夹 sounds 拷贝到和 Resources 平级的目录下；
+                  02. 把工程下的文件夹下的 sounds 拖到工程的 Resources 文件夹下，
+                      Destination: 选中 Copy items into destination group’s folder (if needed)；
+                      Folders: Create folder references for any added folders；
+                      Add to targets: AircraftBattle iOS。
+
+    3.07  Building, Troubleshooting, Thinking
+
+          01. 注意音乐要拖工程下面的那个 sound 文件；
+          02. 拖到 Resources 时有个选项 Folders 要选 Create folder references for any added folders。
+
+    3.08  Class Exercises
+
+    3.09  Conclusion
+
+04. Using the Physical Engine
+
+    4.01  Introduction
+
+          4.1.01  Cocos2d Physics Engine
+
+                  01. 为了方便碰撞检测，我们可以使用 Cocos2d-x 集成的物理引擎；
+                  02. Cocos2d-X 有两种物理引擎，一种轻量级的 Chipmunk，一种相对 Chipmunk 比较复杂的 Box2d；
+                  03. 在 3.x 版本 Cocos2d-X 封装了 Chipmunk 的 api，简单好用；
+                  04. 在我们的项目中就是使用了 Chipmunk 这种物理引擎。
+
+          4.1.02  Using the Physics Engine
+
+                  01. 设置物理世界的场景；
+                  02. 设置物体形状（在物理世界的一个实体)和碰撞属性；
+                  03. 碰撞检测。
+
+          4.1.03  Understanding Physical Engine
+
+                  01. 设置了物理世界的场景后，相当于我们创造了一个屏幕大小的世界，精灵在上面只是灵魂的存在，
+                      任何物体互相之间是无法影响的，就是相当于敌机要撞上我机时，他是穿过去的；
+                  02. 但是当我们给他设置物理形状时，那么就等于他在世界上有个了实体；
+                  03. 实体什么概念，就是前面有道墙，你优哉游哉得以为像演电影一样穿过去，最后碰个头破血流；
+                      简单得说就是模拟物理世界；
+                  04. 另外还可以设置实体的各种属性，比如受重力影响啦、密度啦、重量啦等等；
+                  05. 最后在物理世界模拟现实世界来运行。
+
+    4.02  Set the Physical World Scene
+
+          // 这里是关键代码，只需要一句，即可设置物理世界场景 
+          auto scene = Scene::createWithPhysics();
+
+          // 获取物理世界对象，通过它来设置和获取物理世界的各种属性
+          PhysicsWorld* phyWorld = scene->getPhysicsWorld();
+
+          // 设置为物理世界的物体可见
+          phyWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+
+    4.03  Set Object Body
+
+          4.3.01  Source Code
+
+                  // createBox 是设置为矩形，也可以为其他形状
+                  auto aircraftBody = PhysicsBody::createBox(aircraft->getContentSize());
+
+                  // 碰撞测试掩码
+                  aircraftBody->setContactTestBitmask(0x0003);
+
+                  // 类别掩码
+                  aircraftBody->setCategoryBitmask(0x0001);
+
+                  // 碰撞掩码
+                  aircraftBody->setCollisionBitmask(0x0007);
+
+                  // 把物体设置为实体
+                  aircraft->setPhysicsBody(aircraftBody);
+
+          4.3.02  Description
+
+                  三个掩码决定的是物体是否可以相互碰撞，然后是否触发碰撞事件。 
+
+          4.3.03  Collision Decision
+
+                  A 与 B result                            是否会碰撞    是否触发事件
+                  =============                            ========    ==========
+
+                  CategoryBitmask & CollisionBitmask 零    不会         否
+                  CategoryBitmask & CollisionBitmask 非零   会          否
+                  ContactTestBitmask & CollisionBitmask 零  不会        会
+
+                  01. 上面的表格就是说，决定是否会碰撞的是 CategoryBitmask 和 CollisionBitmask；
+                  02. 不管是 A 的 CategoryBitmask 还是 B 的 CategoryBitmask，只要与另个物体的
+                      CollisionBitmask 为零就不会碰撞，所以计算物体的掩码的时候靠的是这个等式
+                      A & B 是否等于零的等式；
+                  03. 而决定在碰撞的时候触发碰撞事件的是 ContactTestBitmask 和 CollisionBitmask。
+
+          4.3.04  Bitmask
+
+                  01. CategoryBitmask 值为 0xFFFFFFFF；
+                  02. ContactTestBitmask 值是 00000000；
+                  03. 而 CollisionBitmask 值为 0xFFFFFFFF；
+                  04. 表示所有的身体会相互碰撞，但默认不发送接触事件。
+
+          4.3.05  Setting
+
+                  01. 另外就是三个码的设置，才能让程序的逻辑正确执行；
+                  02. 在我们项目中，有我机，敌机，和子弹三个实体，我机和敌机可以碰撞，
+                      我机不可以和子弹碰撞，子弹可以和敌机碰撞；
+                  03. 九个码，要决定这个逻辑，那么就有九元一次方程给你解，这就有些麻烦，只能放值进去算了；
+                  04. 到现在，敌机和敌机不能碰撞这个逻辑我还没通过掩码实现；
+                  05. 敌机和敌机碰撞在一起，还会触发事件，是个 bug，不过在程序中使用了点逻辑跳过了。
+
+    4.04  Collision Detection
+
+          4.4.01  Introduction
+
+                  碰撞检测交给了引擎去做了，现在我们只剩下了碰撞事件监听还有处理。
+
+          4.4.02  Source Code
+
+                  auto listener = EventListenerPhysicsContact::create();
+                  listener->onContactBegin = [=](PhysicsContact& contact) {
+                      // 通过下面语句获取碰撞的两个节点
+                      auto spriteA = (Sprite *)contact.getShapeA()->getBody()->getNode();
+                      auto spriteB = (Sprite *)contact.getShapeB()->getBody()->getNode();
+                  }
+                  // 注册监听器
+                  EventDispatcher * eventDispatcher = Director::getInstance()->getEventDispatcher(); 
+                  eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+          4.4.03  Description
+
+                  01. 这样，只要实体碰撞到了一起，就会触发该函数；
+                  02. 还有其他函数，比如 onContactPreSolve，onContactPostSolve 和 onContactSeperate；
+                  03. 看函数名大概也可以猜到它是干嘛的了。
+
+    4.05  Class Exercises
+
+    4.06  Conclusion
+
+05. Background, Aircraft, Physical
+
+    5.01  Introduction
+
+          01. 现在我们要创建新的一个场景了；
+          02. 选择开始游戏即从菜单场景跳到游戏场景。
+
+    5.02  Background
+
+          5.2.01  GameMenuScene.cpp
+
+                  (1) #include "GamePlayScene.h"
+
+                  /* 开始游戏 */
+                  void GameMenuScene::menuStartCallback(Ref* pSender)
+                  {
+                      // 开始游戏
+                  (2) //CCLOG("开始游戏");
+                  (3) auto scene = GamePlayScene::createScene();
+                  (4) auto GamePlayScene = TransitionSlideInR::create(1.0f, scene);
+                  (5) Director::getInstance()->replaceScene(GamePlayScene);
+                  }
+
+          5.2.02  New File for GamePlayScene
+
+                  01. 先鼠标左键点击，GameMenuScene.h；
+                  02. File --> New --> File --> iOS --> C and C++；
+                  03. --> C++ Class --> Next（或双击）；
+                  04. --> Save As: GamePlayScene；
+                  05. --> Create。
+
+          5.2.03  GamePlayScene.h
+
+                  #ifndef __AircraftBattle__GamePlayScene__
+                  #define __AircraftBattle__GamePlayScene__
+
+                  #include <iostream>
+
+                  (1) #include "cocos2d.h"
+                  (2) #include "SimpleAudioEngine.h"
+
+                  (3) class GamePlayScene : public cocos2d::Layer
+                      {
+                  (4) private:
+                  (5)     cocos2d::Size visibleSize;
+                  (6)     cocos2d::Vec2 visibleOrigin;
+
+                  (7) public:
+                  (8)     static cocos2d::Scene* createScene();
+
+                  (9)     virtual bool init();
+
+                  (10)    void initEnvironment();
+                  (11)    void initBackground();
+
+                          // 滚动背景定时器回调函数
+                  (12)    void backgroundMove(float f);
+
+                  (13)    CREATE_FUNC(GamePlayScene);
+                      };
+
+                  #endif /* defined(__AircraftBattle__GamePlayScene__) */
+
+          5.2.04  GamePlayScene.cpp, Header and Namespace
+
+                  (1) USING_NS_CC;
+                  (2) using namespace CocosDenshion;
+
+          5.2.05  GamePlayScene.cpp, createScene
+
+                  (1) Scene *GamePlayScene::createScene()
+                  {
+                      // 创建物理世界的场景
+                  (2) auto scene = Scene::createWithPhysics();
+
+                      //PhysicsWorld* phyWorld = scene->getPhysicsWorld();
+                      //phyWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+
+                  (3) auto layer = GamePlayScene::create();
+                  (4) scene->addChild(layer);
+
+                  (5) return scene;
+                  }
+
+          5.2.06  GamePlayScene.cpp, init
+
+                  (1) bool GamePlayScene::init()
+                      {
+                  (3)     if (!Layer::init()) {
+                  (4)         return false;
+                          }
+
+                  (5)     initEnvironment();
+                  (6)     initBackground();
+
+                  (2)     return true;
+                  }
+
+          5.2.07  GamePlayScene.cpp, initEnvironment
+
+                  (1) void GamePlayScene::initEnvironment()
+                  {
+                  (2) visibleSize = Director::getInstance()->getVisibleSize();
+                  (3) visibleOrigin = Director::getInstance()->getVisibleOrigin();
+                  }
+
+          5.2.08  GamePlayScene.cpp, initBackground
+
+                  /* 初始化游戏背景 */
+                  (1) void GamePlayScene::initBackground()
+                  {
+                      // 创建背景精灵
+                  (2) auto bg1 = Sprite::create("background.png");
+                  (3) bg1->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,0));
+                      // AnchorPoint 的默认位置 Layer 的是左下，而其他的 node 是中心点
+                      // 节点的原点是父节点的左下角
+                  (4) bg1->setAnchorPoint(Vec2(0.5, 0));
+                  (5) bg1->setTag(101);
+                  (6) this->addChild(bg1, 0);
+
+                      // 第二张背景图，是跟在第一张的上面，无缝连接，两张图形成不间断的地图滚动 
+                  (7) auto bg2 = Sprite::create("background.png");
+                  (8) bg2->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,
+                          bg1->getPositionY()+bg1->getContentSize().height));
+                  (9) bg2->setAnchorPoint(Vec2(0.5, 0));
+                  (10) bg2->setTag(102);
+                  (11) this->addChild(bg2, 0);
+
+                      // 背景滚动的定时器，0.01 执行一次传入的函数
+                  (12) this->schedule(schedule_selector(GamePlayScene::backgroundMove), 0.01);
+                  }
+
+          5.2.09  GamePlayScene.cpp, backgroundMove
+
+                  /* 背景滚动的回调方法 */
+                  (1) void GamePlayScene::backgroundMove(float f) 
+                  {
+                      // 背景滚动逻辑
+                  (2) auto bg1 = this->getChildByTag(101);
+                  (3) auto bg2 = this->getChildByTag(102);
+
+                      // 当第二张图片退出屏幕时，把第一张图片设置到屏幕中
+                      // 由于背景图片的高度是大于屏幕的高度的，所以判断逻辑要复杂点
+                  (4) if(bg2 -> getPositionY() + bg2->getContentSize().height <=
+                          Director::getInstance()->getVisibleSize().height) {
+                  (5)     bg1->setPositionY(-bg1->getContentSize().height +
+                          Director::getInstance()->getVisibleSize().height);
+                      }
+                  (6) bg1->setPositionY(bg1->getPositionY() - 4);
+                  (7) bg2->setPositionY(bg1->getPositionY() + bg1->getContentSize().height);
+                  }
+
+          5.2.10  Building, Troubleshooting, Thinking
+
+    5.03  My Player
+
+          5.3.01  GamePlayScene.h
+
+                  (1) void initMyPlayer();
+
+          5.3.02  GamePlayScene.cpp, init
+
+                  bool GamePlayScene::init()
+                  {
+                  (1) initMyPlayer();
+                  }
+
+          5.3.03  GamePlayScene.cpp, initMyPlayer
+
+                  /* 初始化我方战机 */
+                  (1) void GamePlayScene::initMyPlayer()
+                  {
+                       // 创建我方战机
+                  (2)  auto aircraft = Sprite::create("hero1.png");
+                  (3)  aircraft->setPosition(visibleSize.width/2+visibleOrigin.x, 200);
+                  (4)  aircraft->setTag(103);
+
+                       // 设置碰撞属性
+                       // 碰撞掩码，用于判断是否可以与其他物体碰撞，
+                       // 判断逻辑为两者的碰撞掩码进行逻辑与，如为零则不会碰撞，否则会
+                       // 这里只有我机、敌机、子弹
+                       // 子弹和敌机可以碰撞，敌机和我机可以碰撞，我机和子弹不可以碰撞
+                       // 依次可以设置它们的掩码分别为：0x01(0001)、0x03(0011)、0x02(0010)
+                  (5)  auto aircraftBody = PhysicsBody::createBox(aircraft->getContentSize());
+                  (6)  aircraftBody->setContactTestBitmask(0x0003);
+                  (7)  aircraftBody->setCategoryBitmask(0x0001);
+                  (8)  aircraftBody->setCollisionBitmask(0x0007);
+                  (9)  aircraftBody->setGravityEnable(false);
+                  (10) aircraft->setPhysicsBody(aircraftBody);
+                  (11) this->addChild(aircraft);
+
+                  (12) Animation *animation = Animation::create();
+                  (13) SpriteFrame *spriteFrame1 = SpriteFrame::create("hero1.png",
+                          Rect(0, 0, 102, 126));
+                  (14) SpriteFrame *spriteFrame2 = SpriteFrame::create("hero2.png",
+                          Rect(0, 0, 102, 126));
+                  (15) animation->addSpriteFrame(spriteFrame1);
+                  (16) animation->addSpriteFrame(spriteFrame2);
+                  (17) animation->setDelayPerUnit(0.15f);
+                  (18) Animate * animate = Animate::create(animation);
+
+                  (19) aircraft->runAction(RepeatForever::create(animate));
+                  }
+
+          5.3.04  Building, Troubleshooting, Thinking
+
+    5.04  Moving Player
+
+          5.4.01  GamePlayScene.h
+
+                  class GamePlayScene : public cocos2d::Layer
+                  {
+                  private:
+                      cocos2d::Size visibleSize;
+                      cocos2d::Vec2 visibleOrigin;
+
+                  (1) enum Game_State {
+                  (2)     Game_State_Running = 1,  // 1，游戏运行
+                  (3)     Game_State_Pause,        // 2，游戏暂停
+                  (4)     Game_State_Over          // 3，游戏结束
+                      } gameState;
+
+                  (5) float fx, fy;
+
+                  public:
+                      static cocos2d::Scene* createScene();
+    
+                      virtual bool init();
+    
+                      void initEnvironment();
+                      void initBackground();
+                      void initMyPlayer();
+
+                      // 滚动背景定时器回调函数
+                      void backgroundMove(float f);
+
+                  (6) void touchEventRegistration();
+                  (7) virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event); 
+                  (8) virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event);
+
+                      CREATE_FUNC(GamePlayScene);
+                  };
+
+          5.4.02  GamePlayScene.cpp, init
+
+                  bool GamePlayScene::init()
+                  {
+                  (1) touchEventRegistration();
+                  }
+
+          5.4.03  GamePlayScene.cpp, initEnvironment
+
+                  void GamePlayScene::initEnvironment()
+                  {
+                      visibleSize = Director::getInstance()->getVisibleSize();
+                      visibleOrigin = Director::getInstance()->getVisibleOrigin();
+
+                  (1) gameState = Game_State_Running ;  // 初始化游戏状态
+                  }
+
+          5.4.04  GamePlayScene.cpp, touchEventRegistration
+
+                  /* 触摸事件注册，要通过回调函数来控制飞机的坐标 */
+                  (1) void GamePlayScene:: touchEventRegistration()
+                  {
+                      //setTouchEnabled(true);  // deprecated
+
+                      // 得到当前节点（场景、层、精灵等）的所有事件分发器
+                  (2) auto dispatcher = Director::getInstance()->getEventDispatcher();
+                      // 创建单点触摸监听器
+                      // 即只有注册的 Layer 才能接收触摸事件
+                  (3) auto listener = EventListenerTouchOneByOne::create();
+                      // 添加监听事件到监听器
+                  (4) listener->onTouchBegan = CC_CALLBACK_2(GamePlayScene::onTouchBegan, this);
+                  (5) listener->onTouchMoved = CC_CALLBACK_2(GamePlayScene::onTouchMoved, this);
+                      // 不向下传递触摸
+                  (6) listener->setSwallowTouches(true);
+                      // 添加事件监听器到事件分发器
+                  (7) dispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+                  }
+
+          5.4.05  GamePlayScene.cpp, onTouchBegan
+
+                  /* 手指点击下时，记录该点的位置，该点为起点 */
+                  (1) bool GamePlayScene::onTouchBegan(Touch *touch, Event *event)
+                  {
+                  (3) if (Game_State_Running == gameState) {
+                  (4)     fx = touch->getLocation().x;
+                  (5)     fy = touch->getLocation().y;
+                      }
+
+                  (2) return true;
+                  }
+
+          5.4.06  GamePlayScene.cpp, onTouchMoved
+
+                  /*
+                   * 每次移动把移动的位置（终点）记录下来，并与之前记录下的位置相减
+                   * 得到飞机该位移的相对量（x、y轴移动多少），并刷新起点位置
+                   */
+                  (1) void GamePlayScene::onTouchMoved(Touch *touch, Event *event)
+                  {
+                  (2) if (Game_State_Running == gameState) {
+                  (3)     int mx = touch->getLocation().x - fx;
+                  (4)     int my = touch->getLocation().y - fy;
+                  (5)     auto spaircraft = this->getChildByTag(103);
+                  (6)     spaircraft->runAction(MoveBy::create(0, Point(mx, my)));
+                  (7)     fx = touch->getLocation().x;
+                  (8)     fy = touch->getLocation().y;
+                      }
+                  }
+
+          5.4.07  Building, Troubleshooting, Thinking
+
+    5.05  Bullet Create
+
+          5.5.01  GamePlayScene.h
+
+                  class GamePlayScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+                  (1) cocos2d::Vector<cocos2d::Sprite *> bulletList;
+
+                  public:
+
+                      ... ...
+
+                      // 游戏的逻辑
+                  (2) void gameLogic();
+
+                      // 子弹创建的定时器回调函数
+                  (3) void bulletCreate(float f);
+                  };
+
+          5.5.02  GamePlayScene.cpp, init
+
+                  bool GamePlayScene::init()
+                  {
+                  (1) gameLogic();
+                  }
+
+          5.5.03  GamePlayScene.cpp, gameLogic
+
+                  (1) void GamePlayScene::gameLogic()
+                  {
+                      // 我机发射子弹创建
+                  (2) this->schedule(schedule_selector(GamePlayScene::bulletCreate), 0.3);
+                  }
+
+          5.5.04  GamePlayScene.cpp, bulletCreate
+
+                  /* 子弹创建 */
+                  (1) void GamePlayScene::bulletCreate(float f)
+                  {
+                  (2)  SimpleAudioEngine::getInstance()->playEffect("sounds/bullet.wav"); 
+                  (3)  auto aircraft = this->getChildByTag(103);
+                  (4)  Sprite *bullet=Sprite::create("bullet.png");
+                  (5)  bullet->setPosition(aircraft->getPosition().x,
+                           aircraft->getPosition().y+60);
+                  (6)  bullet->setTag(106);
+                  (7)  auto bulletBody = PhysicsBody::createBox(bullet->getContentSize());
+                  (8)  bulletBody->setContactTestBitmask(0x0002);
+                  (9)  bulletBody->setCategoryBitmask(0x0005);
+                  (10) bulletBody->setCollisionBitmask(0x0002);
+                  (11) bulletBody->setGravityEnable(false);
+                  (12) bullet->setPhysicsBody(bulletBody);
+                  (13) this->addChild(bullet);
+                  (14) this->bulletList.pushBack(bullet);
+                  }
+
+          5.5.05  Resources
+
+                  把 bullet.png 拖取工程的 Resources 目录下。
+
+          5.5.06  Building, Troubleshooting, Thinking
+
+                  01. 怎么没有看见子弹呢？生成了吗？
+                  02. 移动我方战机会发现有子弹生成了，但是子弹不会动。
+
+    5.06  Bullet Shooting
+
+          5.6.01  GamePlayScene.h
+
+                  class GamePlayScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+
+                  public:
+                      ... ...
+
+                      // 让子弹飞
+                  (1) void bulletMove(float f);
+                  };
+
+          5.6.02  GamePlayScene.cpp, gameLogic
+
+                  void GamePlayScene::gameLogic()
+                  {
+                      // 我机发射子弹
+                      this->schedule(schedule_selector(GamePlayScene::bulletCreate), 0.3);
+
+                      // 让子弹飞
+                  (1) this->schedule(schedule_selector(GamePlayScene:: bulletMove), 0.01);
+                  }
+
+          5.6.03  GamePlayScene.cpp, bulletMove
+                  
+                  /* 让子弹飞 */
+                  (1) void GamePlayScene::bulletMove(float f)
+                  {
+                      // 遍历 vector 取出所有的子弹，让子弹的位置往上移，移动快了就是飞
+                  (2) for (int i = 0; i < bulletList.size(); i++) {
+                  (3)     auto bullet = bulletList.at(i);
+                  (4)     bullet->setPositionY(bullet->getPositionY() + 3);
+                          // 如果该子弹已经超出屏幕范围，则移除它
+                  (5)     if (bullet->getPositionY() > Director::getInstance()->getWinSize().height) {
+                              // 从层中移除
+                  (6)         bullet->removeFromParent();
+                              // 从记录所有子弹的 vector 中移除
+                  (7)         bulletList.eraseObject(bullet);
+                              // 移除后上一个对象会移到当前这个对象的位置
+                              // 实际还是当前这个 i，所以要 --i 才能访问到下一个对象
+                  (8)         --i;
+                          }
+                      }
+                  }
+
+          5.6.04  Building, Troubleshooting, Thinking
+
+    5.07  Enemy Create
+
+          5.7.01  GamePlayScene.h
+
+                  class GamePlayScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+
+                  (1) cocos2d::Vector<cocos2d::Sprite *> enemyList;
+
+                  public:
+
+                      ... ...
+
+                      // 创建敌机
+                  (2) void enemyCreate(float f); 
+                  };
+
+          5.7.02  GamePlayScene.cpp, gameLogic
+
+                  void GamePlayScene::gameLogic()
+                  {
+                      // 我机发射子弹创建
+                      this->schedule(schedule_selector(GamePlayScene::bulletCreate), 0.3);
+
+                      // 让子弹飞
+                      this->schedule(schedule_selector(GamePlayScene:: bulletMove), 0.01);
+
+                      // 敌机创建
+                  (1) this->schedule(schedule_selector(GamePlayScene::enemyCreate), 0.5);
+                  }
+
+          5.7.03  GamePlayScene.cpp, enemyCreate
+
+                  /* 敌机创建 */
+                  (1) void GamePlayScene::enemyCreate(float f)
+                  {
+                       // 随机出现敌机 1 或敌机 2
+                  (2)  int ranDom = rand() % 2 + 1;
+                  (3)  auto string = cocos2d::__String::createWithFormat("enemy%d.png", ranDom);
+                  (4)  auto enemy = Sprite::create(string->getCString());
+                  (5)  if (ranDom == 1) {
+                           // 敌机的类型，由这个来判断，用于分数计算
+                  (7)      enemy->setTag(104);
+                  (6)  } else {
+                  (8)      enemy->setTag(105);
+                       }
+
+                       // 随机在屏幕最上方的出现敌机
+                  (9)  auto width = rand()%(int)(Director::getInstance()->getVisibleSize().width);
+                  (10) auto height = Director::getInstance()->getVisibleSize().height +
+                          enemy->getContentSize().height;
+                  (11) enemy->setPosition(Vec2(width, height));
+                  (12) auto enemyBody = PhysicsBody::createBox(enemy->getContentSize());
+                  (13) enemyBody->setContactTestBitmask(0x0003);
+                  (14) enemyBody->setCategoryBitmask(0x0002);
+                  (15) enemyBody->setCollisionBitmask(0x0001);
+                  (16) enemyBody->setGravityEnable(false);
+                  (17) enemy->setPhysicsBody(enemyBody);
+                  (18) this->addChild(enemy);
+                  (19) this->enemyList.pushBack(enemy);
+                  }
+
+          5.5.04  Resources
+
+                  01. 把 enemy1.png 拖到工程的 Resources 目录下；
+                  02. 把 enemy2.png 拖到工程的 Resources 目录下。
+
+          5.7.05  Building, Troubleshooting, Thinking
+
+                  01. 为什么没有看到敌机的出现？莫非隐形了？
+                  02. 敌机还没有动，在屏幕的外面，一点点的进来才合理。
+
+    5.08  Enemy Move
+
+          5.8.01  GamePlayScene.h
+
+                  class GamePlayScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+
+                  public:
+                      ... ...
+
+                      // 敌机来袭
+                  (1) void enemyMove(float f);
+                  };
+
+          5.8.02  GamePlayScene.cpp, gameLogic
+
+                  void GamePlayScene::gameLogic()
+                  {
+                      // 我机发射子弹创建
+                      this->schedule(schedule_selector(GamePlayScene::bulletCreate), 0.3);
+
+                      // 让子弹飞
+                      this->schedule(schedule_selector(GamePlayScene:: bulletMove), 0.01);
+
+                      // 敌机创建
+                      this->schedule(schedule_selector(GamePlayScene::enemyCreate), 0.5);
+
+                      // 敌机来袭
+                  (1) this->schedule(schedule_selector(GamePlayScene:: enemyMove), 0.01);
+                  }
+
+          5.8.03  GamePlayScene.cpp, enemyMove
+
+                  /* 让敌人来得更猛烈些吧 */
+                  (1) void GamePlayScene::enemyMove(float f)
+                  {
+                      // 取出所有的敌机，让敌机往下移动
+                  (2) for (int i = 0; i < enemyList.size(); ++i) {
+                  (3)     auto enemy = enemyList.at(i);
+                  (4)     enemy->setPositionY(enemy->getPositionY() - 5);
+                          // 如果该子弹已经超出屏幕范围，则移除它
+                  (5)     if (enemy->getPositionY() < -enemy->getContentSize().height) {
+                              // 从层中移除
+                  (6)         enemy->removeFromParent();
+                              // 从记录所有子弹的 vector 中移除
+                  (7)         enemyList.eraseObject(enemy);
+                              // 移除后上一个对象会移到当前这个对象的位置，
+                              // 实际还是当前这个 i，所以要 --i 才能访问到下一个对象
+                  (8)         --i;
+                          }
+                      }
+                  }
+
+          5.8.04  Building, Troubleshooting, Thinking
+
+                  01. 敌人终于出现了，来吧，发炮！
+                  02. 为什么打不列敌人呢？
+
+    5.09  Building, Troubleshooting, Thinking
+
+          01. 试试和敌人相撞了会怎么样？
+          02. 是否能练成 "金钟罩铁布衫" 撞死敌人？
+
+    5.10  Class Exercises
+
+    5.11  Conclusion
+
+06. Collision, Score, Music
+
+    6.01  Particle Effects
+
+          6.1.01  What Is It
+
+                  01. 为模拟现实中的水、火、雾、气等效果由各种三维软件开发的制作模块；
+                  02. 原理是将无数的单个粒子组合使其呈现出固定形态；
+                  03. 借由控制器，脚本来控制其整体或单个的运动，模拟出现真实的效果。
+
+          6.1.02  In Cocos2d
+
+                  Cocos2d 中使用粒子特效很简单，其实他也就是个 Node，创建和使用都跟精灵差不多。
+
+          6.1.03  plist
+
+                  01. 粒子特效一般用一个 plist 来描述；
+                  02. 就是一个 plist 做后缀的 xml 文件，他描述了粒子的特性；
+                  03. 可以自定义粒子，创建粒子特效的时候，加载这个 plist 文件即可。
+
+          6.1.04  Source Code
+
+                  // 使用 plist 文件创建粒子特效
+                  auto *particleSystem = ParticleSystemQuad::create("particle_texture.plist");
+
+                  // 设置粒子特效显示的位置
+                  particleSystem ->setPosition(vec1);
+
+                  // 添加到当前的层
+                  this->addChild(particleSystem);
+
+    6.02  Data Storage
+
+          6.2.01  Many Ways
+
+                  01. 在 Cocos2d中，数据存储有很多种方式，一种是Sqlit，轻量级的数据库；
+                  02. 不过数据量小的话使用 UserDefault 是非常方便的，当然还有其他的方式，这里就不介绍了。
+
+          6.2.02  UserDefault
+
+                  01. UserDefault，在项目中我就是用他来存储用户的分数和最高分数的，
+                      存储一些游戏设置啊基本上都用他的；
+                  02. 其实他也就是个 map，只是用了 xml 文件来存储，使用方面跟 map 也是极其相似；
+                  03. 当第一次调用 UserDefault::getInstance(); 时将会在系统中创建一个 UserDefault.xml 文件；
+                  04. 注意是系统中创建，也就是说用户可见，也是可以操作的；
+                  05. 其实用户的敏感数据放在这里是非常危险的，非常危险！
+                  06. 比如现在的最高分，用户修改了那数据就是作假，这游戏追求高分就没意义了。
+
+          6.2.03  Source Code
+
+                  // 第一次调用即创建 UserDefualt.xml 文件
+                  serDefault * userDefault = UserDefault::getInstance();
+
+                  // 存 value，索引是 key，每种类型都有对应的 get、set 方法
+                  // 跟 map 一样，有一个 key 和 value
+                  userDefault->setIntegerForKey("topScore", score);                  
+
+                  // 根据 key 来拿 value
+                  userDefault->getIntegerForKey("topScore");
+
+    6.03  Implementation Description
+
+          6.3.01  Introduction
+
+                  01. 现在我们已经可以捕捉到碰撞的事件了；
+                  02. 这时我们只要在捕捉函数里面做工作就好了，就是万事俱备只差碰撞处理了。 
+
+          6.3.02  Bullet Collision with Enemy
+
+                  01. 首先子弹与敌机碰撞时，播放敌机被击爆的音乐，计算所得的分数，
+                      引爆敌机，就是播放一个敌机爆炸的动画，再移除动画；
+                  02. 然后移除 Vector 中的敌机和子弹，最后从层中移除两者。
+
+          6.3.03  Aircraft Collision with Enemy
+
+                  01. 然后是我机与敌机碰撞，先播放我机被击爆的音乐，修改游戏状态（游戏已经结束）；
+
+                  02. 停止所有的定时器，造成全屏停止的效果，再播放两者爆炸效果，再从层中移除敌机和我机；
+                  03. 存储游戏的分数并刷新最高纪录，这里使用到的 Cocos2d 的 UserDefualt 类；
+                  04. 最后就是跳转到游戏结束场景。
+
+    6.04  GamePlayScene.h
+
+          class GamePlayScene : public cocos2d::Layer
+          {
+          private:
+              ... ...
+
+              // 游戏所得分数
+          (1) int score; 
+
+          public:
+              ... ...
+
+              // 层进入时调用的方法，碰撞事件监听在此处声明定义
+          (2) virtual void onEnter();
+
+              // 初始化分数
+          (3) void initScoreLabel();
+
+              // 飞机爆炸动画
+          (4) void explosionEfect(cocos2d::Vec2 vec, int tag);
+
+              // 飞机爆炸动画播放完之后的回调函数
+          (5) void explosionRemove(Node * sprite);
+
+              // 停止所有的定时器
+          (6) void stopAllSchedule();
+
+              // 游戏结束逻辑
+          (7) void gameOver();
+          };
+
+    6.05  GamePlayScene.cpp, initEnvironment
+
+          void GamePlayScene::initEnvironment()
+          {
+              ... ...
+
+              // 初始化分数标签
+          (1) initScoreLabel();
+          }
+
+    6.06  GamePlayScene.cpp, initScoreLabel
+
+          (1) void GamePlayScene::initScoreLabel()
+          {
+              // 初始化分数为 0
+          (2) score = 0;
+
+              // 添加分数
+              //auto label = Label::createWithTTF("", "fonts/MarkerFelt.ttf", 24);  
+          (3) auto label = cocos2d::Label::createWithSystemFont("分数:0", "Arial", 24);
+          (4) label->setTag(100); 
+          (5) label->setPosition(Vec2(0, visibleOrigin.y + visibleSize.height -
+                  label->getContentSize().height/2));
+          (6) label->setHorizontalAlignment(TextHAlignment::RIGHT);
+          (7) label->setAnchorPoint(Vec2(0, 0.5));
+          (8) this->addChild(label, 1);
+          }
+
+    6.07  Collision Handling
+
+          01. 当两个可以互相碰撞的实体碰撞后，触发 onContactBegin 事件；
+          02. 然后通过捕捉的参数PhysicsContact类获取到相关的信息；
+          03. 碰撞一般是两个实体进行碰撞的，我们可以通过 contact.getShapeA()->getBody()->getNode();
+              和 contact.getShapeA()->getBody()->getNode(); 来获取两个碰撞的实体；
+          04. 也就是一个节点，游戏里是我机、敌机或子弹精灵；
+          05. 最后就是判断是哪种碰撞，是我机和敌机，或者是敌机和子弹，然后进行不同的处理。
+
+    6.08  GamePlayScene.cpp, onEnter
+
+          /* 层进入的时候会调用该函数，进行物理世界的碰撞检测 */
+          (1) void GamePlayScene::onEnter()
+          {
+          (2) Layer::onEnter();
+
+          (3) auto listener = EventListenerPhysicsContact::create();
+
+          (4) listener -> onContactBegin = [=](PhysicsContact& contact) {
+                  // FIXME: 有时会到这里 Crash，提示说 spriteA 或 spriteB 地址为空
+          (5)     auto spriteA = (Sprite *)contact.getShapeA()->getBody()->getNode();
+          (6)     auto spriteB = (Sprite *)contact.getShapeB()->getBody()->getNode();
+          (7)     int tag1 = spriteA->getTag();
+          (8)     int tag2 = spriteB->getTag();
+          (9)     Vec2 vec1 = spriteA->getPosition();
+          (10)    Vec2 vec2 = spriteB->getPosition();
+
+                  // 敌机和子弹碰撞碰撞
+                  // 敌机 105 或 104，子弹 106，我机 103
+          (11)    if (tag1 + tag2 == 210 || tag1 + tag2 == 211) {
+          (13)        SimpleAudioEngine::getInstance()->playEffect("sounds/use_bomb.wav"); 
+                      // 加分，如果是 104 则是小敌机 500 分，105 是大敌机 1000 分
+          (15)        if (tag1 == 104 || tag2 == 104) {
+          (16)            score += 500;
+          (14)        } else {
+          (17)            score += 1000;
+                      }
+          (18)        auto scoreSpire = (Label *)this->getChildByTag(100);
+          (19)        scoreSpire->setString(String::createWithFormat("分数:%d", score)->_string);
+                      // 粒子特效
+          (20)        auto *system = ParticleSystemQuad::create("particle_texture.plist"); 
+
+          (21)        if (tag1 == 104 || tag1 == 105) {
+                          // 移除敌机和子弹
+          (23)            enemyList.eraseObject(spriteA);
+          (24)            bulletList.eraseObject(spriteB);
+          (25)            system->setPosition(vec1);
+                          // 启动动画
+          (26)            this->explosionEfect(vec1, tag1);
+          (22)        } else { 
+          (27)            enemyList.eraseObject(spriteB);
+          (28)            bulletList.eraseObject(spriteA); 
+                          // 启动动画
+          (29)            this->explosionEfect(vec2, tag2);
+          (30)            system->setPosition(vec2);
+                      }
+
+                      // 粒子特效加入层中
+          (31)        this->addChild(system);
+          (32)        spriteA->removeFromParent();
+          (33)        spriteB->removeFromParent();
+
+                    // 敌机与我机碰撞
+          (12)    } else if ((tag1+tag2) == 207 || (tag1+tag2) == 208) {
+          (34)        SimpleAudioEngine::getInstance()->playEffect("sounds/game_over.wav"); 
+                      // 修改游戏状态为结束状态 Game_State_Over
+          (35)        gameState = Game_State_Over;
+                      // 停止所有的定时器
+          (36)        stopAllSchedule();
+                      // 游戏结束逻辑	
+          (37)        if (tag1 == 103) {
+          (39)            this->explosionEfect(vec2, tag2);
+          (40)            this->explosionEfect(vec1, tag1);
+          (38)        } else {
+          (41)            this->explosionEfect(vec1, tag1);
+          (42)            this->explosionEfect(vec2, tag2);
+                      }
+                      // 使用 UserDefault 存储些用户数据分数
+          (43)        UserDefault *userDefault = UserDefault::getInstance();
+          (44)        int topScore = userDefault->getIntegerForKey("topScore");
+          (45)        if (topScore < score) {
+          (47)            userDefault->setIntegerForKey("topScore", score);
+          (46)        } else {
+          (48)            userDefault->setIntegerForKey("topScore", topScore);
+                      }
+          (49)        userDefault->setIntegerForKey("currentScore", score);
+
+          (50)        spriteA->removeFromParent();
+          (51)        spriteB->removeFromParent();
+          (13)    } else{ }
+
+          (52)    return true;
+              };
+
+               // 注册监听器
+          (53) EventDispatcher *eventDispatcher = Director::getInstance()->getEventDispatcher();
+          (54) eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+          }
+
+    6.09  GamePlayScene.cpp, stopAllSchedule
+
+          /* 停止所有的定时器 */
+          (1) void GamePlayScene::stopAllSchedule()
+          {
+          (2) this->unscheduleAllSelectors();
+          }
+
+    6.10  GamePlayScene.cpp, explosionEfect
+
+          /* 飞机爆炸动画 */
+          (1) void GamePlayScene::explosionEfect(Vec2 vec, int tag)
+          {
+          (2) float timeDelay = 0.1;
+          (3) Vector<SpriteFrame*> animationframe;
+              // 小敌机动画帧
+          (4) if (tag == 104) {
+          (7)     for (int i = 1; i < 5; i++) {
+          (8)         auto string = cocos2d::__String::createWithFormat("enemy1_down%d.png", i);
+          (9)         SpriteFrame * sf=SpriteFrame::create(string->getCString(),
+                          Rect(0, 0, 57, 43));
+          (10)        animationframe.pushBack(sf);
+                  }
+          (5) } else if (tag == 105) {
+          (11)    for(int i = 1; i < 5; i++) {
+          (12)        auto string = cocos2d::__String::createWithFormat("enemy2_down%d.png", i);
+          (13)        SpriteFrame * sf=SpriteFrame::create(string->getCString(),
+                          Rect(0, 0, 69, 95));
+          (14)        animationframe.pushBack(sf);
+                  }
+          (6) } else {
+          (15)    timeDelay = 0.5;
+          (16)    for(int i=1;i<5;i++) {
+          (17)        auto string = cocos2d::__String::createWithFormat("hero_blowup_n%d.png", i);
+          (18)        SpriteFrame * sf = SpriteFrame::create(string->getCString(),
+                          Rect(0, 0, 102, 126));
+          (19)        animationframe.pushBack(sf);
+                  }
+              }
+          (20) Animation * ani = Animation::createWithSpriteFrames(animationframe, timeDelay);
+          (21) auto blanksprite = Sprite::create();
+          (22) blanksprite->setTag(tag);
+          (23) Action *act = Sequence::create(Animate::create(ani),
+                  CCCallFuncN::create(blanksprite, callfuncN_selector(GamePlayScene::explosionRemove)),
+                  NULL);
+          (24) this->addChild(blanksprite);
+          (25) blanksprite->setPosition(vec);
+          (26) blanksprite->runAction(act);
+          }
+
+    6.11  GamePlayScene.cpp, explosionRemove
+
+          /* 删除爆炸动画本身 */
+          (1) void GamePlayScene::explosionRemove(Node * sprite)
+          {
+          (2) sprite->removeFromParentAndCleanup(true);
+          (3) if (sprite->getTag() == 103) {
+          (4)     SimpleAudioEngine::getInstance()->stopBackgroundMusic("sounds/game_music.wav");
+                  // 游戏结束
+          (5)     gameOver();
+              }
+          }
+
+    6.12  GamePlayScene.cpp, gameOver
+
+          /* 游戏结束 */
+          (1) void GamePlayScene::gameOver()
+          {
+          (2) CCLOG("游戏结束");
+          }
+
+    6.13  Resource
+
+          01. 把文件 "particle_texture.plist" 拖到工程的 Resources 文件夹下；
+          02. 把文件 "particle_texture.png" 拖到工程的 Resources 文件夹下；
+          03. 把文件 "enemy1_down1.png" 拖到工程的 Resources 文件夹下；
+          04. 把文件 "enemy1_down2.png" 拖到工程的 Resources 文件夹下；
+          05. 把文件 "enemy1_down3.png" 拖到工程的 Resources 文件夹下；
+          06. 把文件 "enemy1_down4.png" 拖到工程的 Resources 文件夹下；
+          07. 把文件 "enemy2_down1.png" 拖到工程的 Resources 文件夹下；
+          08. 把文件 "enemy2_down2.png" 拖到工程的 Resources 文件夹下；
+          09. 把文件 "enemy2_down3.png" 拖到工程的 Resources 文件夹下；
+          10. 把文件 "enemy2_down4.png" 拖到工程的 Resources 文件夹下；
+          11. 把文件 "hero_blowup_n1.png" 拖到工程的 Resources 文件夹下；
+          12. 把文件 "hero_blowup_n2.png" 拖到工程的 Resources 文件夹下；
+          13. 把文件 "hero_blowup_n3.png" 拖到工程的 Resources 文件夹下；
+          14. 把文件 "hero_blowup_n4.png" 拖到工程的 Resources 文件夹下。
+
+    6.14  Building, Troubleshooting, Thinking
+
+          01. onEnter 里的，FIXME: 有时会到这里 Crash，提示说 spriteA 或 spriteB 地址为空；
+          02. 在 enemyCreate() 里，加上一段调试：CCLOG("%s", string->getCString());
+              就不提示出错了。
+
+    6.15  Class Exercises
+
+    6.16  Conclusion
+
+07. The End, Game Over Scene
+
+    7.01  Introduction
+
+          01. 游戏结束场景就没什么好介绍的了，跟第一个 GameMenuScene 场景差不多；
+          02. 只是修改了背景图片，去掉了飞机，添加了显示分数和最高分的 Label；
+          03. 下面我们来看是如何实现的。 
+
+    7.02  New File for GameOverScene
+
+          01. 先鼠标左键点击，GamePlayScene.h；
+          02. File --> New --> File --> iOS --> C and C++；
+          03. --> C++ Class --> Next（或双击）；
+          04. --> Save As: GameOverScene；
+          05. --> Create.
+
+    7.03  GameOverScene.h
+
+          #ifndef __AircraftBattle__GameOverScene__
+          #define __AircraftBattle__GameOverScene__
+
+          #include <iostream>
+          (1) #include "cocos2d.h"
+
+          (2) class GameOverScene : public cocos2d::Layer
+          {
+          (3) private:
+          (4)     cocos2d::Size visibleSize;
+          (5)     cocos2d::Vec2 visibleOrigin;
+
+          (6) public:
+          (7)     static cocos2d::Scene* createScene();
+          (8)     virtual bool init();
+          (9)     void initEnvironment();
+          (10)    void initScoreLabel();
+          (11)    void initGameMenu();
+          (12)    void continueGame(cocos2d::Ref* pSender);
+          (13)    void quitGame(cocos2d::Ref* pSender);
+
+          (14)    CREATE_FUNC(GameOverScene);
+          };
+
+          #endif /* defined(__AircraftBattle__GameOverScene__) */
+
+    7.04  GameOverScene.cpp, Header and Namespace
+
+          (1) #include "GamePlayScene.h"
+
+          (2) USING_NS_CC;
+
+    7.05  GameOverScene.cpp, createScene
+
+          (1) Scene* GameOverScene::createScene()
+          {
+              // 'scene' is an autorelease object
+          (2) auto scene = Scene::create();
+
+              // 'layer' is an autorelease object
+          (3) auto layer = GameOverScene::create();
+
+             // add layer as a child to scene
+          (4) scene->addChild(layer);
+
+             // return the scene
+          (5) return scene;
+          }
+
+    7.06  GameOverScene.cpp, init
+
+          (1) bool GameOverScene::init()
+          {
+          (2) if (!Layer::init()) {
+          (3)     return false;
+              }
+
+          (4) initEnvironment();
+          (5) initScoreLabel();
+          (6) initGameMenu();
+
+              return true;
+          }
+
+    7.07  GameOverScene.cpp, initEnvironment
+
+          (1) void GameOverScene::initEnvironment()
+          {
+          (2) visibleSize = Director::getInstance()->getVisibleSize();
+          (3) Vec2 visibleOrigin = Director::getInstance()->getVisibleOrigin();
+
+              // 创建背景
+          (4) auto bg = Sprite::create("gameover.png");
+          (5) bg->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,
+                  visibleSize.height/2));
+          (6) bg->setAnchorPoint(Vec2(0.5, 0.5));
+          (7) this->addChild(bg, 0);
+          }
+
+    7.08  GameOverScene.cpp, initScoreLabel
+
+          (1) void GameOverScene::initScoreLabel()
+          {
+          (2) int currentScore = UserDefault::getInstance()->getIntegerForKey("currentScore");
+          (3) int topScore = UserDefault::getInstance()->getIntegerForKey("topScore");
+
+              // 显示最终分数
+          (4) auto label = cocos2d::Label::createWithSystemFont(__String::createWithFormat("%d",
+                  currentScore)->getCString(), "Arial", 24);
+          (5) label->setPosition(Vec2(visibleSize.width/2,
+                  visibleOrigin.y + visibleSize.height/2 + 60));
+          (6) label->setHorizontalAlignment(TextHAlignment::RIGHT);
+          (7) label->setAnchorPoint(Vec2(0.5, 0.5));
+          (8) this->addChild(label, 1);
+
+              // 显示最高分数
+          (9) auto label2 = cocos2d::Label::createWithSystemFont(__String::createWithFormat("%d",
+                  topScore)->getCString(), "Arial", 24);
+          (10) label2->setPosition(Vec2(visibleSize.width/2,
+                  visibleOrigin.y + visibleSize.height-label2->getContentSize().height));
+          (11) label2->setHorizontalAlignment(TextHAlignment::RIGHT);
+          (12) label2->setAnchorPoint(Vec2(0.5, 0.5));
+          (13) this->addChild(label2, 1);
+          }
+
+    7.09  GameOverScene.cpp, initGameMenu
+
+          (1) void GameOverScene:: initGameMenu()
+          {
+              // 继续游戏菜单项 
+          (2) auto startItem = MenuItemImage::create("game_start.png", "game_start2.png",
+                  CC_CALLBACK_1(GameOverScene::continueGame, this));
+          (3) startItem->setPosition(Vec2(visibleSize.width/2 + visibleOrigin.x,
+                  visibleSize.height/2 + visibleOrigin.y));
+
+              // 退出游戏菜单项
+          (4) auto closeItem = MenuItemImage::create( "game_exit.png", "game_exit2.png",
+                  CC_CALLBACK_1(GameOverScene::quitGame, this));
+          (5) closeItem->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,
+                  visibleSize.height/2 + visibleOrigin.y - startItem->getContentSize().height));
+
+              // 把菜单项添加到菜单精灵中
+          (6) auto menu = Menu::create(startItem, closeItem, NULL);
+          (7) menu->setPosition(Vec2::ZERO);
+
+              // 把菜单精灵添加到当前的层中
+          (8) this->addChild(menu, 1);
+          }
+
+    7.10  GameOverScene.cpp, continueGame
+
+          /* 继续游戏菜单项的回调函数 */
+          (1) void GameOverScene::continueGame(Ref *pSender)
+          {
+          (2) auto scene = GamePlayScene::createScene();
+          (3) auto gameScene = TransitionSlideInR::create(1.0f, scene);
+          (4) Director::getInstance()->replaceScene(gameScene);
+          }
+
+    7.11  GameOverScene.cpp, quitGame
+
+          /* 退出游戏，系统默认退出的回调函数 */
+          (1) void GameOverScene::quitGame(Ref *pSender)
+          {
+              // 结束导演实例
+          (2) Director::getInstance()->end();
+
+              // 退出程序
+          (3) exit(0);
+          }
+
+    7.12  GamePlayScene.cpp, gameOver
+
+          (1) #include "GameOverScene.h"
+
+          /* 游戏结束 */
+          void GameScene::gameOver()
+          {
+          (2) //CCLOG("游戏结束");
+          (3) auto scene = GameOverScene::createScene();
+          (4) auto gameOverScene = TransitionTurnOffTiles::create(1.0f, scene);
+          (5) Director::getInstance()->replaceScene(gameOverScene);
+          }
+
+    7.13  Resources
+
+          把文件 "gameover.png" 拖到工程的 Resources 文件夹下。
+
+    7.14  Building, Troubleshooting, Thinking
+
+    7.15  Class Exercises
+
+    7.16  Conclusion
+
+08. Conclusion
+
+09. Interview
+
+10. Homework
+
+11. Traps and Pitfalls
+
+12. Diligence

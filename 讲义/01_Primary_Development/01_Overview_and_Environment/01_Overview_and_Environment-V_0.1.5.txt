@@ -1,0 +1,979 @@
+
+/*
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Copyleft (C) 2009-2014
+ * COEO - China Open Education Organization
+ * "+++New Life+++" Team for Computer Science
+ * Free as in freedom. The Truth Will Free You.
+ * 张开自由的翅膀，真理要释放你。
+ * To teach the inexperienced the ropes 
+ * and give our young people a grasp on reality.
+ * 教导没有经验的得以丰富，给予青年人开启真理的钥匙。
+ * The old life is gone; a new life burgeons!
+ * 告别飘逝的过去，拥抱怒放的新生！
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * This file is available to you under a choice of one of two licenses.
+ *
+ * GPL
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
+ *
+ * THE FILE IS DISTRIBUTED AS-IS, WITHOUT WARRANTY OF ANY KIND, AND THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE
+ * ARE EXPRESSLY DISCLAIMED.
+ *
+ * See the GNU General Public License * for more details.
+ *
+ * http://www.opensource.org/licenses/gpl-license.html
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * 
+ * BSD
+ *
+ *  Alternatively you can redistribute this file under the terms of the
+ *  BSD license as stated below:
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *  3. The names of its contributors may not be used to endorse or promote
+ *     products derived from this software without specific prior written
+ *     permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ *  TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Description:
+ *     This file describe the Cocos2d programming.
+ *
+ * Original Date:
+ *     Aug-04-2014
+ *
+ * Modified Date:
+ *     Aug-13-2014
+ *
+ * Authors:
+ *     Yuhui    <abrahambenyu@gmail.com>
+ *
+ * Current Version:
+ *     0.1.5
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+00. Table of Contents
+
+    01. Introduction
+    02. System Requirements
+    03. Download Essentials
+    04. Install Cocos2d-X
+    05. Create a Cocos2d-x Project
+    06. Build and Run New Project
+    07. The Anatomy of Cocos2d
+    08. Rewrite Hello World
+    09. Change the World
+    10. What Else You Should Know
+    11. Conclusion
+    12. Homework
+    13. Traps and Pitfalls
+    14. Diligence
+
+
+01. Introduction
+
+    1.01  Why Cocos2d
+
+          1.1.01  Free
+
+                  01. 首先，Cocos2d 是免费的，不需要花一分钱就可以用它来进行开发；
+                  02. 可以随心所欲地开发苹果移动设备和 Android 等其它移动设备；
+                  03. 还可以用它来开发 主机系统应用，完全没有任何附加限制的。
+
+          1.1.02  Open Source
+
+                  01. Cocos2d 的第二个好处就是它是开源的，这意味着可以自由地学习游戏引擎的源代码；
+                  02. 或者在需要时对引擎做些改动，这使得 Cocos2d 既可以扩展，又十分灵活。
+
+          1.1.03  Programming Language
+
+                  01. 最早的 Cocos2d 引擎诞生于 2008 年，使用 Python 语言开发；
+                  02. 之后有很多个版本的 Cocos2d 的版本衍生；
+                  03. 使用的编程语言有：Phthon, C++, Java, Objective-C, Lua, C#, JavaScript。
+
+          1.1.04  2D
+
+                  01. Cocos2d 中的 "2d" 已经表明它是一个专注于开发 2d 游戏的引擎；
+                  02. Cocos2d 也可以用于加载并显示 3d 对象；
+                  03. Cocos2d 已经有了一个完整的增件，叫做 Cocos3d，也是开源的，
+                      用于为 Cocos2d 添加 3d 渲染支持；
+                  04. 不幸的是，Cocos3d 目前与 Cocos2d 不兼容，因为 Cocos3d 仍然在使用 OpenGL ES 1.1；
+                  05. 2d 游戏通常比较容易开发，算法也比较 容易理解和实现；
+                  06. 很多情况下，它们对硬件的要求比较低，因此可以创建色彩更鲜明、更细致的图形。
+
+          1.1.05  Got Physics
+
+                  01. 目前有两种集成在 Cocos2d 中的物理引擎可供选择：Chipmunk 和 Box2d；
+                  02. 这两种物理引擎仅仅在编写它们的语言上有一些细微的差别：
+                      Chipmunk 是用 C 语言编写而成的，而 Box2d 是用 C++ 语言编写而成的，
+                      但它们的功能几乎完全一样；
+                  03. Box2d 提供的文档比较好容易理解，Chipmunk 的 Pro 版本（商业版）为其 API
+                      提供了原生的 Objective-C 接口。
+
+          1.1.06  Less Technical
+
+                  01. 游戏开发者最喜欢 Cocos2d 的地方就在于它把底层的 OpenGL ES 代码封装的特别好；
+                  02. 大多数图形都是简单的精灵类来显示的，而精灵对象又是根据图像文件创建的；
+                  03. 也就是说，一个精灵对象就是一个具有缩放、翻转和着色能力的纹理，
+
+          1.1.07  Still Programming
+
+                  01. 总的来说，Cocos2d 确实简化了 iOS 游戏开发的过程，但出色的编程技巧依然是需要掌握的；
+                  02. 其它游戏引擎，如 Unity, Unreal, iTorque 2D 和 Shiva，都着重于向用户提供工具箱和工作流
+                      来降低对编程能力的要求；
+                  03. 使用这些引擎固然方便，但也失去了一些技术上的自由，而且还得付费；
+                  04. 至于 Cocos2d，要使用它确实需要花些工夫，但是相比其他引擎，Cocos2d 更能显出游戏编程的本质；
+                  05. 使用 Cocos2d 的开发者关注的是游戏编程的核心问题，同时出于 Cocos2d 良好的封装性，他们又不
+                      必真正地去处理最底层的实现。
+
+          1.1.08  Great Community
+
+                  01. 在 Cocos2d 社区，总有人能很快地回答你的问题，并且开发者可以自由地在这里分享知识和信息；
+                  02. Cocos2d 的官方论坛是 www.cocos2d-iphone.org/forum；
+                  03. 在社区，几乎每天都有新的教程和源码示例发布，而且大多数都是免费的；
+                  04. 你会发现网上实在有太多太多的资源可供学习、带来灵感；
+                  05. 如果想要密切关注 Cocos2d 社区的最新动态，建议你成为 Twitter 上 Cocos2d 的粉丝；
+                      http://twitter.com/cocos2d。
+
+          1.1.09  Official
+
+                  01. Fast
+                  02. Free
+                  03. Easy to use
+                  04. Community Supported
+
+    1.02  Other Cocos2d Game Engines
+
+          01. Cocos2d 提供了很多不同平台的版本，包括 Windows, JavaScript 和 Android；
+          02. 还有一个 C++ 版本的 Cocos2d，叫做 Cocos2d-X，它支持包括 iOS 和 Android 在内的多个移动平台；
+          03. 下面列出最流行的 Cocos2d 游戏引擎：
+
+          Name                Language          Platform                   Website
+          ====                ========          ========                   =======
+
+          Cocos2d             Python            Mac OS, Windows, Linux     www.cocos2d.org
+
+          Cocos2d-X           C++, Lua          iOS, Android Samsung Bada  www.cocos2d-x.org
+                                                BlackBerry Tablet OS,
+                                                Windows, Linux
+
+          Cocos2d-iphone      Objective-C       iOS, Mac OS X              www.cocos2d-iphone.org
+
+          Kobold2d            Objective-C, Lua  iOS, Mac OS X              www.kobold2d.com
+
+          Cocos2d-android-1   Java              Android                    https://github.com/
+                                                                               ZhouWeikuan/cocos2d
+
+          Cocos2d-X for XNA   C#                Windows Phone 7            http://github.com/cocos2d/
+                                                                               cocos2d-x-for-xna/
+
+          Cocos2d-javascript  JavaScript        Web 浏览器                 www.cocos2d-javascript.org
+
+    1.03  Prerequirstes
+
+          1.3.01  Programming Experience
+
+                  01. 也许你想为 iPhone, iPod Touch 和 iPad 开发 2D 游戏；
+                  02. 我们唯一的强制性要求是你必须有一定程序的编程经验；
+                  03. 你必须对一些编程概念，诸如循环，函数和类等有所理解。
+
+          1.3.02  Programming Language
+
+                  01. 如果在 iOS 系统下如果用 Cocos2d-x 也不是说都用 C++，也需要用一部分 Objective-C，
+                      访问系统底层的东西会用到 Objective-C；
+                  02. 如果在 Android 系统下用 Cocos2d-x 就会用到 Java，在 Windows 平台下就用 C#；
+                  03. C++ 语言是平台无关的，而 Objective-C, Java 或 C# 则可移植性差了，这个我们需要平衡一下。
+
+02. System Requirements
+
+    2.01  Hardware Requirements
+
+    2.02  Runtime Requirements
+
+          Android 2.3+
+          iOS 5.0+
+          OS X 10.7+
+          Windows 7+
+          Ubuntu 12.04+
+          Cocos2d-x v3.0+
+
+    2.03  Software Requirements
+
+          Xcode 4.6 (for iOS or Mac)
+          gcc 4.7 for Linux or Android. For Android ndk-r9 or newer is required.
+          Visual Studio 2012 (for Windows)
+          Python 2.7.5
+
+    2.04  Conclusion
+
+          01. cocos2d-x-3.0 以后的版本不支持安装模板到 XCode，所以只能手动建立项目了；
+          02. cocos2d-x-3.0 以后的版本编译时需要 XCode-5.1+ 的版本，所以最好先安装 XCode-5.1。
+
+03. Download Essentials
+
+    3.01  Download and Install Xcode and iOS SDK
+
+          01. cocos2d-x-3.0 以后的版本编译时需要 XCode-5.1+ 的版本，所以最好先安装 XCode-5.1；
+          02. iOS SDK 笔者还未测试出最低版本应该是多少，笔者现在所使用的版本是 iOS 7.1。
+
+    3.02  Download Cocos2d
+
+          3.2.01  Website Address
+
+                  01. 官方网址：    http://www.cocos2d-x.org/download
+                  02. github 网址：https://github.com/cocos2d/cocos2d-x
+
+          3.2.02  Cocos2d-x
+
+                  01. Written in C++ and OpenGL ES 1.1/2.0;
+                  02. Offers C++ and Lua API, runs on iOS, Android, Windows Phone 8,
+                      Windows, Mac OS X, Linux and more.
+
+          3.2.03  Cocos2d-JS
+
+                  01. Include Cocos2d-html5 and Cocos2d-x JavaScript binding, offers
+                      JavaScript friendly API.
+                  02. Applications developed by Cocos2d-JS can work on web browser and native platforms.
+
+          3.2.04  Code IDE
+
+                  Cocos2d-x official IDE for Lua and JavaScript coding.
+
+          3.2.05  Cocos Studio
+
+                  01. A game development tool kit based on Cocos2d-x, containing UI Editor,
+                  02. Animation Editor, Number Editor, Number Cruncher, and Scene Editor.
+
+          3.2.06  Conclusion
+
+                  github 上的代码不是全部的只有源代码，很多工具没有，建议从官方网址下载。
+
+04. Install Cocos2d-X
+
+    4.01  Early Days
+
+          01. 两用方法可以安装，第一种是装模板，另一种是把几个文件导进来；
+          02. 早期版本运行：./intstall-templates-xcode.sh。
+
+    4.02  Nowaday
+
+          01. 新版本的 Cocos2d-x 现在设计成不支持安装模板了；
+          02. cocos2d-x-3.0 以后的版本不用安装，直接可以建立多平台的项目；
+          03. 这样有很多好处，不污染 XCode，也一下子支持多个平台了。
+
+05. Create a Cocos2d-x Project
+
+    5.01  Introduction
+
+          01. 新版本的 Cocos2d-x 现在不安装模板的形式加到 XCode 所以不在 XCode 中建立项目；
+          02. 所以还用命令行的形式创建如下命令用于新建一个 Cocos2dx 项目。
+
+    5.02  New Project
+
+          5.2.01  Command
+
+                  $ cd cocos2d-x
+                  $ ./setup.py
+                  $ source FILE_TO_SAVE_SYSTEM_VARIABLE
+                  $ cocos new MyGame -p com.your_company.mygame -l cpp -d NEW_PROJECTS_DIR
+                  $ cd NEW_PROJECTS_DIR/MyGame
+李强
+/*
+1：把cocos2d-x-3.5拷贝到桌面上
+
+2：./setup.py （安装过程中有两个显示安卓SDK的，回车跳过即可）
+
+3：source /Users/apple/.bash_profile
+
+4：cd tools/cocos2d-console/bin 进入到bin 目录下才可以执行下面的命令
+./cocos new testgame -p com.history.HelloWorld -l cpp -d /Users/mac/Desktop/cocos2d-x-3.5/WorkSpace
+
+5：在桌面的指定文件夹创建cocos2d的工程
+
+*/
+          5.2.02  Description
+
+                  MyGame: name of your project
+                  -p com.MyCompany.MyGame: package name for android
+                  -l cpp: programming language used for the project, valid value is cppand lua
+                  -d ~/MyCompany: directory to hold your project
+
+06. Build and Run New Project
+
+    6.01  Build
+
+          6.1.01  Command
+
+                  cocos run -s ~/MyCompany/MyGame -p ios
+
+          6.1.02  Description
+
+                  -s: directory of the new project. This could be an absolute path or a relative path.
+                  -p: which platform to run on. Options are ios,android,win32,mac and linux.
+
+    6.02  Running Tests and Samples
+
+          6.2.01  Running Tests
+
+                  01. For OS X / iOS
+                      $ cd cocos2d-x/build
+                      $ open cocos_tests.xcodeproj
+                  02. For Linux
+                      $ cd cocos2d-x/build
+                      $ ./install-deps-linux.sh
+                      $ cmake ..
+                      $ make
+
+          6.2.02  Running Samples
+
+                  $ bin/cpp-empty-test/cpp-empty-test
+                  or
+                  $ bin/lua-empty-test/lua-empty-test
+
+07. The Anatomy of Cocos2d
+
+    7.01  The main Function
+
+          01. 发生在 main 函数和 AppDelegate 类之间的所有事情都是由 iOS SDK 自行处理的，不受程序员控制；
+          02. 因为几乎不用对 main.m 进行修改，所以可以放心跳过这里的内容，当然，多学一点知识也无妨；
+          03. 简单来说，main 函数创建了 NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+              之后调用 UIApplicationMain 来启动应用程序；
+          04. 其中，AppController 用作实现 UIApplicationDelegate 协议的类。
+
+    7.02  The Prefix Header Files
+
+          01. Prefix.pch 是用于加快编译速度的工具；
+          02. PCH 代表预编译头文件 (Pre-Compiled Header) ；
+          03. 只有永远变化或很少发生变化的头文件才能被添加到预编译头文件中；
+          04. 这样做可以使框架的代码提前编译，并对所有类可见；
+          05. 但是，如果添加到预编译头文件中的头文件发生了变化，那么所有代码会被重新编译，
+              这也是为什么只能向预编译头文件中添加不变头文件的原因；
+          06. cocos2d.h 头文件是非常适合被添加到预编译头文件中的，因为它几乎不会改变；
+          07. 当项目比较复杂时，编译速度会有比较显著的提升；
+          08. 一开始就将 cocos2d.h 添加到预编译头文件中是一个非常好的习惯，
+              这样在其他源文件中就不必再写语句 #import "cocos2d.h" 了。
+
+    7.03  The AppDelegate Class
+
+          7.3.01  Introduction
+
+                  01. 每个 iOS 应用程序都有用于实现 UIApplication Delegate 协议的 AppDelegate 类，
+                      Cocos2d-x 项目中的程序入口文件，提供对程序生命周期的控制事件；
+                  02. 在我们的 HelloWorld 项目中，它被简单地叫做 AppDelegate；
+                  03. AppDelegate 是在每个 iOS 应用程序中都存在的通用概念，它通过在特定时间点从 iOS
+                      接收消息来追踪应用程序的状态变化；
+                  04. 例如，可以通过它来处理诸如用户接收来电或内存不足时应用程序需要采取的措施，
+                      Cocos2d 通常在 applicationDidFinishLaunching 方法中初始化；
+                  05. 在 Cocos2d 项目中，在 AppDelegate 类中最常被修改的代码行如下所示：
+                      // turn on display FPS
+                      director->setDisplayStats(true);
+                      // set FPS. the default value is 1.0/60 if you don't call this
+                      director->setAnimationInterval(1.0 / 60);
+
+          7.3.02  Display Stats
+
+                  01. 使用 setDisplayStats 方法可在屏幕左下角显示数字，如图 FirstGame_HelloWorld；
+                  02. 数字排列为 3 行，第 1 行是绘制调用的次数，绘制调用是开销很高的操作，
+                      所以这个数字越小越好；
+                      03. 第 2 行是更新帧所需的时间，可以用来判断还可以绘制多少东西才会导致帧率下降；
+                      04. 最底下第 3 行是当前帧率；
+                      05. 在 iOS 模拟器中，只需要关注绘制调用次数，而完全可以忽略帧用时和帧率，
+                          模拟器中的性能无关紧要，影响它的因素和实际的 iOS 设备是不同的，
+                          这就像在庄稼地里开跑车，用这种方式来衡量跑车的性能一样，你会得到一个粗略的印象，
+                          这么开车也许还很有趣，但是你仍然无法判断跑车在街道上开起来怎么样，
+                          而这才是真正关键的地方；
+                      06. 如果需要调整显示帧率的反应速度，可以在 MyGame/cocos2d_libs.xcondeproj/ccConfig.h
+                          文件中修改 CC_DIRECTOR_FPS_INTERVAL 代码行；
+                      07. 该值默认为 0.1，即在默认情况下，表示帧率的数字会在每秒被刷新 10 次，
+                          如果增大该值，那么数字就会被刷新得更慢，虽然这个变化不明显，但还是存在的。
+
+          7.3.03  Animation Interval
+
+                  01. 动作间隔决定了 Cocos2d 刷新屏幕的频率，关乎游戏可以获得的最大帧率；
+                  02. 但动作间隔不等同于每秒刷新多少帧，相反，表示的是 Cocos2d 刷新一帧所需的时间；
+                  03. 在上面的代码中，动作间隔参数为 1.0/60，这就是 Cocos2d 对屏幕进行连续两次刷新之间间隔；
+                  04. 当然，如果游戏十分复杂，需要 CPU 或 GPU 花大于 1.0/60 秒时间来刷新屏幕，
+                      就无法保证应用程序能始终保持 60fps (frame per second，帧/秒)的刷新速度；
+                  05. 很多情况下，最好把帧率设为 30fps，这对复杂游戏很有帮助，因为这样做可以避免由于帧率
+                      无法达到 60fps，而在游戏过程中发生 30fps 到 60fps 间的大幅波动；
+                  06. 在这种情况下，最好把帧率设为可能达到的最低帧率，因为较低但是稳定的帧率可以保证游戏的流畅
+                      运行，而平均帧率较高、但是帧率可能发生大幅波动的游戏会降低玩家的用户体验。
+
+    7.04  HelloWorld
+
+          7.4.01  Introduction
+
+                  01. HelloWorld 类中的代码是真正用于显示 Hello World 标签的；
+                  02. 在介绍这些内容之前，你应该了解 Cocos2d 采用了多个层级的 Node 对象来决定在什么地方
+                      显示什么内容；
+                  03. 所有节点的基类都是 Node，它包含一个位置属性，但没有视觉上的显示；
+                  04. 它是其他所有节点类的父类，包括最基本的 Scene 类和 Layer 类。
+
+          7.4.02  Scene
+
+                  01. Scene 类是一个抽象概念，它仅用于根据对象的像素坐标把对象放置到场景中正确的位置；
+                  02. 所以，Scene 节点通常是整个 Cocos2d 场景体系的根节点，任何时候只能有一个运行
+                      着的场景；
+                  03. 由于 Scene 类是抽象概念，因此在 Cocos2d 中创建场景的默认方式是通过类中的方法
+                      auto scene = Scene::create(); 来完成的；
+                  04. 该方法创建了一个普通的 Scene 对象，并把 HelloWorld 类的一个实例添加到刚创建的
+                      Scene 对象中，Scene 几乎永远都是用这种方式创建并使用的；
+                  05. 然后用同样的方法创建一个 HelloWorld 对象，并把它添加到刚创建的 Scene 对象中；
+                  06. 最后，把这个 Scene 对象返回给调用者。
+
+          7.4.03  cocos2d::Layer
+
+                  01. cocos2d::Layer 类本身几乎没有什么功能，但它可用于接收触摸和加速计输入；
+                  02. 它常被用作 Scene 的第一个子节点，因为每个游戏至少都会使用触摸输入功能；
+                  03. 严格来说，层对象是不需要 Layer 的，使用 Node 的其他任何派生类可以实现相同的效果；
+                  04. 打开 HelloWorldScene.h 头文件，你会看到 HelloWorld 类派生自 Layer 类。
+
+          7.4.04  init()
+
+                  在这里是 HeloWorld 项目最基本的初始化代码。
+
+          7.4.05  LabelTTF
+
+                  01. LabelTTF 类使用 Arial 字体在屏幕上绘制文本；
+                  02. 接下来我们来解释 Hello World 标签是如何添加到场景中去的；
+                  03. 程序中 LabelTTF 对象是通过它的一个静态初始化方法创建的，该方法会返回一个新创建的
+                      LabelTTF 实例；
+                  04. 为了防止该对象在 init 方法结束后从内存中释放，必须调用：
+                      // add the label as a child to this layer
+                      this->addChild(label, 1);
+                      把它添加为 this 的子节点，保存对象的引用会使该对象保持存活；
+                  05. 在这里，Cocos2d 会控制对象的内容，直到你从场景中删除它或者切换了场景为止；
+                  06. 同时，该标签的 position 属性被设置为屏幕中央，注意，既可以在调用 addChild 方法之前
+                      对 position 属性赋值，也可以在调用后进行赋值。
+
+    7.05  Resources
+
+          01. 该文件夹主要用于存放游戏中需要的图片、音频和配置等资源文件；
+          02. 为了方便管理，可以在其中创建子文件夹；
+          03. 在不同平台下，对于文件路径的定义是不一致的，
+              但实际接口大同小异；
+          04. Cocos2d-x 为我们屏蔽了这些差异，其中 "resource" 文件夹可以默认为游戏运行时的目录。
+
+08. Rewrite Hello World
+
+    8.01  New Class
+
+          01. 左键点击 MyGame 下的 Classes 下的 AppDelegate.cpp；
+          02. 然后点击菜单的 File —> New —> File… —> iOS —> C and C++ —> C++ Class；
+          03. Next —> Save As: GenesisScene, Where (Classes), Targets (MyGame iOS) —> Create。
+
+    8.02  GenesisScene.h
+
+          #ifndef __GENESIS_SCENE_H__
+          #define __GENESIS_SCENE_H__
+
+          #include <iostream>
+          #include "cocos2d.h"
+
+          class Genesis : public cocos2d::Layer
+          {
+          public:
+              // there's no 'id' in cpp, so we recommend returning the class instance pointer
+              static cocos2d::Scene* createScene();
+
+              // Here's a difference. Method 'init' in cocos2d-x returns bool,
+              // instead of returning 'id' in cocos2d-iphone
+              virtual bool init();  
+    
+              // a selector callback
+              void menuCloseCallback(cocos2d::Ref* pSender);
+    
+              // implement the "static create()" method manually
+              CREATE_FUNC(Genesis);
+          };
+
+          #endif // __GENESIS_SCENE_H__
+
+    8.03  GenesisScene.cpp
+
+          #include "GenesisScene.h"
+
+          USING_NS_CC;
+
+          Scene* Genesis::createScene()
+          {
+              // 'scene' is an autorelease object
+              auto scene = Scene::create();
+
+              // 'layer' is an autorelease object
+              auto layer = Genesis::create();
+
+              // add layer as a child to scene
+              scene->addChild(layer);
+
+              // return the scene
+              return scene;
+          }
+
+          // on "init" you need to initialize your instance
+          bool Genesis::init()
+          {
+              //////////////////////////////
+              // 1. super init first
+              if ( !Layer::init() )
+              {
+                  return false;
+              }
+
+              Size visibleSize = Director::getInstance()->getVisibleSize();
+              Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+              /////////////////////////////
+              // 2. add a menu item with "X" image, which is clicked to quit the program
+              //    you may modify it.
+
+              // add a "close" icon to exit the progress. it's an autorelease object
+              auto closeItem = MenuItemImage::create(
+                                                     "CloseNormal.png",
+                                                     "CloseSelected.png",
+                                                     CC_CALLBACK_1(Genesis::menuCloseCallback, this));
+
+	          closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2,
+                                          origin.y + closeItem->getContentSize().height/2));
+
+              // create menu, it's an autorelease object
+              auto menu = Menu::create(closeItem, NULL);
+              menu->setPosition(Vec2::ZERO);
+              this->addChild(menu, 1);
+
+              /////////////////////////////
+              // 3. add your codes below…
+
+              // add a label shows "Genesis in the Bible"
+              // create and initialize a label
+
+              auto label = LabelTTF::create("In the beginning God created the heaven and the earth.",
+                                            "Arial", 35);
+
+              // position the label on the center of the screen
+              label->setPosition(Vec2(origin.x + visibleSize.width/2,
+                                      origin.y + visibleSize.height -
+                                      label->getContentSize().height));
+
+              // add the label as a child to this layer
+              this->addChild(label, 1);
+
+              // add "Genesis" splash screen"
+              auto sprite = Sprite::create("Genesis.png");
+
+              // position the sprite on the center of the screen
+              sprite->setPosition(Vec2(visibleSize.width/2  + origin.x,
+                                       visibleSize.height/2 + origin.y));
+
+              // add the sprite as a child to this layer
+              this->addChild(sprite, 0);
+
+              return true;
+          }
+
+          void Genesis::menuCloseCallback(Ref* pSender)
+          {
+              Director::getInstance()->end();
+
+              exit(0);
+          }
+
+    8.04  AppDelegate.cpp
+
+          #include "GenesisScene.h"
+
+          bool AppDelegate::applicationDidFinishLaunching() {
+              // initialize director
+              auto director = Director::getInstance();
+              auto glview = director->getOpenGLView();
+              if(!glview) {
+                  glview = GLView::create("My Game");
+                  director->setOpenGLView(glview);
+              }
+
+              // turn on display FPS
+              director->setDisplayStats(true);
+
+              // set FPS. the default value is 1.0/30 if you don't call this
+              director->setAnimationInterval(1.0 / 30);
+
+              // create a scene. it's an autorelease object
+              auto scene = Genesis::createScene();
+
+              // run
+              director->runWithScene(scene);
+
+              return true;
+          }
+
+    8.05  Resources
+
+          Copy ChinaOpenEducation.png here.
+          
+    8.06  Conclusion
+    
+          8.6.01  Director
+          
+                  01. Director 是得到的对象，注意，是得到，不是生成，因为 Director 使用单态模式控制的对象，
+                      并通过该对象设置应用程序的各种属性；
+                  02. 一个应用程序里有且只有一个 Director，它控制着整个应用程序所有的资源；
+                  03. 其实 Director 的工作确实跟导演的工作非常类似，Director 类主要负责以下工作：
+                      . 游戏呈现方面的设定，包括设定游戏呈现的窗口、FPS 显示、默认帧率上限、纹理颜色位宽等；
+                      . 切换当前的游戏场景，暂停或恢复游戏场景的运行；
+                      . 总而言之，游戏在 Director 的管理下完成了呈现设定与流程控制；
+                  04. 在 Director 中，还定义了以下管理场景的方法：
+                      . runWithScene(Scene* scene)：启动游戏，并运行 scene 场景，这个方法在主程序启动时
+                        第一次启动主场景时调用；
+                      . replaceScene(Scene* scene)：直接使用传入的 scene 替换当前场景来切换画面，当前场景
+                        将被释放，这是切换场景时最常用的方法；
+                      . pushScene(Scene* scene)： 将当前运行中的场景暂停并压入到代执行场景栈中，再将传入的
+                        scene 设置为当前运行场景；
+                      . popScene：释放当前场景，再从代执行场景栈中弹出栈顶的场景，并将其设置为当前运行场景，
+                        如果栈为空，则直接结束应用，与 pushScene 成对使用，可以达到形如由主界面进入设置界面，
+                        然后回到主界面的效果；
+                      . pause：暂停当前运行场景中的所有计时器和动作，场景仍然会显示在屏幕上；
+                      . resume：恢复当前运行场景中被暂停的计时器和动作，它与 pause 配合使用；
+                      . end：结束场景，同时退出应用；
+                  05. 值得注意的一点是，以上三种切换场景的方法 (replaceScene、pushScene、popScene)
+                      均是先将待切换的场景完全加载完毕后，才将当前运行的场景释放掉，所以，在新场景恰好完全加载
+                      完毕的瞬间，系统中同时存在着两个场景，这将是对内存的一个考验，若不注意的话，切换场景可能
+                      会造成内存不足。
+
+          8.6.02  set FPS - AnimationInterval
+          
+                  01. 接下来是设置绘制间隔，绘制间隔指的是两次绘制的时间间隔，因此绘制间隔的倒数就是 FPS 上限；
+                  02. 对于移动设备来说，我们通常都会将 FPS 限制在一个适当的范围内；
+                  03. 过低的每秒重绘次数会使动画显示出卡顿的现象，而提高每秒重绘次数会导致设备运算量大幅增加，
+                      造成更高的能耗；
+                  04. 人眼的刷新频率约为 60 次每秒，因此把 FPS 限定在 60 是一个较为合理的设置，
+                      Cocos2d-x 就把绘制间隔设置为 1/60 秒；
+                  05. 至此，我们已经完成了引擎的初始化，接下来我们将启动引擎。
+    
+          8.6.03  addChild()
+    
+                  01. addChild 用于将一个游戏元素添加到另一个元素中；
+                  02. 在创建一个层或者场景时，通常会初始化自己的游戏元素，定义一些特殊的效果，
+                      或是将其他的游戏元素组合到一起，而 addChild 方法就是用于组合游戏元素的；
+                  03. 后面我们将会看到，这样的架构是多么简单而又富有表现力。
+                  
+          8.6.04  Conclusion
+          
+                  01. Cocos2d 的游戏结构可以简单地概括为场景、层、精灵，而这两个文件就是 Hello World
+                      场景的实现文件；
+                  02. 每个游戏组件都可以添加到另一个组件中，形成层次关系，例如场景中可以包含多个层，
+                      层中可以包含多个精灵。
+
+09. Change the World
+
+    9.01  New Class
+
+          01. 左键点击 MyGame 下的 Classes 下的 AppDelegate.cpp；
+          02. 然后点击菜单的 File —> New —> File… —> iOS —> C and C++ —> C++ Class；
+          03. Next —> Save As: GameLayer, Where (Classes), Targets (MyGame iOS) —> Create。
+
+    9.02  GameLayer.h
+
+              //
+              //  GameLayer.h
+              //  MyGame
+              //
+              //  Created by qianfeng on 14-8-9.
+              //
+              //
+
+              #ifndef __MyGame__GameLayer__
+              #define __MyGame__GameLayer__
+
+              #include <iostream>
+
+          (1) #include "cocos2d.h"
+
+          (2) USING_NS_CC;
+
+          (3) class GameLayer : public  Layer {
+
+          (4) public:
+          (6)     Sprite   *pSprite;
+          (7)     Director *pDirector;
+
+          (5) public:
+          (8)     virtual bool init();
+          (9)     CREATE_FUNC(GameLayer);
+              };
+
+              #endif /* defined(__MyGame__NewGameLayer__) */
+
+    9.03  GameLayer.cpp
+
+              //
+              //  NewGameLayer.cpp
+              //  MyGame
+              //
+              //  Created by qianfeng on 14-8-9.
+              //
+              //
+
+              #include "NewGameLayer.h"
+
+          (1) bool GameLayer::init()
+              {
+                  //////////////////////////////
+                  // 1. super init first
+          (3)     if ( !Layer::init() )
+                  {
+          (4)         return false;
+                  }
+
+                  // 创建一个精灵
+          (5)     pSprite = Sprite::create("Plane.png");
+
+                  // Point 对象代表一个点（或者向量）
+          (6)     Point pos = Point(100,100);
+
+                  // 设置精灵的坐标
+          (7)     pSprite->setPosition(pos);
+
+                  // 将精灵添加至图层当中
+          (8)     this->addChild(pSprite);
+
+                  // 生成动作对象
+          (9)     MoveTo* pMoveTo = MoveTo::create(2, Point(500, 500));
+
+                  // 执行这个动作
+          (10)    pSprite->runAction(pMoveTo);
+
+          (2)     return true;
+              }
+
+    9.04  AppDelegate.cpp
+
+          (1) #include "GameLayer.h"
+
+              bool AppDelegate::applicationDidFinishLaunching() {
+
+                  // initialize director
+                  /** @deprecated Use getInstance() instead */
+                  //CCDirector*  pDirector = CCDirector::sharedDirector();
+                  /** static getOpenGLView() method obsolete */
+                  //CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+
+          (2)     Director *pDirector = Director::getInstance();
+          (3)     GLView   *pGLView   = pDirector->getOpenGLView();
+          (4)     if(!pGLView) {
+          (5)         pGLView = GLView::create("Abraham Game");
+          (6)         pDirector->setOpenGLView(pGLView);
+                  }
+
+                  // turn on display FPS
+          (7)     pDirector->setDisplayStats(true);
+
+                  // set FPS. the default value is 1.0/30 if you don't call this
+          (8)     pDirector->setAnimationInterval(1.0 / 30);
+
+                  // create a scene.
+          (9)     Scene *pScene = Scene::create();
+
+                  // create a layer.
+          (10)    GameLayer *pLayer = GameLayer::create();
+
+                  // add layer to scene.
+          (11)    pScene->addChild(pLayer);
+
+                  // run
+          (12)    pDirector->runWithScene(pScene);
+
+                  return true;
+              }
+
+    9.05  Resources
+
+          Copy Plane.png here.
+
+10. What Else You Should Know
+
+    10.01  The iOS Devices
+
+           10.1.01  Introduction
+
+                    01. 当你在 iOS 设备上进行开发时，需要考虑到设备之间的差异；
+                    02. 现在已经有很多种 iOS 设备存在了，并且每年大概还会出两款新设备；
+                    03. 但至少你要意识到不同设备之间是有差别的；
+                    04. 每一代新的 iOS 设备都有更快的 CPU，更强大的图形芯片，更多的内存及更高的屏幕分辨率，
+                        这个趋势还会继续，新的设备会越来越强大。
+
+           10.1.02  Table - iOS Hardware Differences
+
+                    Device       Processor    Graphics            Resolution   Memory(RAM)
+                    ======       =========    ========            ==========   ===========
+
+                    第 1 代       412MHz       PowerVR BX          480 * 320    128MB
+                    第 2 代（3G）  412/533MHz   PowerVR MBX         480 * 320    128MB
+                    第 3 代（3GS） 600MHz       PowerVR SGX535      480 * 320    256MB
+                    第 4 代（4）   800MHz       PowerVR SGX 535     960 * 640    512/256MB
+                    iPhone 4S    2 * 800MHz   PowerVR SGX535 Dual  960 * 640    512MB
+                    iPad 第 1 代  1GHz         PoerVR SGX535        1024 * 768   256MB
+                    iPad 第 2 代  2 * 1GHz     PowerVR SGX543 Dual  1024 * 768   512MB
+                    iPad 第 3 代  2 * 1GHz     PowerVR SGX543 Dual  2048 * 1536  1GB
+
+           10.1.03  Conclusion
+
+                    01. 使用 Cocos2d 意味着不能把第 1 代和第 2 代设备作为目标；
+                    02. 老设备最少要有 256MB 内存，但是，256MB~1024MB 仍是一个很大的范围；
+                    03. 而且 CPU 也分别有 600MHz 以及第 3 代 iPad 上的双核 CPU 这分；
+                    04. 游戏开发者在查看硬件特性时，往往会更关注 CPU 和图形芯片，以评估在技术上什么是可行的；
+                    05. 然而作为移动设备，iOS 设备受到的最大限制还是内存的大小；
+                    06. 新手开发者经常低估这一点，例如，1000 * 1000 的地图很容易就会占用几百 MB 的内存，
+                        这还没有计算纹理内存；
+                    07. 2048 * 2048 并且颜色深度为 32 位的纹理现在已经占用 16MB 的内存，所以内存中不能同时
+                        有太多这样的纹理。
+
+           10.1.04  RAM & Flash
+
+                    01. 不要把 RAM 和 Flash（闪存）设备混淆，闪存是存储 MP、视频、应用程序和图像的地方；
+                    02. 即使是最小的 iOS 设备也有 8GB，闪存就像计算机中的硬盘；
+                    03. RAM 是内存，是程序运行时存储代码、数据和图像的地方；
+                    04. 我们这里所说的内存批的是 RAM。
+
+    10.02  Memory Usage
+
+           10.2.01  Introduction
+
+                    01. 当前的 iOS 设备配有 256MB~1GB 的内存，然而，这些内存并不是都能被应用程序使用；
+                    02. iOS 本身一直在使用很大一块内存，iOS 的多任务又使得可用内存问题更加复杂；
+                    03. 久而久之，iOS 开发者渐渐找到了理论上应用程序能使用的 RAM 最大值，
+                        超过这个值应用程序就会被 iOS 强制关闭。
+
+           10.2.02  Installed Memory Is Not Available Memory
+
+                    Installed Memory  Available Memory  Memory Warning Threshold
+                    ================  ================  ========================
+
+                    128MB             30MB   左右        20MB  左右
+                    256MB             90MB   左右        70MB  左右
+                    512MB             3000MB 左右        250MB 左右
+
+           10.2.03  Conclusion
+
+                    01. 理想中，应总是使内存使用量小于"内存警告阈值"列的数值；
+                    02. 超过这个界限应用程序就可能会收到内存警告通知；
+                    03. 一级内存警告是可以忽视的，但如果应用程序继续使用更多的内存，就会收到二级内存警告；
+                    04. 这时如果不释放一些内存，应用程序就可能会被操作系统关闭；
+                    05. 尽早用真正的设备来进行开发，记住大部分 iOS 设备只有少量的内存；
+                    06. 开发时用的设备性能越弱越好，这样可以邦你尽早找到性能和内存过低的问题。
+
+    10.03  The iOS Simulator
+
+           10.3.01  Can't Assess Performance
+
+                    01. 在 iOS 模拟器上运行的游戏，性能完全依靠计算机的 CPU，图形渲染过程甚至没有使用
+                        Mac 图形芯片的硬件加速功能，这也就是为什么通过模拟器得到的帧率没有任何实际意义的原因；
+                    02. 在修改代码之后，你甚至无法确定模拟器上得到的前后帧率比较结果，是否会和设备上得到的
+                        比较结果一致；
+                    03. 所以一定要在设备上进行性能测试，并且使用发布构建方式。 
+
+           10.3.02  Can't Assess Memory Usage
+
+                    01. iOS 模拟器可以使用计算机上配置的所有内存，所以模拟器比 iOS 设备有更多的可用内存；
+                    02. 这意味着你不会在 iOS 模拟器上收到内存报警，游戏在 iOS 模拟器上会流畅地运行，
+                        但是当你发布到 iOS 设备上时，可能会发现游戏在第一次运行时就崩溃了；
+                    03. 不过，可以用 iOS 模拟器和 Instruments 应用程序评估游戏当前使用的内存大小；
+                      04. 在 iOS 模拟器中，甚至还可以通过选择 Hardware | Simulate Memory Warning
+                      向应用程序发送模拟的内存警告消息。
+
+           10.3.03  Can't Use All iOS Device Features
+
+                    01. 有一些 iOS 设备功能，比如设备转向 (Device Orientation)，可以用程序菜单或键盘
+                        快捷键来模拟；
+                    02. 但是模拟的体验效果和真实的体验效果相差甚远
+                    03. 还有一些功能，像多点触摸、加速计、振动或位置信息获取，则完全不能通过 iOS 模拟器
+                        来测试，因为计算机的硬件无法模拟这些功能；
+                    04. iSimulate 应用程序 (www.vimov.com/isimulate) 是一个宝贵的开发工具，
+                        它允许 iOS 设备向运行在 iOS 模拟器中的应用程序发送加速计、GPS、罗盘和多点触摸事件。
+
+           10.3.04  Runtime Behavior Can Differ
+
+                    01. 有时候你会碰到一棘手的问题：游戏在 iOS 模拟器上运行良好，但是放到 iOS 设备上就崩溃
+                        或是没有理由地运行变慢；
+                    02. 还有一些图形方面的问题只出现在 iOS 模拟器或设备上；
+                    03. 在你进入代码寻找可能存在的问题之前，如果问题出现在 iOS 模拟器上，就在设备上运行游戏；
+                    04. 有时候，出现的问题可能会自动消失，不过即使没有消失，通过这样做，也可以了解问题可能
+                        出现在哪里；
+                    05. 如果问题只在模拟器中出现，那么不必考虑，但是如果问题出现在设备上，那么即使模拟器上
+                        运行正常，也应该认真找出问题的原因所在。
+
+    10.04  Performance and Logging
+
+           01. 默认情况下，XCode 项目使用调试构建配置，为了便于调试，这种配置关闭了代码优化并打开了日志；
+           02. 即使是一条错误的 NSLog 或 CCLOG 语句，也会让 Debugger Console 窗口填满日志信息，
+               导致程序运行速度变慢；
+           03. 日志记录是很慢的过程，连续不断地向 Debugger Console 打印日志消息会使游戏性能严重下降；
+           04. 如果你觉得游戏在调试构建中的运行性能很差，就应该看一下 Debugger Console 窗口中是不是有
+               多余的日志活动；
+           05. 从 XCode 的 Run 菜单中，选择 Console 以显示 Debugger Console 窗口；
+           06. 排除日志和进行更好的优化也是为什么要用发布构建来测试游戏性能的主要原因；
+           07. 通过在 Xcode 的 Product 菜单中选择 Manage Schemes，可以将项目设为临时使用发布构建配置；
+           08. 然后选择项目的目标并进行编辑，选择左侧的 Run 配置，然后将 Build Configuration 改为 Release；
+           09. 也可以创建 scheme 的副本，让其中一个使用调试构建配置，让另一个使用发布构建置，
+               这样就可以快速地改变构建配置，而不必使用 Manage Schemes 菜单；
+           10. 对 cocos2d_libray 则没有必要这么做，因为它会自动使用与衫程序相同的构建立配置。
+
+11. Conclusion
+
+12. Homework
+
+13. Traps and Pitfalls
+
+    13.01  Resources
+    
+           注意：如果有文件拷贝到这个目录后一定要添加到工程中，不然可能会有显示错误或是其它的错误。
+
+14. Diligence
+
+
+
+
+
+
+
+是一个UIVIew类似的视图
+#import "platform/ios/CCEAGLView-ios.h"
+
+
+#import "AppDelegate.h"
+
+为什么要是用EAGLView
+1，因为游戏的频率太快了，1/60 使用image view.image 时间长了扛不住  
+2，uiview的刷新是点对点的刷新，每次只刷新一个点，满足不了需求，所以需要用使用OpenGL ES 直接操作显卡
+。普通的uiview 是使用CALayer这个做普通的UI画图

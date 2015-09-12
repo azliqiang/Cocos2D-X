@@ -1,0 +1,285 @@
+{\rtf1\ansi\ansicpg936\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fnil\fcharset134 STHeitiSC-Light;\f1\fnil\fcharset136 Weibei-TC-Bold;\f2\fswiss\fcharset0 Helvetica;
+\f3\fnil\fcharset0 Menlo-Regular;\f4\fnil\fcharset134 STSongti-SC-Regular;\f5\froman\fcharset0 Times-Roman;
+}
+{\colortbl;\red255\green255\blue255;\red15\green116\blue1;\red170\green12\blue145;\red63\green110\blue116;
+\red38\green71\blue75;\red196\green26\blue22;\red28\green2\blue207;\red46\green13\blue110;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww19740\viewh11980\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs86 \cf0 \'b5\'da\'b6\'fe\'cc\'ec\
+\'c9\'cf\'ce\'e7\'a3\'ba\'b6\'e0\'b8\'f6\'d4\'cb\'b6\'af\'b5\'c4\'d0\'a1\'c7\'f2\
+\'cf\'c2\'ce\'e7\'a3\'ba\'b2\'c2\'ca\'fd\'d7\'d6\'d3\'ce\'cf\'b7\
+\pard\pardeftab720
+
+\f1\b\fs42 \cf0 \'b7\'66\'ab\'d8\uc0\u39029 \'ad\'b1\'a1\'47
+\f2\b0\fs28 \
+\pard\pardeftab720
+
+\f3\fs36 \cf0 \'a0 \'a0\cf2 //
+\f4 \'b4\'b4\'bd\'a8\'d2\'bb\'b8\'f6
+\f3 \'a0
+\f4 \'b1\'ea\'c7\'a9
+\f3 \
+\cf0 \'a0 \'a0\'a0\cf3 auto\cf0 \'a0label =\'a0\cf4 Label\cf0 ::\cf5 create\cf0 ();\
+\'a0 \'a0 label->\cf5 setString\cf0 (\cf6 "Please input a num betweetn 0 -100"\cf0 );\cf6 \
+\cf0 \'a0 \'a0\'a0\cf5 addChild\cf0 (label);\
+\'a0 \'a0 label ->\'a0\cf5 setSystemFontSize\cf0 (\cf7 30\cf0 );\cf5 \
+\cf0 \'a0 \'a0 label->\cf5 setPosition\cf0 (\cf4 visibleSize\cf0 .\cf4 width\cf0 /\cf7 2\cf0 ,\cf4 visibleSize\cf0 .\cf4 height\cf0 -label->\cf5 getContentSize\cf0 ().\cf4 height\cf0 /\cf7 2\cf0 -\cf7 20\cf0 );\
+\cf4 \
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97
+\f0 \'d4\'cb\'d0\'d0
+\f3 \'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\cf2 \
+//\'a0 \'a0\'a0
+\f4 \'b4\'b4\'bd\'a8\'d2\'bb\'b8\'f6\'ca\'e4\'c8\'eb\'bf\'f2
+\f5 \
+
+\f3 \cf0 \'a0\'a0 \'a0\'a0\'a0\cf4 tf\cf0 \'a0=\cf4 TextFieldTTF\cf0 ::\cf5 textFieldWithPlaceHolder\cf0 (\cf6 "input sth"\cf0 ,\'a0\cf6 "Helvetica"\cf0 ,\'a0\cf7 30\cf0 );\cf5 \
+\cf0 \'a0 \'a0\'a0\cf4 tf\cf0 \'a0->\'a0\cf5 setColor\cf0 (\cf4 Color3B\cf0 ::\cf4 BLUE\cf0 );\
+\'a0 \'a0\'a0\cf4 tf\cf0 ->\cf5 setPosition\cf0 (\cf4 visibleSize\cf0 .\cf4 width\cf0 /\cf7 2\cf0 ,label->\cf5 getPositionY\cf0 ()-\cf7 50\cf0 );\cf5 \
+\cf4 \
+\cf0 \'a0 \'a0\'a0\cf5 addChild\cf0 (\cf4 tf\cf0 );\cf5 \
+\pard\pardeftab720
+
+\f2\fs28 \cf0 \
+\pard\pardeftab720
+
+\f3\fs36 \cf4 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97
+\f0 \'d4\'cb\'d0\'d0
+\f3 \'97\'97\'97\'97\'97\'97\'97\'97\'97
+\f2\fs28 \cf0 \
+
+\f3\fs36 \'a0\'a0\cf2 //
+\f4 \'b4\'b4\'bd\'a8\'d2\'bb\'b8\'f6\'b0\'b4\'bc\'fc
+\f5 \
+
+\f3 \cf0 \'a0 \'a0\'a0\cf4 submitBtn\cf0 \'a0=\'a0\cf4 Label\cf0 ::\cf5 create\cf0 ();\cf4 \
+\cf0 \'a0 \'a0\'a0\cf4 submitBtn\cf0 ->\cf5 setPosition\cf0 (\cf4 visibleSize\cf0 .\cf4 width\cf0 /\cf7 2\cf0 ,\'a0\cf4 tf\cf0 ->\cf5 getPositionY\cf0 ()-\cf7 50\cf0 );\cf4 \
+\cf0 \'a0 \'a0\'a0\cf4 submitBtn\cf0 \'a0->\cf5 setSystemFontSize\cf0 (\cf7 30\cf0 );\cf5 \
+\cf0 \'a0 \'a0\'a0\cf4 submitBtn\cf0 ->\cf5 setString\cf0 (\cf6 "Submit"\cf0 );\
+\
+\'a0 \'a0\'a0\cf5 addChild\cf0 (\cf4 submitBtn\cf0 );\cf4 \
+\cf0 \
+\'a0 \'a0\'a0\cf4 messageLabel\cf0 \'a0=\'a0\cf4 Label\cf0 ::\cf5 create\cf0 ();\cf4 \
+\cf0 \'a0 \'a0\'a0\cf5 addChild\cf0 (\cf4 messageLabel\cf0 );\cf4 \
+\cf0 \'a0 \'a0\'a0\cf4 messageLabel\cf0 \'a0->\'a0\cf5 setSystemFontSize\cf0 (\cf7 30\cf0 );\cf5 \
+\cf0 \'a0 \'a0\'a0\cf4 messageLabel\cf0 \'a0->\cf5 setPosition\cf0 (\cf4 visibleSize\cf0 .\cf4 width\cf0 /\cf7 2\cf0 ,\cf4 submitBtn\cf0 ->\cf5 getPositionY\cf0 ()-\cf7 50\cf0 );\cf4 \
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97
+\f0 \'d4\'cb\'d0\'d0
+\f3 \'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720
+
+\f2\fs28 \cf0 \
+\pard\pardeftab720
+
+\f1\b\fs40 \cf0 2\'a1\'42 
+\f4 \'b4\'b4
+\f1 \'ab\'d8\'a4\'40\uc0\u20010 \'a4\'e8\'aa\'6bBuildUI
+\f2\b0\fs28 \
+\
+\pard\pardeftab720
+
+\f3\fs36 \cf0 \'a0 \cf3 void\cf0 \'a0buildUI();\
+\pard\pardeftab720
+
+\f0\fs28 \cf0 \'c8\'bb\'ba\'f3
+\f2 app
+\f0 \'c0\'ef\'c3\'e6\'ca\'b5\'cf\'d6
+\f2 \
+
+\f0 \'b0\'d1\'c9\'cf\'c3\'e6\'d0\'b4\'b5\'c4\'b4\'ee\'bd\'a8\'d2\'b3\'c3\'e6\'b4\'fa\'c2\'eb\'d5\'b3\'cc\'f9\'c0\'ef\'c3\'e6\'c8\'a5
+\f2 \
+\
+\pard\pardeftab720
+
+\f3\fs36 \cf0 \'a0\cf3 int\cf0 \'a0RandomNum;
+\f2\fs28 \
+\
+\pard\pardeftab720
+
+\f0 \cf0 \'b3\'f5\'ca\'bc\'bb\'af\'b7\'bd\'b7\'a8\'c0\'ef\'d0\'b4
+\f2 \
+\pard\pardeftab720
+
+\f3\fs36 \cf0 \'a0 \'a0\'a0\cf2 //
+\f4 \'c9\'e8\'d6\'c3\'cb\'e6\'bb\'fa\'d6\'d6\'d7\'d3
+\f3 \
+\cf0 \'a0 \'a0\'a0\cf4 RandomNum\cf0 \'a0=\'a0\cf8 rand\cf0 ()%\cf7 100\cf0 ;\
+\'a0 \'a0\'a0\cf5 log\cf0 (\cf6 "%d"\cf0 ,\cf4 RandomNum\cf0 );\cf4 \
+\
+\pard\pardeftab720
+
+\f0 \cf0 \'c9\'e8\'d6\'c3\'d2\'bb\'b8\'f6\'cb\'e6\'bb\'fa\'d6\'d6\'d7\'d3\'a3\'a8\'b0\'d1\'ca\'b1\'bc\'e4\'c9\'e8\'d6\'c3\'ca\'b1\'bc\'e4\'d6\'d6\'d7\'d3\'a3\'a9
+\f3 \cf4 \
+\pard\pardeftab720
+\cf0 \'a0 \'a0\'a0\cf8 srand\cf0 (\cf8 time\cf0 (\cf3 NULL\cf0 ));\
+\
+\pard\pardeftab720
+
+\f0 \cf0 \'c8\'fd\'a3\'ba\'ce\'c4\'b1\'be\'ca\'e4\'c8\'eb\'b2\'bb\'c1\'cb
+\f3 \
+
+\f0 \'cf\'c8\'b0\'d1
+\f3 tf 
+\f0 \'b1\'e4\'b3\'c9\'c8\'ab\'be\'d6\'b5\'c4
+\f3 \
+\'a0 \'a0\'a0\cf4 cocos2d\cf0 ::\cf4 TextFieldTTF\cf0 \'a0*tf;\cf4 \
+\pard\pardeftab720
+
+\f0\fs28 \cf0 \'d4\'d9\'d0\'b4\'d2\'bb\'b8\'f6\'b7\'bd\'b7\'a8
+\f2 \
+\
+\pard\pardeftab720
+
+\f3\fs36 \cf0 \'a0 \'a0\'a0\cf2 //\'a0 \'a0\'a0
+\f4 \'cc\'ed\'bc\'d3\'bc\'e0\'cc\'fd\'c6\'f7
+\f3 \
+\cf0 \'a0 \'a0\'a0\cf3 void\cf0 \'a0addListen();\
+\
+\pard\pardeftab720
+
+\f0 \cf0 \'d4\'da
+\f3 buildUI
+\f0 \'ba\'f3\'c3\'e6\'cc\'ed\'bc\'d3
+\f3  \'a0\cf5 addListen\cf0 ();\
+\
+
+\f0 \'d4\'d9\'ca\'b5\'cf\'d6
+\f3 addlisten\
+\
+\pard\pardeftab720
+
+\fs28 \cf2 //
+\f4 \'cc\'ed\'bc\'d3\'ca\'e4\'c8\'eb\'bf\'f2
+\f3  
+\f4 \'b5\'c4\'bc\'e0\'cc\'fd\'c6\'f7
+\f5 \
+\pard\pardeftab720
+
+\f3 \cf3 void\cf0  \cf4 HelloWorld\cf0 ::addListen()\{\
+\'a0\'a0 \'a0\
+\'a0 \'a0 \cf3 auto\cf0  director = \cf4 Director\cf0 ::\cf5 getInstance\cf0 ();\
+\'a0 \'a0\'a0\cf2 //
+\f0 \'b4\'b4\'bd\'a8\'b1\'d5\'b0\'fc\'ba\'af\'ca\'fd
+\f5 \
+
+\f3 \cf0 \'a0 \'a0 \cf3 auto\cf0  handler = [\cf3 this\cf0 ](\cf4 Touch\cf0 *t,\cf4 Event\cf0 *e)\{\
+\'a0\'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \cf3 auto\cf0  target = e->\cf5 getCurrentTarget\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \cf3 auto\cf0  point = t->\cf5 getLocation\cf0 ();\
+\'a0\'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \cf3 if\cf0  (target->\cf5 getBoundingBox\cf0 ().\cf5 containsPoint\cf0 (point)) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf3 if\cf0  (target ==\cf4 tf\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 tf\cf0 ->\cf5 attachWithIME\cf0 ();\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf3 else\cf0  \cf3 if\cf0  (target == \cf4 submitBtn\cf0 )\{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 tf\cf0 ->\cf5 detachWithIME\cf0 ();\
+\pard\pardeftab720
+\cf2 //\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 log("submit");\
+\pard\pardeftab720
+\cf0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \'a0 \'a0 \cf3 else\cf0 \
+\'a0 \'a0 \'a0 \'a0 \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf4 tf\cf0  -> \cf5 detachWithIME\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \}\
+\'a0\'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \cf3 return\cf0  \cf3 false\cf0 ;\cf3 \
+\cf0 \'a0 \'a0 \};\
+\
+\'a0 \'a0 \cf2 //
+\f4 \'b8\'f8\'ca\'e4\'c8\'eb\'bf\'f2\'cc\'ed\'bc\'d3\'ca\'c2\'bc\'fe\'bc\'e0\'cc\'fd\'c6\'f7
+\f5 \
+
+\f3 \cf0 \'a0 \'a0 \cf3 auto\cf0  l = \cf4 EventListenerTouchOneByOne\cf0 ::\cf5 create\cf0 ();\cf4 \
+\cf0 \'a0 \'a0 l->\cf4 onTouchBegan\cf0  = handler;\
+\'a0 \'a0 director->\cf5 getEventDispatcher\cf0 ()->\cf5 addEventListenerWithSceneGraphPriority\cf0 (l, \cf4 tf\cf0 );\cf5 \
+\cf0 \
+\'a0 \'a0 \cf2 //
+\f4 \'b0\'b4\'bc\'fc\'cc\'ed\'bc\'d3\'ca\'c2\'bc\'fe\'bc\'e0\'cc\'fd\'c6\'f7
+\f5 \
+
+\f3 \cf0 \'a0 \'a0 \cf3 auto\cf0  subBtnListener = \cf4 EventListenerTouchOneByOne\cf0 ::\cf5 create\cf0 ();\
+\'a0 \'a0 subBtnListener->\cf4 onTouchBegan\cf0  = handler;\
+\'a0 \'a0 director->\cf5 getEventDispatcher\cf0 ()->\cf5 addEventListenerWithSceneGraphPriority\cf0 (subBtnListener, \cf4 submitBtn\cf0 );\cf5 \
+\pard\pardeftab720
+
+\f5 \cf2 \
+\pard\pardeftab720
+
+\f3 \cf0 \}\
+\pard\pardeftab720
+
+\f2 \cf0 \
+\
+\pard\pardeftab720
+
+\f0 \cf0 \'c8\'bb\'ba\'f3\'ce\'d2\'c3\'c7\'d2\'aa\'c5\'d0\'b6\'cf\'d2\'bb\'cf\'c2
+\f2 \
+\
+
+\f0 \'ca\'d7\'cf\'c8\'d2\'aa\'bb\'f1\'c8\'a1\'b5\'bd\'ce\'c4\'b1\'be\'b5\'c4\'d6\'b5\
+\'d4\'da
+\f3 \cf3 else\cf0  \cf3 if\cf0  (target == \cf4 submitBtn\cf0 )
+\f0 \'c0\'ef\'d0\'b4
+\f2 \
+\pard\pardeftab720
+
+\f3 \cf0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\
+\cf3 int\cf0  inputValue = \cf4 __String\cf0 ::\cf5 create\cf0 (\cf4 tf\cf0 ->\cf5 getString\cf0 ())->\cf5 intValue\cf0 ();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0
+\f2 \
+
+\f3 \cf3 if\cf0  (inputValue>\cf4 RandomNum\cf0 )
+\f2 \
+
+\f3 \{
+\f2 \
+
+\f3 \'a0 \'a0\cf4 messageLabel\cf0 ->\cf5 setString\cf0 (\cf6 "
+\f4 \'c4\'e3\'ca\'e4\'c8\'eb\'b5\'c4\'b4\'f3\'c1\'cb
+\f3 "\cf0 );
+\f2 \
+
+\f3 \}
+\f2 \
+
+\f3 \cf3 else\cf0  \cf3 if\cf0 (inputValue<\cf4 RandomNum\cf0 )
+\f2 \
+
+\f3 \{
+\f2 \
+
+\f3 \'a0 \'a0\cf4 messageLabel\cf0 ->\cf5 setString\cf0 (\cf6 "
+\f4 \'c4\'e3\'ca\'e4\'c8\'eb\'b5\'c4\'d0\'a1\'c1\'cb
+\f3 "\cf0 );
+\f2 \
+
+\f3 \}
+\f2 \
+
+\f3 \cf3 else
+\f2 \cf0 \
+
+\f3 \{
+\f2 \
+
+\f3 \'a0 \'a0\cf4 messageLabel\cf0 ->\cf5 setString\cf0 (\cf6 "
+\f4 \'ce\'d2\'c0\'d5\'b8\'f6\'c8\'a5
+\f3  \'a0 
+\f4 \'d6\'d5\'d3\'da\'b6\'d4\'c1\'cb
+\f3 "\cf0 );
+\f2 \
+
+\f3 \}\
+\pard\pardeftab720
+
+\f2 \cf0 \
+\
+\
+\
+\
+\
+\
+}

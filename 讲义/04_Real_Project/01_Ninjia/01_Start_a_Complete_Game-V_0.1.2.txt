@@ -1,0 +1,791 @@
+
+
+
+03. GameRunningScene
+
+    3.01  Introduction
+
+          01. 复杂的就是这里了，大部分的游戏设计都在这里面完成；
+          02. 这里可以有多个背景层，多个同时完成游戏的开发。
+
+    3.02  GameRunningScene.h
+
+          (1) #ifndef __GAMERUNNING_SCENE_H__
+          (2) #define __GAMERUNNING_SCENE_H__
+
+          (4) #include "cocos2d.h"
+
+          (5) class GameRunningScene : public cocos2d::Layer
+          {
+          (6) private:
+          (7)     cocos2d::Size visibleSize;
+          (8)     cocos2d::Vec2 visibleOrigin;
+
+          (9) public:
+              // there's no 'id' in cpp,
+              // so we recommend returning the class instance pointer
+          (10) static cocos2d::Scene* createScene();
+
+              // Here's a difference.
+              // Method 'init' in cocos2d-x returns bool,
+              // instead of returning 'id' in cocos2d-iphone
+          (11) virtual bool init();
+
+               // 初始化程序基本属性
+          (12) void initEnvironment();
+               // 初始化程序菜单
+          (13) void initMainMenu();
+               // 初始化标签
+          (14) void initLabel();
+               // 初始化图片
+          (15) void initPicture();
+    
+              // a selector callback
+          (16) void menuCloseCallback(cocos2d::Ref* pSender);
+    
+              // implement the "static create()" method manually
+          (17) CREATE_FUNC(GameRunningScene);
+          };
+
+          (3) #endif // __GAMERUNNING_SCENE_H__
+
+    3.03  GameRunningScene.cpp, header and Namespace
+
+          (1) #include "GameRunningScene.h"
+
+          (2) USING_NS_CC;
+
+    3.04  GameRunningScene.cpp, createScene
+
+          (1) Scene* GameRunningScene::createScene()
+          {
+              // 'scene' is an autorelease object
+          (2) auto scene = Scene::createWithPhysics();
+          (3) scene->getPhysicsWorld()->setGravity(Vect(0, 0));
+
+              // 'layer' is an autorelease object
+          (4) auto layer = GameRunningScene::create();
+
+              // add layer as a child to scene
+          (5) scene->addChild(layer);
+
+              // return the scene
+          (6) return scene;
+          }
+
+    3.05  GameRunningScene.cpp, init
+
+          /* on "init" you need to initialize your instance */
+          (1) bool GameRunningScene::init()
+          {
+              //////////////////////////////
+              // 1. super init first
+          (3) if (!Layer::init()) {
+          (4)     return false;
+              }
+
+          (5) initEnvironment();
+          (6) initMainMenu();
+          (7) initLabel();
+          (8) initPicture();
+
+          (2) return true;
+          }
+
+    3.06  GameRunningScene.cpp, initEnvironment
+
+          /* 初始化程序基本属性 */
+          (1) void GameRunningScene::initEnvironment()
+          {
+              // 表示获得视图（可视区域）的大小
+              // 如果 DesignResolutionSize 跟屏幕尺寸一样大
+              // 则 getVisibleSize 等于 getWinSize
+          (2) visibleSize = Director::getInstance()->getVisibleSize();
+              // 表示可视区域的起点坐标，这在处理相对位置的时候非常有用
+              // 确保节点在不同分辨率下的位置一致
+          (3) visibleOrigin = Director::getInstance()->getVisibleOrigin();
+          }
+
+    3.07  GameRunningScene.cpp, initMainMenu
+
+          /* 初始化程序菜单 */
+          (1) void GameRunningScene::initMainMenu()
+          {
+              /////////////////////////////
+              // 2. add a menu item with "X" image, which is clicked to quit the program
+              //    you may modify it.
+
+              // add a "close" icon to exit the progress. it's an autorelease object
+          (2) auto closeItem = MenuItemImage::create(
+                  "CloseNormal.png",
+                  "CloseSelected.png",
+                  CC_CALLBACK_1(GameRunningScene::menuCloseCallback, this));
+
+          (3) closeItem->setPosition(Vec2(
+                  visibleOrigin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
+                  visibleOrigin.y + closeItem->getContentSize().height/2));
+
+              // create menu, it's an autorelease object
+          (4) auto menu = Menu::create(closeItem, NULL);
+          (5) menu->setPosition(Vec2::ZERO);
+          (6) this->addChild(menu, 1);
+          }
+
+    3.08  GameRunningScene.cpp, initLabel
+
+          /* 初始化标签 */
+          (1) void GameRunningScene::initLabel()
+          {
+              // add a label shows "Hello World"
+              // create and initialize a label
+
+          (2) auto label = LabelTTF::create("Programming is Romantic",
+                  "Arial", 24);
+
+              // position the label on the center of the screen
+          (3) label->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,
+                  visibleOrigin.y + visibleSize.height - label->getContentSize().height));
+
+              // add the label as a child to this layer
+          (4) this->addChild(label, 1);
+          }
+
+    3.09  GameRunningScene.cpp, initPicture
+
+          /* 初始化图片 */
+          (1) void GameRunningScene::initPicture()
+          {
+              // add "HelloWorld" splash screen"
+          (2) auto sprite = Sprite::create("Genesis_800x800.png");
+
+              // position the sprite on the center of the screen
+          (3) sprite->setPosition(Vec2(visibleSize.width/2 + visibleOrigin.x,
+                  visibleSize.height/2 + visibleOrigin.y));
+
+              // add the sprite as a child to this layer
+          (4) this->addChild(sprite, 0);
+          }
+
+    3.10  GameRunningScene.cpp, menuCloseCallback
+
+          /* 退出游戏，系统默认退出的回调函数 */
+          (1) void GameRunningScene::menuCloseCallback(Ref* pSender)
+          {
+              // 结束导演实例
+          (2) Director::getInstance()->end();
+
+              // 退出程序
+          (3) exit(0);
+          }
+
+    3.11  AppDelegate.cpp, applicationDidFinishLaunching
+
+          bool AppDelegate::applicationDidFinishLaunching() {
+          // initialize director
+          auto director = Director::getInstance();
+          auto glview = director->getOpenGLView();
+          if(!glview) {
+          (1) glview = GLView::create("Ninjia");
+              director->setOpenGLView(glview);
+          }
+
+          // turn on display FPS
+          director->setDisplayStats(true);
+
+          // set FPS. the default value is 1.0/60 if you don't call this
+          director->setAnimationInterval(1.0 / 60);
+
+          // create a scene. it's an autorelease object
+      (2) //auto scene = HelloWorld::createScene();
+          auto scene = GameRunningScene::createScene();
+
+          // run
+          director->runWithScene(scene);
+
+          return true;
+      }
+
+    3.12  CMakeLists.txt
+
+          if( UNIX ) #assume linux
+          set(GAME_SRC
+            proj.linux/main.cpp
+            Classes/AppDelegate.cpp
+          (1)  Classes/GameRunningScene.cpp
+          )
+          elseif ( WIN32 )
+          set(GAME_SRC
+            proj.win32/main.cpp
+            proj.win32/main.h
+            proj.win32/resource.h
+            Classes/AppDelegate.cpp
+          (2)  Classes/GameRunningScene.cpp
+          )
+          endif()
+
+    3.13  Building, Troubleshooting, Thinking
+
+    3.14  GameRunningScene.cpp, Change Backgroud Color
+
+          3.14.01  GameRunningScene.h
+
+                   class GameRunningScene : public cocos2d::Layer
+                   {
+                   private:
+                       cocos2d::Size visibleSize;
+                       cocos2d::Vec2 visibleOrigin;
+                   (1) cocos2d::LayerColor *colorLayer;
+
+                   public:
+                       ... ...
+                       /* 初始化背景颜色 */
+                   (2) void initBgColor();
+                       ... ...
+                   };
+
+          3.14.02  GameRunningScene.cpp, init
+
+                   bool GameRunningScene::init()
+                   {
+                       ... ...
+                   (1) initBgColor();
+                       ... ...
+                   }
+
+          3.14.03  GameRunningScene.cpp, initBgColor
+
+                   /* 初始化图片 */
+                   (1) void GameRunningScene::initBgColor()
+                   {
+                   (2) colorLayer = LayerColor::create(Color4B(255, 255, 255, 255),
+                           visibleSize.width,visibleSize.height);
+                   (3) this->addChild(colorLayer);
+
+                   (4) colorLayer = (LayerColor *)Sprite::create("Genesis_800x800.png");
+                   (5) colorLayer->setPosition(Vec2(visibleSize.width/2 + visibleOrigin.x,
+                           visibleSize.height/2 + visibleOrigin.y));
+                   (6) this->addChild(colorLayer);
+                   }
+
+          3.14.04  GameRunningScene.cpp, initPicture
+
+                   01. 注释 initPicture 在 GameRunningScene.h；
+                       // 初始化图片
+                       //void initPicture();
+                   02. 注释 initPicture 在 GameRunningScene.cpp 的 init；
+                       // 初始化图片
+                       //initPicture();
+                   03. 注释 initPicture 的执行方法（函数体）。
+
+          3.14.05  GameRunningScene.cpp, Change Label Color
+
+                   /* 初始化标签 */
+                   void GameRunningScene::initLabel()
+                   {
+                       // add a label shows "Hello World"
+                       // create and initialize a label
+
+                       auto label = LabelTTF::create("Programming is Romantic",
+                           "Arial", 24);
+                   (1) label->setColor(ccc3(0, 0, 0));
+
+                       // position the label on the center of the screen
+                       label->setPosition(Vec2(visibleOrigin.x + visibleSize.width/2,
+                           visibleOrigin.y + visibleSize.height - label->getContentSize().height));
+
+                       // add the label as a child to this layer
+                       this->addChild(label, 1);
+                   }
+
+          3.14.06  Building, Troubleshooting, Thinking
+
+    3.14  Class Exercises
+
+    3.15  Conclusion
+
+04. Enemy Appearances
+
+    4.01  Introduction
+
+          01. 1598 年，丰臣秀吉在 "伏见城" 病逝，丰臣家裂分为近江（西军）和尾张（东军）两派；
+          02. 民不聊生，强盗肆虐，烧杀抢掠无恶不作，下面让这些强盗出场吧！
+
+    4.02  GameRunningScene.h, addRobber
+
+          class GameRunningScene : public cocos2d::Layer
+          {
+          private:
+              ... ...
+          (1) std::vector<cocos2d::Sprite*> Robber;
+          (2) int numRobber;
+
+          public:
+              ... ...
+          (3) void addRobber(float dt); 
+              ... ...
+          };
+
+    4.03  GameRunningScene.cpp, initEnvironment
+
+          /* 初始化程序基本属性 */
+          void GameRunningScene::initEnvironment()
+          {
+              visibleSize = Director::getInstance()->getVisibleSize();
+              visibleOrigin = Director::getInstance()->getVisibleOrigin();
+          (1) numRobber = 0;
+          }
+
+    4.04  GameRunningScene.cpp, addRobber
+
+          /* 添加强盗 */
+          (1) void GameRunningScene::addRobber(float dt)
+          {
+          (2) Sprite *robberExample = Sprite::create("robber.png");
+          (3) Size targetSize = robberExample->getContentSize();
+          (4) ++numRobber;
+
+              // 创建一个物理物体, 大小为强盗的大小, 使用默认材质
+          (5) auto OneBody = PhysicsBody::createBox(targetSize);
+              // 碰撞测试掩码
+          (6) OneBody->setContactTestBitmask(0x08);
+              // 将图形和刚刚创建的世界绑定
+          (7) robberExample->setPhysicsBody(OneBody);
+
+          (8) float targetInitX = visibleSize.width + robberExample->getContentSize().width/2;
+              // CCRANDOM_0_1() 生成随机数，范围是[0, 1]
+          (9) float targetInitY = CCRANDOM_0_1() * (visibleSize.height -targetSize.height) +
+                  targetSize.height/2;
+          (10) Point initPoint = Point(targetInitX, targetInitY);
+          (11) robberExample->setPosition(initPoint);
+
+          (12) Robber.push_back(robberExample);
+          (13) this->addChild(Robber.back(), numRobber);
+
+          (14) float targetEndX = -targetSize.width / 2;
+          (15) float targetEndY = targetInitY;
+          (16) Point endPoint   = Point(targetEndX, targetEndY);
+
+          (17) float time = CCRANDOM_0_1() * 2 + 2;
+          (18) MoveTo *Move = MoveTo::create(time, Vec2(-Robber.back()->getContentSize().width/2,
+                  Robber.back()->getPosition().y));
+          (19) Robber.back()->runAction(Move);
+          }
+
+    4.05  Building, Troubleshooting, Thinking
+
+          01. 为什么没有看到强盗呢？
+          02. 难道会忍术不成？
+
+    4.06  GameRunningScene.cpp, gameLogic
+
+          4.6.01  GameRunningScene.h
+
+                  class GameRunningScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+
+                  public:
+                      ... ...
+                      // 游戏逻辑
+                  (1) void gameLogic();  
+                      ... ...
+                  };
+
+          4.6.02  GameRunningScene.cpp, init
+
+                   bool GameRunningScene::init()
+                   {
+                       ... ...
+                   (1) gameLogic();
+                       ... ...
+                   }
+
+          4.6.03  GameRunningScene.cpp, gameLogic
+
+                  /* 游戏逻辑 */
+                  void GameRunningScene::gameLogic()
+                  {
+                  (1) this->schedule(schedule_selector(GameRunningScene::addRobber), 1);
+                  }
+
+    4.07  GameRunningScene.cpp, Cancel the Picture
+
+          /* 初始化图片 */
+          void GameRunningScene::initBgColor()
+          {
+              colorLayer = LayerColor::create(Color4B(255, 255, 255, 255),
+                  visibleSize.width,visibleSize.height);
+              this->addChild(colorLayer);
+          (1) #if 0
+              colorLayer = (LayerColor *)Sprite::create("Genesis_800x800.png");
+              colorLayer->setPosition(Vec2(visibleSize.width/2 + visibleOrigin.x,
+                  visibleSize.height/2 + visibleOrigin.y));
+              this->addChild(colorLayer);
+          (2) #endif
+          }
+
+    4.08  Building, Troubleshooting, Thinking
+
+    4.09  Class Exercises
+
+    4.10  Conclusion
+
+05. Heroes Appearances
+
+    5.01  Introduction
+
+          01. 乱世出英雄，这强盗肆虐的年代，一定要有正义来伸张；
+          02. 还在等什么，众目期待的英雄，出场吧！
+
+    5.02  GameRunningScene.h
+
+          class GameRunningScene : public cocos2d::Layer
+          {
+          private:
+              ... ...
+
+          public:
+              ... ...
+              // 添加英雄
+          (1) void addHero();
+              ... ...
+          };
+
+    5.03  GameRunningScene.cpp, init
+
+          bool GameRunningScene::init()
+          {
+              ... ...
+          (1) addHero();
+              ... ...
+          }
+
+    5.04  GameRunningScene.cpp, addHero
+
+          (1) void GameRunningScene::addHero()
+          {
+          (2) colorLayer = (LayerColor *)Sprite::create("player.png");
+          (3) colorLayer->setPosition(visibleSize.width/8, visibleSize.height/2);
+          (4) this->addChild(colorLayer);
+          }
+
+    5.05  Building, Troubleshooting, Thinking
+
+    5.06  Class Exercises
+
+    5.07  Conclusion
+
+06. Bullet Shooting
+
+    6.01  Introduction
+
+          01. 眼见强盗横行，英雄怎能束手不管，战斗吧勇士！
+          02. 屏幕一点就出子弹，或是一直发子弹，那就移动主角了；
+          03. 这些方法我们前面已经接触过了，在这里就是一点击就发射子弹；
+          04. 默认我们的游戏是关闭了触摸事件的，所以我们首先要做的就是把触摸事件使能；
+          05. 谁能说一下，我们的手机都有哪些触摸事件？
+          06. 你能发明一些现在没有的触摸事件吗？
+          07. 使我们的游戏具有屏幕触摸的事件，系统已经包装好了，只需要调用就行了；
+          08. 你也许也会发现用 C++ 编程语言会很复杂，但是灵活度更高了。
+
+    6.02  Touch Event Registration
+
+          6.2.01  GameRunningScene.h
+
+                  class GameRunningScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+
+                  public:
+                      ... ...
+                      // 触摸事件注册
+                  (1) virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
+                      ... ...
+                  };
+
+          6.2.02  GameRunningScene.cpp, touchEventRegistration
+
+                  /* 触摸事件注册 */
+                  (1) void GameRunningScene::touchEventRegistration()
+                  {
+                      //setTouchEnabled(true);  // deprecated
+
+                      // 得到当前节点（场景、层、精灵等）的所有事件分发器
+                  (2) auto dispatcher = Director::getInstance()->getEventDispatcher();
+                      // 创建单点触摸监听器
+                      // 即只有注册的 Layer 才能接收触摸事件
+                  (3) auto listener = EventListenerTouchOneByOne::create();
+                      // 添加监听事件到监听器
+                  (4) listener->onTouchBegan = CC_CALLBACK_2(GameRunningScene::onTouchBegan, this);
+                      //listener->onTouchMoved = CC_CALLBACK_2(GameRunningScene::onTouchMoved, this);
+                      // 向下传递触摸
+                  (5) listener->setSwallowTouches(false);
+                      // 添加事件监听器到事件分发器
+                  (6) dispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+                  }
+
+    6.03  Bullet Shooting, onTouchBegan
+
+          6.3.01  GameRunningScene.h
+
+                  class GameRunningScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+                  (1) std::vector<cocos2d::Sprite*> Projectile;
+                  (2) int numProjectile;
+
+                  public:
+                      ... ...
+                      // 触摸开始事件
+                  (3) bool onTouchBegan();
+                      ... ...
+                  };
+
+          6.3.02  GameRunningScene.cpp, onTouchBegan
+
+                  (1) bool GameRunningScene::onTouchBegan(Touch* pTouch, Event* pEvent)
+                  {
+                  (2) Point touchLocation = pTouch->getLocationInView();
+                  (3) touchLocation = Director::getInstance()->convertToGL(touchLocation);
+                  (4) Sprite *projectileExmaple = Sprite::create("projectile.png");
+                  (5) ++numProjectile;
+
+                  (6) auto OneBody = PhysicsBody::createBox(projectileExmaple->getContentSize());
+                  (7) OneBody->applyImpulse(Vect(100, 500));
+                  (8) OneBody->setContactTestBitmask(0x04);
+                  (9) projectileExmaple->setPhysicsBody(OneBody);
+
+                  (10) projectileExmaple->setPosition(visibleSize.width/8, visibleSize.height/2);
+                  (11) Projectile.push_back(projectileExmaple);
+                  (12) this->addChild(Projectile.back(), numProjectile);
+                  (13) Point offset = ccpSub(touchLocation, colorLayer->getPosition());
+                  (14) float ratio  = offset.y / offset.x;
+                  (15) int targetX  = colorLayer->getContentSize().width/2 + visibleSize.width;
+                  (16) int targetY  = (targetX*ratio) + colorLayer->getPosition().y;
+                  (17) Vec2 targetPosition = Vec2(targetX, targetY);
+
+                  (18) MoveTo* Move = MoveTo::create(2, targetPosition);
+                  (19) Projectile.back()->runAction(Move);
+
+                  (20) return true;
+                  }
+
+    6.04  Building, Troubleshooting, Thinking
+
+    6.05  Class Exercises
+
+    6.06  Conclusion
+
+07. Destroy the Enemy by Own Calculations
+
+    7.01  Introduction
+
+          01. 看着强盗横行霸道，而英雄刀不见血，这可是太让人觉得侮辱至极了！
+          02. 快快快，让英雄发威吧，是男人就站出来！
+          03. 我们如何能够杀死强盗，并让他消失在屏幕中呢？
+          04. 判断我的飞镖和强盗的位置如果重合就干掉他！
+          05. 来吧，大家跟着这个思路一起杀鬼子！
+
+    7.02  GameRunningScene.h
+
+          class GameRunningScene : public cocos2d::Layer
+          {
+          private:
+              ... ...
+
+          public:
+              ... ...
+          (1) void checkDetection(float dt);
+              ... ...
+          };
+
+    7.03  GameRunningScene.cpp, gameLogic
+
+          /* 游戏逻辑 */
+          void GameRunningScene::gameLogic()
+          {
+              this->schedule(schedule_selector(GameRunningScene::addRobber), 1);
+          (1) this->schedule(schedule_selector(GameRunningScene::checkDetection));
+          }
+
+    7.04  GameRunningScene.cpp, checkDetection
+
+          void GameRunningScene::checkDetection(float dt)
+          {
+              for (int i = 0; i < Projectile.size(); ++i) {
+
+                  for (int j = 0; j < Robber.size(); ++j) {
+
+                      float x = abs(Projectile.at(i)->getPosition().x -
+                          Robber.at(j)->getPosition().x);
+                      float y = abs(Projectile.at(i)->getPosition().y -
+                          Robber.at(j)->getPosition().y);
+                      float length = sqrt(x * x + y * y);
+
+                      // 判断子弹和强盗是否位置重合
+                      if (length < Robber.at(j)->getContentSize().width/2 +
+                          Projectile.at(i)->getContentSize().width/2) {
+
+                          this->removeChild(Projectile.at(i));
+                          this->removeChild(Robber.at(j));
+                          std::vector<Sprite*>::iterator Iter1 = Projectile.begin() + i;
+                          Projectile.erase(Iter1);
+
+                          std::vector<Sprite*>::iterator Iter2 = Robber.begin() + j;
+                          Robber.erase(Iter2);
+                          break;
+                      }
+
+                      //std::cout << "Projectile Postion = " << 
+                            Projectile.at(i)->getPosition().x << std::endl;
+                      // 删除移动超过屏幕的发射体
+                      if (Projectile.at(i)->getPosition().x > visibleSize.width) {
+                          //std::cout << "========== remove Projectile ==========" << std::endl;
+                          this->removeChild(Projectile.at(i));
+                          std::vector<Sprite*>::iterator Iter1 = Projectile.begin() + i;
+                          Projectile.erase(Iter1);
+                          break;
+                      }
+                  }
+              }
+
+              // 删除不发子弹时，移动超过屏幕的强盗
+              for (int j = 0; j < Robber.size(); ++j) {
+                  //std::cout << "Robber Postion = " << Robber.at(j)->getPosition().x << std::endl;
+                  if (Robber.at(j)->getPosition().x < 0) {
+                      //std::cout << "========== remove Robber ==========" << std::endl;
+                      this->removeChild(Robber.at(j));
+                      std::vector<Sprite*>::iterator Iter2 = Robber.begin() + j;
+                      Robber.erase(Iter2);
+                      break;
+                  }
+              }
+          }
+
+    7.05  Building, Troubleshooting, Thinking
+
+    7.06  Class Exercises
+
+    7.07  Conclusion
+
+08. Destroy the Enemy by Collision Detection
+
+    8.01  Introduction
+
+          01. Cocos2d 提供的物理引擎为 Chipmunk 和 Box2d，它们能够更好、更方便的处理碰撞检测；
+          02. 我们这里用 Box2d 来感受一下，Chipmunk 也思路一样，只是代码有一些区别；
+          03. 大家跟我一起来，先把以前的自己检测的代码注释，然后用新的代码来对比。
+
+    8.02  Initialization PhysicsBody
+
+          8.2.01  GameRunningScene.h
+
+                  class GameRunningScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+
+                  public:
+                      ... ...
+                  (1) void initPhysicsBody();
+                      ... ...
+                  };
+
+          8.2.02  GameRunningScene.cpp, init
+
+                  bool GameRunningScene::init()
+                  {
+                      ... ...
+                  (1) initPhysicsBody();
+                      ... ...
+                  }
+
+          8.2.03  GameRunningScene.cpp, initPhysicsBody
+
+                  (1) void GameRunningScene::initPhysicsBody()
+                  {
+                  (2) auto body = PhysicsBody::createEdgeBox(visibleSize);
+                  (3) auto edgeNode = Node::create();
+                  (4) edgeNode->setPosition(visibleSize.width/2, visibleSize.height/2);
+                  (5) edgeNode->setPhysicsBody(body);
+
+                  (6) this->addChild(edgeNode);
+                  }
+
+    8.03  GameRunningScene.cpp, touchEventRegistration
+
+          /* 触摸事件注册 */
+          void GameRunningScene::touchEventRegistration()
+          {
+              //setTouchEnabled(true);  // deprecated
+
+              // 得到当前节点（场景、层、精灵等）的所有事件分发器
+              auto dispatcher = Director::getInstance()->getEventDispatcher();
+              // 创建单点触摸监听器
+              // 即只有注册的 Layer 才能接收触摸事件
+              auto listener = EventListenerTouchOneByOne::create();
+              // 添加监听事件到监听器
+              listener->onTouchBegan = CC_CALLBACK_2(GameRunningScene::onTouchBegan, this);
+              //listener->onTouchMoved = CC_CALLBACK_2(GameRunningScene::onTouchMoved, this);
+              // 向下传递触摸
+              listener->setSwallowTouches(false);
+              // 添加事件监听器到事件分发器
+              dispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+          (1) auto contactListener = EventListenerPhysicsContact::create();
+          (2) contactListener->onContactBegin = CC_CALLBACK_1(GameRunningScene::onContactBegin, this);
+          (3) dispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+          }
+
+    8.04  GameRunningScene.cpp, onContactBegin
+
+          8.4.01  GameRunningScene.h
+
+                  class GameRunningScene : public cocos2d::Layer
+                  {
+                  private:
+                      ... ...
+
+                  public:
+                      ... ...
+                  (1) bool onContactBegin(const PhysicsContact& contact);
+                      ... ...
+                  };
+
+          8.4.02  GameRunningScene.cpp, onContactBegin
+
+                  (1) bool GameRunningScene::onContactBegin(const PhysicsContact& contact)
+                  {
+                  (2) PhysicsBody *a = contact.getShapeA()->getBody();
+                  (3) PhysicsBody *b = contact.getShapeB()->getBody();
+
+                  (4) this->removeChild(a->getNode());
+                  (5) this->removeChild(b->getNode());
+
+                  (6) return true;
+                  }
+
+    8.05  Building, Troubleshooting, Thinking
+
+          大家比较一下是自己检测容易，还是用系统封装的碰撞检测容易呢？
+
+    8.06  Class Exercises
+
+    8.07  Conclusion
+
+09. Building, Troubleshooting, Thinking
+
+    9.01  Fixing all Bugs
+
+    9.02  Adding New Features
+
+10. Conclusion
+
+11. Homework
+
+12. Traps and Pitfalls
+
+13. Diligence

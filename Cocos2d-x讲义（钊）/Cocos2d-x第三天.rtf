@@ -1,0 +1,626 @@
+{\rtf1\ansi\ansicpg936\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fnil\fcharset134 STHeitiSC-Light;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 Menlo-Regular;
+\f3\fnil\fcharset134 HannotateSC-W5;\f4\fnil\fcharset134 STSongti-SC-Regular;}
+{\colortbl;\red255\green255\blue255;\red15\green116\blue1;\red196\green26\blue22;\red100\green56\blue32;
+\red170\green12\blue145;\red63\green110\blue116;\red92\green38\blue153;\red38\green71\blue75;\red28\green2\blue207;
+\red30\green181\blue26;\red46\green13\blue110;\red20\green127\blue21;\red252\green15\blue22;\red237\green14\blue21;
+\red251\green2\blue7;\red252\green19\blue52;\red164\green8\blue0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww19540\viewh12780\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\tx12380\pardirnatural
+
+\f0\fs82 \cf0 \'b5\'da\'c8\'fd\'cc\'ec\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \'b1\'f0\'b2\'c8\'b0\'d7\'bf\'e9\
+\
+\pard\pardeftab720
+
+\fs42 \cf0 \'d2\'bb
+\f1  
+\f0 \'a3\'ba
+\f1  
+\f0 \'d3\'c3\'c3\'fc\'c1\'ee\'d0\'d0\'d0\'c2\'bd\'a8\'ce\'c4\'bc\'fe\'bc\'d0
+\f1 \
+
+\f0 \'b6\'fe
+\f1  
+\f0 \'a3\'ba
+\f1  
+\f0 \'c5\'e4\'d6\'c3\'b9\'a4\'b3\'cc
+\f1  \'a0 
+\f0 \'d6\'bb\'ca\'b9\'d3\'c3\'d6\'b1\'c1\'a2
+\f1 \
+
+\f0 \'c8\'fd
+\f1  :   
+\f0 \'b4\'b4\'bd\'a8
+\f1 Block
+\f0 \'c0\'e0
+\f1 \
+\pard\pardeftab720
+
+\fs28 \cf0 \'a0
+\f2 \cf2 ************Block.h*********************
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f2 \cf3 #include\'a0<cocos2d.h>\
+\pard\pardeftab720
+\cf4 USING_NS_CC;\
+\pard\pardeftab720
+\cf5 class\cf0 \'a0Block:\cf5 public\cf0 \'a0\cf6 Sprite\cf0 \'a0\{\cf5 \
+\cf0 \'a0\'a0 \'a0\
+\cf5 private\cf0 :\cf5 \
+\cf0 \'a0 \'a0\'a0\cf5 static\cf0 \'a0\cf6 Vector\cf0 <\cf6 Block\cf0 *> * blocks; \'a0 \'a0\
+\cf5 public\cf0 :\cf5 \
+\cf0 \'a0 \'a0 \'a0\'a0\
+\'a0 \'a0\'a0\cf5 static\cf0 \'a0\cf6 Block\cf0 * createWithArgs(\cf6 Color3B\cf0 \'a0color,\cf6 Size\cf0 \'a0size,\cf7 std\cf0 ::\cf7 string\cf0 \'a0label,\cf5 float\cf0 \'a0fontSize,\cf6 Color4B\cf0 \'a0textColor);\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 virtual\cf0 \'a0\cf5 bool\cf0 \'a0initWithArgs(\cf6 Color3B\cf0 \'a0color,\cf6 Size\cf0 \'a0size,\cf7 std\cf0 ::\cf7 string\cf0 \'a0label,\cf5 float\cf0 \'a0fontSize,\cf6 Color4B\cf0 \'a0textColor);\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 void\cf0 \'a0removeBlock();\
+\};\
+\pard\pardeftab720\sa280
+
+\f1 \cf0 \
+\pard\pardeftab720
+\cf0 \'a0
+\f2 \cf2 ************Block.cpp*********************
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f0 \cf2 \'ca\'b5\'cf\'d6\'c9\'f9\'c3\'f7\'b5\'c4\'c1\'bd\'b8\'f6\'b7\'bd\'b7\'a8\
+\pard\pardeftab720
+
+\f2 \cf2 \
+\pard\pardeftab720
+\cf6 Vector\cf0 <\cf6 Block\cf0 *> *\'a0\cf6 Block\cf0 ::blocks =\'a0\cf5 new\cf0 \'a0\cf6 Vector\cf0 <\cf6 Block\cf0 *>();\
+\
+\cf6 Block\cf0 *\'a0\'a0\cf6 Block\cf0 ::createWithArgs(\cf6 Color3B\cf0 \'a0color,\cf6 Size\cf0 \'a0size,\cf7 std\cf0 ::\cf7 string\cf0 \'a0label,\cf5 float\cf0 \'a0fontSize,\cf6 Color4B\cf0 \'a0textColor)\{\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 auto\cf0 \'a0b =\'a0\cf5 new\cf0 \'a0\cf6 Block\cf0 ();\
+\'a0 \'a0 b->\cf8 initWithArgs\cf0 (color,size,label,fontSize,textColor);\
+\'a0 \'a0 b->\cf8 autorelease\cf0 ();\cf8 \
+\cf0 \'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf6 blocks\cf0 ->\cf8 pushBack\cf0 (b);\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 return\cf0 \'a0b;\cf2 \
+\cf0 \}\
+\pard\pardeftab720
+\cf2 \
+\pard\pardeftab720
+\cf5 bool\cf0 \'a0\cf6 Block\cf0 ::initWithArgs(\cf6 Color3B\cf0 \'a0color,\cf6 Size\cf0 \'a0size,\cf7 std\cf0 ::\cf7 string\cf0 \'a0label,\cf5 float\cf0 \'a0fontSize,\cf6 Color4B\cf0 \'a0textColor)\{\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf6 Sprite\cf0 ::\cf8 init\cf0 ();\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf6 lineIndex\cf0 \'a0=\'a0\cf9 0\cf0 ;\cf6 \
+\cf0 \'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf8 setContentSize\cf0 (size);//
+\f0 \'bf\'e9\'b5\'c4\'b4\'f3\'d0\'a1
+\f2 \cf8 \
+\cf0 \'a0 \'a0\'a0\cf8 setAnchorPoint\cf0 (\cf6 Point\cf0 ::\cf6 ZERO\cf0 );//
+\f0 \'d7\'f3\'cf\'c2\'bd\'c7\'b6\'d4\'c6\'eb
+\f2 \cf8 \
+\cf0 \'a0 \'a0\'a0\cf8 setTextureRect\cf0 (\cf6 Rect\cf0 (\cf9 0\cf0 ,\'a0\cf9 0\cf0 , size.\cf6 width\cf0 , size.\cf6 height\cf0 ));\
+\'a0 \'a0\'a0\cf8 setColor\cf0 (color);\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 auto\cf0 \'a0l =\'a0\cf6 Label\cf0 ::\cf8 create\cf0 ();\
+\'a0 \'a0 l->\cf8 setString\cf0 (label);\
+\'a0 \'a0 l->\cf8 setSystemFontSize\cf0 (fontSize);\
+\'a0 \'a0 l->\cf8 setTextColor\cf0 (textColor);\
+\'a0 \'a0\'a0\cf8 addChild\cf0 (l);\
+\'a0 \'a0 l->\cf8 setPosition\cf0 (size.\cf6 width\cf0 /\cf9 2\cf0 ,size.\cf6 height\cf0 /\cf9 2\cf0 );\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 return\cf0 \'a0\cf5 true\cf0 ;\cf2 \
+\cf0 \}\
+\
+\pard\pardeftab720
+
+\fs44 \cf0 \
+
+\f0 \'cb\'c4
+\f2  
+\f0 \'a3\'ba\'cc\'ed\'bc\'d3\'bf\'aa\'ca\'bc\'d0\'d0
+\f2 \
+\pard\pardeftab720
+
+\fs28 \cf0 \
+\pard\pardeftab720
+
+\f1 \cf0 \'a0
+\f2 \cf2 ************\cf10 HelloWorldScene.h\cf2 *********************\
+\pard\pardeftab720
+\cf5 (1)\
+private\cf0 :\cf5 \
+\pard\pardeftab720
+\cf3 \
+\pard\pardeftab720
+\cf0 \'a0 \'a0 \'a0\cf6 Size\cf0 \'a0visibleSize;\
+(2)\'a0\cf5 \'a0void\cf0 \'a0addStartLine();\
+\pard\pardeftab720
+\cf3 \
+\pard\pardeftab720
+
+\f1 \cf0 \'a0
+\f2 \cf2 ************\cf10 HelloWorldScene.cpp\cf2 *********************
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f2 \cf0 (1) \'a0\cf6 visibleSize\cf0 \'a0=\'a0\cf6 Director\cf0 ::\cf8 getInstance\cf0 ()->\cf8 getVisibleSize\cf0 ();
+\f3\fs26 \
+\pard\pardeftab720
+
+\f2\fs28 \cf8 \
+\pard\pardeftab720
+\cf3 (2)
+\f3\fs26 \cf0 \
+\pard\pardeftab720
+
+\f2\fs28 \cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::addStartLine()\{
+\f3\fs26 \
+
+\f2\fs28 \'a0 \'a0 \'a0\cf5 auto\cf0 \'a0b =\'a0\cf6 Block\cf0 ::\cf8 createWithArgs\cf0 (\cf6 Color3B\cf0 ::\cf6 YELLOW\cf0 ,\'a0\cf6 Size\cf0 (\cf6 visibleSize\cf0 .\cf6 width\cf0 ,\'a0\cf6 visibleSize\cf0 .\cf6 height\cf0 /\cf9 4\cf0 ),\'a0\cf3 ""\cf0 ,\'a0\cf9 20\cf0 ,\'a0\cf6 Color4B\cf0 ::\cf6 BLACK\cf0 );\cf6 \
+\cf0 \'a0 \'a0 \'a0\cf6 gameLayer\cf0 ->\cf8 addChild\cf0 (b);\
+\'a0 \'a0 \'a0b->\cf8 setLineIndex\cf0 (\cf9 0\cf0 );\cf8 \
+\cf0 \}\
+\
+\pard\pardeftab720
+
+\f0\fs44 \cf0 \'ce\'e5
+\f2  \'a0 
+\f0 \'cc\'ed\'bc\'d3\'bd\'e1\'ca\'f8\'d0\'d0
+\f2 \
+\pard\pardeftab720
+
+\fs28 \cf2 ************\cf10 HelloWorldScene.h\cf2 *********************
+\f1 \cf0 \
+
+\f2 \cf2 \
+\pard\pardeftab720
+\cf0 \'a0\cf5 void\cf0 \'a0addEndLine();\
+\pard\pardeftab720
+
+\f3\fs26 \cf0 \
+\pard\pardeftab720
+
+\f2\fs28 \cf2 ************\cf10 HelloWorldScene.cpp\cf2 *******************
+\f1 \cf0 \
+
+\f2 \cf2 \
+\pard\pardeftab720
+\cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::addEndLine()\{\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 auto\cf0 \'a0b =\'a0\cf6 EndLine\cf0 ::\cf8 createWithContext\cf0 (\cf5 this\cf0 );\cf8 \
+\cf0 \'a0 \'a0 b->\cf8 setLineIndex\cf0 (\cf9 4\cf0 );\cf8 \
+\cf0 \'a0 \'a0 b->\cf8 setPositionY\cf0 (b->\cf8 getLineIndex\cf0 ()*\cf6 visibleSize\cf0 .\cf6 height\cf0 /\cf9 4\cf0 );\cf8 \
+\cf0 \'a0 \'a0\'a0\cf6 gameLayer\cf0 ->\cf8 addChild\cf0 (b);\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf6 currentEndLine\cf0 \'a0= b;
+\fs44 \
+
+\fs28 \}\
+\
+\
+\pard\pardeftab720
+
+\f0\fs42 \cf0 \'c1\'f9
+\f2  \'a0
+\f0 \'cc\'ed\'bc\'d3\'c6\'d5\'cd\'a8\'d0\'d0
+\f2 \
+\pard\pardeftab720
+
+\f1\fs28 \cf0 \'a0
+\f2 \cf2 ************\cf10 HelloWorldScene.h\cf2 *********************\cf0 \
+\pard\pardeftab720
+
+\fs26 \cf2 \
+\pard\pardeftab720
+
+\fs28 \cf5 void\cf0 \'a0addNormalLine(\cf5 int\cf0 \'a0lineIndex);\
+\
+\pard\pardeftab720
+
+\f1 \cf0 \'a0
+\f2 \cf2 ************\cf10 HelloWorldScene.cpp\cf2 *********************
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f2\fs26 \cf2 \
+\pard\pardeftab720
+
+\fs28 \cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::addNormalLine(\cf5 int\cf0 \'a0lineIndex)\{\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf6 Block\cf0 \'a0*b;\
+\'a0 \'a0\'a0\cf5 int\cf0 \'a0blackIndex =\'a0\cf11 rand\cf0 ()%\cf9 4\cf0 ;\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 for\cf0 \'a0(\cf5 int\cf0 \'a0i=\cf9 0\cf0 ; i<\cf9 4\cf0 ; i++) \{\
+\'a0 \'a0 \'a0 \'a0 b = Block::createWithArgs(blackIndex==i?Color3B::BLACK:Color3B::WHITE,Size(visibleSize.width/\cf9 4\cf0 -\cf9 1\cf0 , visibleSize.height/\cf9 4\cf0 -\cf9 1\cf0 ),\cf3 ""\cf0 ,\cf9 20\cf0 ,Color4B::BLACK);\
+\'a0 \'a0 \'a0 \'a0 gameLayer->addChild(b);\
+\'a0\'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 b->setPosition(i*visibleSize.width/\cf9 4\cf0 , lineIndex*visibleSize.height/\cf9 4\cf0 );\
+\'a0 \'a0 \'a0 \'a0 b->\cf8 setLineIndex\cf0 (lineIndex);\
+\'a0 \'a0 \}\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf6 linesCount\cf0 ++;\cf6 \
+\cf0 \}\
+\
+\pard\pardeftab720
+
+\f0\fs38 \cf0 \'c6\'df
+\f2  \'a0 
+\f0 \'ca\'b6\'b1\'f0\'b5\'b1\'c7\'b0\'b4\'a6\'d3\'da\'c4\'c4\'d2\'bb\'d0\'d0
+\f2 \
+\pard\pardeftab720
+
+\f1\fs28 \cf0 \'a0
+\f2 \cf2 ************Block.h*********************
+\f1 \cf0 \
+
+\f2 \cf2 \
+\pard\pardeftab720
+\cf5 (1)\cf0 \
+\cf5 int\cf0 \'a0lineIndex;\
+\
+\cf5 (2)\cf0 \
+\cf5 int\cf0 \'a0getLineIndex();\
+\cf5 void\cf0 \'a0setLineIndex(\cf5 int\cf0 \'a0lineIndex);\
+\pard\pardeftab720
+\cf2 \
+
+\f1 \cf0 \'a0
+\f2 \cf2 ************Block.cpp*********************
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f2\fs26 \cf2 \
+\pard\pardeftab720
+
+\fs28 \cf5 (1)\cf0 \'a0\cf6 lineIndex\cf0 \'a0=\'a0\cf9 0\cf0 ;\
+\cf5 (2)\cf0 \
+\cf5 void\cf0 \'a0\cf6 Block\cf0 ::setLineIndex(\cf5 int\cf0 \'a0v)\{\
+\'a0 \'a0\'a0\cf5 this\cf0 ->\cf6 lineIndex\cf0 \'a0= v;\
+\}\
+\
+\cf5 (3)\cf0 \
+\cf5 int\cf0 \'a0\cf6 Block\cf0 ::getLineIndex()\{\
+\'a0 \'a0\'a0\cf5 return\cf0 \'a0\cf5 this\cf0 ->\cf6 lineIndex\cf0 ;\cf5 \
+\pard\pardeftab720
+
+\fs44 \cf0 \
+\pard\pardeftab720
+
+\fs28 \cf0 \}\
+\pard\pardeftab720
+
+\f1 \cf0 \'a0
+\f2 \cf2 ************
+\f3\fs32 \cf12 HelloWorldScene.cpp
+\f2\fs28 \cf2 *********************
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f2 \cf0 (1)
+\f1 \
+
+\f2 \cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::addStartLine()\{\
+\'a0 \'a0 b->setLineIndex(\cf9 0\cf0 );\
+\
+\}\
+(2)\
+\cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::addEndLine()\{\
+\
+\'a0 \'a0 b->setLineIndex(\cf9 4\cf0 );\
+\
+\}\
+(3)\
+\cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::addNormalLine(\cf5 int\cf0 \'a0lineIndex)\{\
+\
+...\
+\'a0 \'a0\'a0\cf5 for\cf0 \'a0(\cf5 int\cf0 \'a0i=\cf9 0\cf0 ; i<\cf9 4\cf0 ; i++) \{\
+\'a0 \'a0 \'a0 \'a0...\
+\'a0 \'a0 \'a0 \'a0 b->\cf8 setLineIndex\cf0 (lineIndex);\
+\'a0 \'a0 \}\
+\'a0 \'a0 \'a0 \'a0...\
+\cf6 \}\cf0 \
+\
+\pard\pardeftab720
+
+\f0\fs36 \cf13 \'b4\'b4\'bd\'a8
+\f2 statGame
+\f0 \'ba\'af\'ca\'fd
+\f2 \cf0 \
+\pard\pardeftab720
+
+\fs28 \cf5 void\cf0 \'a0startGame();\
+\
+\pard\pardeftab720
+
+\f0\fs36 \cf14 \'ca\'b5\'cf\'d6
+\f2 StartGame
+\f0 \'ba\'af\'ca\'fd
+\f2 \cf0 \
+\pard\pardeftab720
+
+\fs28 \cf0 \
+\cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::startGame()\{\
+\'a0 \'a0\'a0\cf6 linesCount\cf0 \'a0=\'a0\cf9 0\cf0 ;\cf6 \
+\cf0 \'a0 \'a0\'a0\cf6 showEnd\cf0 \'a0=\'a0\cf5 false\cf0 ;\
+\'a0 \'a0\'a0\cf6 timerRunning\cf0 \'a0=\'a0\cf5 false\cf0 ;\cf6 \
+\cf0 \'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf8 addStartLine\cf0 ();\cf8 \
+\cf0 \'a0 \'a0\'a0\cf8 addNormalLine\cf0 (\cf9 1\cf0 );\cf8 \
+\cf0 \'a0 \'a0\'a0\cf8 addNormalLine\cf0 (\cf9 2\cf0 );\cf8 \
+\cf0 \'a0 \'a0\'a0\cf8 addNormalLine\cf0 (\cf9 3\cf0 );\cf8 \
+\cf0 \}\
+\pard\pardeftab720
+
+\f3\fs26 \cf0 \
+\pard\pardeftab720
+
+\f0\fs44 \cf0 \'b0\'cb
+\f2  \'a0
+\f0 \'d3\'ce\'cf\'b7\'bd\'bb\'bb\'a5\
+\pard\pardeftab720
+
+\f2\fs28 \cf0 \
+\pard\pardeftab720
+
+\f0\fs30 \cf15 \'cc\'ed\'bc\'d3\'ca\'c2\'bc\'fe\'bc\'e0\'cc\'fd\'c6\'f7
+\f2\fs28 \cf0 \
+\'a0\cf5 auto\cf0 \'a0listener =\'a0\cf6 EventListenerTouchOneByOne\cf0 ::\cf8 create\cf0 ();\cf6 \
+\pard\pardeftab720
+\cf0 \'a0 \'a0 listener->\cf6 onTouchBegan\cf0 \'a0= [\cf5 this\cf0 ](\cf6 Touch\cf0 * t,\cf6 Event\cf0 * e)\{\
+\
+\'a0 \'a0 log("on Touch\'94);\
+\'a0 \'a0\'a0\cf5 return\cf0 \'a0\cf5 false\cf0 ;\cf5 \
+\cf0 \'a0 \'a0 \};\
+\pard\pardeftab720
+\cf8 \
+\pard\pardeftab720
+\cf0 \'a0\cf6 Director\cf0 ::\cf8 getInstance\cf0 ()->\cf8 getEventDispatcher\cf0 ()->\cf8 addEventListenerWithSceneGraphPriority\cf0 (listener,\'a0\cf5 this\cf0 );\cf8 \
+\pard\pardeftab720
+
+\f3\fs26 \cf0 \
+\pard\pardeftab720
+
+\f0\fs30 \cf15 \'bb\'f1\'c8\'a1\'b5\'bd\'cb\'f9\'d3\'d0\'b5\'c4\'bf\'e9
+\f2\fs28 \cf0 \
+\pard\pardeftab720
+
+\f1 \cf0 \'a0
+\f2 \cf2 ************Block.h*********************
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f2 \cf16 Block.h
+\f0\fs30 \cf15 \'b4\'b4\'bd\'a8\'b7\'bd\'b7\'a8
+\f2\fs28 \cf0 \
+\pard\pardeftab720
+\cf5 static\cf0 \'a0Vector<Block*> * getBlocks();\
+\
+\pard\pardeftab720
+\cf16 Block.app
+\f0 \cf15 \'ca\'b5\'cf\'d6\'b7\'bd\'b7\'a8
+\f2 \cf0 \
+Vector<Block*> * Block::getBlocks()\{\
+\'a0 \'a0\'a0\cf5 return\cf0 \'a0Block::blocks;\
+\}\
+\
+\cf16 listener
+\f0 \'b7\'bd\'b7\'a8\'c0\'ef\cf15 \'be\'df\'cc\'e5\'ca\'b5\'cf\'d6
+\f2 \cf0 \
+\'a0 \'a0\cf5 auto\cf0 \'a0bs = Block::getBlocks();\
+\'a0 \'a0 \'a0 \'a0 Block *b;\
+\'a0\'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0\'a0\cf5 for\cf0 \'a0(\cf5 auto\cf0 \'a0it = bs->begin(); it!=bs->end(); it++) \{\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 b = *it;\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\cf5 if\cf0 \'a0(b->getLineIndex()==\cf9 1\cf0 &&\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 b->getBoundingBox().containsPoint(t->getLocation())) \{\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\cf5 if\cf0 \'a0(b->getColor()==Color3B::BLACK) \{\
+\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 b->setColor(Color3B::GRAY);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\cf5 this\cf0 ->moveDown();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf5 else\cf0 \'a0\cf5 if\cf0 (b->getColor()==Color3B::GREEN)\{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\cf5 this\cf0 ->moveDown();\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\cf5 this\cf0 ->stopTimer();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\cf5 else\cf0 \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 MessageBox(\cf3 "GameOver"\cf0 ,\'a0\cf3 "
+\f4 \'ca\'a7\'b0\'dc
+\f2 "\cf0 );\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\cf5 break\cf0 ;\
+\'a0 \'a0\}\
+\}\
+\pard\pardeftab720
+
+\f3\fs26 \cf0 \
+\pard\pardeftab720
+
+\fs44 \cf0 \'be\'c5 \uc0\u160  \'d3\'ce\'cf\'b7\'c2\'df\'bc\'ad
+\fs28 \
+\pard\pardeftab720
+
+\fs26 \cf0 \
+\pard\pardeftab720
+\cf15 \'cc\'ed\'bc\'d3\'d2\'bb\'d0\'d0\'d4\'d9\'cd\'f9\'cf\'c2\'d2\'c6\cf0 \
+\pard\pardeftab720
+
+\f2\fs28 \cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::moveDown()\{\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf8 addNormalLine\cf0 (\cf9 4\cf0 );\
+\'a0 \'a0\'a0\cf5 auto\cf0 \'a0bs = Block::getBlocks();\
+\'a0 \'a0\'a0\cf5 for\cf0 \'a0(\cf5 auto\cf0 \'a0it = bs->begin(); it!=bs->end(); it++) \{\
+\'a0 \'a0 \'a0 \'a0 (*it)->moveDown();\
+\'a0 \'a0 \}\
+\}\
+\pard\pardeftab720\sa320
+
+\f3\fs32 \cf15 \'b4\'b4\'bd\'a8\uc0\u160 \u160 moveDown\'b7\'bd\'b7\'a8\cf0 \
+\pard\pardeftab720
+
+\f2\fs28 \cf5 void\cf0 \'a0moveDown();\
+\pard\pardeftab720
+
+\f3\fs26 \cf0 \
+\pard\pardeftab720
+
+\f0\fs34 \cf15 \'ca\'b5\'cf\'d6
+\f2 moveDown
+\f0 \'b7\'bd\'b7\'a8
+\f2 \cf0 \
+\pard\pardeftab720
+
+\fs28 \cf5 void\cf0 \'a0\cf6 Block\cf0 ::moveDown()\{\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 this\cf0 ->\cf6 lineIndex\cf0 --;\
+\'a0\'a0 \'a0\
+\'a0 \'a0 Size visibleSize = Director::getInstance()->getVisibleSize();\
+\'a0\'a0 \'a0\
+\'a0 \'a0 runAction(Sequence::create(MoveTo::create(\cf9 0.1f\cf0 , Point(getPositionX(), lineIndex*visibleSize.height/\cf9 4\cf0 )),\
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 CallFunc::create([\cf5 this\cf0 ]()\{\
+\'a0\'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \'a0 \'a0\'a0\cf5 if\cf0 \'a0(lineIndex<\cf9 0\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\cf5 this\cf0 ->removeBlock();\
+\'a0 \'a0 \'a0 \'a0 \}\
+\'a0\'a0 \'a0 \'a0 \'a0\
+\'a0 \'a0 \}),\'a0\cf5 NULL\cf0 ));
+\fs44 \
+\pard\pardeftab720\sa260
+
+\f3\fs26 \cf0 \}\
+\
+\pard\pardeftab720\sa280
+
+\fs44 \cf0 \'ca\'ae \uc0\u160 \'c5\'d0\'b6\'cf\'d3\'ce\'cf\'b7\'bd\'e1\'ca\'f8
+\fs28 \
+\pard\pardeftab720
+
+\f2 \cf5 int\cf0 \'a0linesCount;\
+\pard\pardeftab720
+
+\f3\fs26 \cf0 \
+\pard\pardeftab720
+
+\f2\fs28 \cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::startGame()\{\
+\'a0 \'a0\'a0\cf6 linesCount\cf0 \'a0=\'a0\cf9 0\cf0 ;\cf6 \
+\}\
+\pard\pardeftab720
+
+\f3\fs36 \cf15 \
+\pard\pardeftab720
+
+\f2 \cf15 moveDown
+\f0 \'b7\'bd\'b7\'a8\'c0\'ef
+\f2\fs28 \cf0 \
+\pard\pardeftab720
+\cf5 void\cf0 \'a0\cf6 HelloWorld\cf0 ::moveDown()\{\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf5 if\cf0 \'a0(\cf6 linesCount\cf0 <\cf9 50\cf0 ) \{\
+\'a0 \'a0 \'a0 \'a0\'a0\cf8 addNormalLine\cf0 (\cf9 4\cf0 );\cf8 \
+\cf0 \'a0 \'a0 \}\cf5 else\cf0 \'a0\cf5 if\cf0 (!\cf6 showEnd\cf0 )\{\
+\'a0 \'a0 \'a0 \'a0\'a0\cf8 addEndLine\cf0 ();\
+\
+***********\
+\'a0 \'a0\'a0\cf5 bool\cf0 \'a0showEnd;\
+\
+\cf5 \'a0 \'a0 void\cf0 \'a0\cf6 HelloWorld\cf0 ::startGame()\
+\cf6 \'a0 \'a0 showEnd\'a0=\'a0\cf5 false\cf6 ;)\cf0 \
+***********\
+\'a0\'a0 \'a0\
+\'a0 \'a0\'a0\cf6 showEnd\cf0 \'a0=\'a0\cf5 true\cf0 ;\
+\pard\pardeftab720
+
+\f1 \cf0 \
+\pard\pardeftab720
+
+\f2 \cf0 \'a0 \'a0\'a0\cf5 auto\cf0 \'a0bs = Block::getBlocks();\
+\
+\'a0 \'a0\'a0\cf5 for\cf0 \'a0(\cf5 auto\cf0 \'a0it = bs->begin(); it!=bs->end(); it++) \{\
+\'a0 \'a0 \'a0 \'a0 (*it)->moveDown();\
+\'a0 \'a0 \}\
+\
+\}\
+\
+\pard\pardeftab720
+
+\f0 \cf0 \'ca\'ae\'d2\'bb\'a3\'ba
+\f2  
+\f0 \'cc\'ed\'bc\'d3\'ca\'b1\'bc\'e4
+\f2 \
+.h 
+\f0 \'c0\'ef\'c3\'e6
+\f2 \
+\'a0 \'a0 Label *timerLabel;\
+\'a0 \'a0 Node *gameLayer;\
+\'a0 \'a0 bool timerRunning;\
+\'a0 \'a0 long startTime;\
+\
+
+\f0 \'b3\'f5\'ca\'bc\'bb\'af
+\f2 \
+\'a0 gameLayer = Node::create();\
+\'a0 \'a0 addChild(gameLayer);\
+\'a0 \'a0\'a0\
+\'a0 \'a0 timerLabel = Label::create();\
+\'a0 \'a0 timerLabel->setTextColor(Color4B::BLUE);\
+\'a0 \'a0 timerLabel->setSystemFontSize(48);\
+\'a0 \'a0 timerLabel->setPosition(visibleSize.width/2, visibleSize.height-100);\
+\'a0 \'a0 timerLabel->setString("0.000000");\
+\'a0 \'a0 addChild(timerLabel);\
+\'a0 \'a0 timerRunning = false;\
+\
+\
+void HelloWorld::update(float dt)\{\
+\'a0 \'a0\'a0\
+\'a0 \'a0 long offset = clock()-startTime;\
+\'a0 \'a0\'a0\
+\'a0 \'a0 timerLabel->setString( StringUtils::format("%g",((double)offset)/1000000));\
+\}\
+\
+\
+void HelloWorld::startTimer()\{\
+\'a0 \'a0 if (!timerRunning) \{\
+\'a0 \'a0 \'a0 \'a0 scheduleUpdate();\
+\'a0 \'a0 \'a0 \'a0 startTime = clock();\
+\'a0 \'a0 \'a0 \'a0\'a0\
+\'a0 \'a0 \'a0 \'a0 timerRunning = true;\
+\'a0 \'a0 \}\
+\}\
+\
+void HelloWorld::stopTimer()\
+\{\
+\'a0 \'a0 if(timerRunning)\{\
+\'a0 \'a0 \'a0 \'a0 unscheduleUpdate();\
+\'a0 \'a0 \'a0 \'a0\'a0\
+\'a0 \'a0 \'a0 \'a0 timerRunning = false;\
+\'a0 \'a0 \}\
+\}\
+\
+=========\
+
+\f0 \'b5\'f7\'d3\'c3
+\f2 \
+\
+\'a0if (b->getColor()==Color3B::BLACK) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf17  if (!timerRunning) \{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 this->startTimer();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 b->setColor(Color3B::GRAY);\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 this->moveDown();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}else if(b->getColor()==Color3B::GREEN)\{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 this->moveDown();\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\'a0\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \cf17 this->stopTimer();\cf0 \
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}else\{\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 MessageBox("GameOver", "
+\f0 \'ca\'a7\'b0\'dc
+\f2 ");\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \}\
+\}\
+\
+}
