@@ -1,0 +1,628 @@
+
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Description:
+ *     This file describe 猜数字游戏.
+ *
+ * Original Date:
+ *     2015 - 09 -22 
+ *
+ * Modified Date:
+ *
+ * Authors:
+ *	lizhao   
+ * Current Version:
+ *      0.1.0
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Table of Contents
+=================
+
+    01. 环境
+    02. 创建工程
+    03. 添加物理引擎，白色背景加边框
+    04. 创建小人
+    05. 创建移动的障碍物
+    06. 添加游戏控制器
+    07. 测试碰撞
+    08. 结束页面
+    09. 游戏交互事件
+ 
+
+01. 环境
+
+    1.01  Building Environment
+
+          01. Xcode 5.1 需要 Mac OS X 10.9 或更高版本；
+          02. Xcode 6.0 需要 Mac OS X 10.9.x 或更高版本；
+          03. Xcode 6.1 需要 Mac OS X 10.10 或更高版本；
+          04. windows上使用vs2012
+
+    1.02  Programming Language
+
+    1.03  Whole Day Introduction
+
+          01. 首先，我们要创建一个程序；
+          02. 然后，我们创建小人小黑块；
+          03. 接着添加游戏控制器，测试碰撞，还有结束页面；
+	  04. 游戏交互事件实现
+
+    1.04  Conclusion
+
+          01. 本文档所使用的代码是在 Xcode-5.1 的版本下编译通过的；
+          02. 如果有版本不一至，需要对比调试和修改，或查看官方文档。
+
+02. 创建工程
+
+    2.01  New Project
+    
+          01. 打开 终端;
+          02. 找到cocos2d-x-3.5的位置（例如我的放在了桌面，则输入cd Desktop/cocos2d-x-3.5）；
+          03. 输入cd tools/cocos2d-console/bin；
+          04. cocos new（这里是项目名字） -p （这里是包名） -l （语言类型cpp是c++） -d （工程存放的位置，我是在cocos2d-     x-3.5里建了一个WorkSpace文件夹）
+          05. 例如输入cocos new NoOneDies -p com.history.www -l cpp -d /Users/ms/Desktop/cocos2d-x-3.5/WorkSpace/
+          06. 回车后，会出现Running command: new…… 接着就是等待，当最终回到bin路径下时才成功，然后关闭终端
+          07. 找到存放工程的文件夹
+
+    2.02  AppDelegate.cpp applicationDidFinishLaunching方法里面基本配置一下屏幕的宽高
+  	   
+          01. bool AppDelegate::applicationDidFinishLaunching() {
+    	      // initialize director
+  	      auto director = Director::getInstance();
+  	      auto glview = director->getOpenGLView();
+              if(!glview) {
+              glview = GLView::create("My Game");
+              director->setOpenGLView(glview);
+              }
+             （1）glview->setDesignResolutionSize(480, 800, ResolutionPolicy::SHOW_ALL);
+             （2）glview->setFrameSize(360, 600);
+              。。。后面代码省略。。。
+	      }
+———————运行—————
+
+03.  添加物理引擎，白色背景加边框
+
+    3.01.  添加物理场景
+          01.
+              HelloWorldScene.cpp  讲场景改为物理世界
+              Scene* HelloWorld::createScene()
+	      {
+             （1） auto scene = Scene::createWithPhysics();
+              // 创建显示调试框
+             （2） scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    
+              auto layer = HelloWorld::create();
+              scene->addChild(layer);
+              return scene;
+              }
+   
+         02.
+             HelloWorldScene.cpp init方法里面原来生成的代码删掉
+	     删完如下
+	     bool HelloWorld::init()
+             {
+             // 1. super init first
+             if ( !LayerColor::init))
+             {
+             return false;
+             }
+             Size visibleSize = Director::getInstance()->getVisibleSize();
+
+             return true;
+             }
+
+    3.02.  添加边框
+        
+          01. 新建一个边界框的类:   classes右键 -> New File -> c++ Class -> 名字为Edge -> create
+          02. Edge.h中导入头文件，添加命名空间，创建一个类
+	      #include <cocos2d.h> 
+	      USING_NS_CC;
+              class Edge:public Node {
+              public:
+              virtual bool init();//初始化方法
+              CREATE_FUNC(Edge);//创建一个创建方法
+              };
+          03. Edge.cpp 中实现init方法
+
+              bool Edge::init(){
+              //执行父类的init方法
+              Node::init();
+              //获取屏幕的宽高
+              Size visibleSize = Director::getInstance()->getVisibleSize();
+              //我们在内部呢要创建一个物理的物理，那么这个物理如何创建呢
+              setPhysicsBody(PhysicsBody::createEdgeBox(visibleSize));
+              //配置ContentSize
+              setContentSize(visibleSize);
+              return true;
+              }	   
+
+          04. 我们要把边界框添加到场景当中
+              在HelloWorldScene.cpp 中引入边界框的头文件
+	      #include "Edge.h"
+              在init方法中添加
+              auto edge = Edge::create();
+              edge -> setPosition(visibleSize.width/2,visibleSize.height/2)
+              addChild(edge);
+ 	 
+———————运行—————
+
+          05. 改变层的背景颜色
+
+             （1）HelloWorldScene.h 里将 class HelloWorld : public cocos2d::Layer改为
+	      class HelloWorld : public cocos2d::LayerColor
+	      让他继承LayerColor，使用一个可以有颜色的层
+
+             （2）HelloWorldScene.cpp init初始化方法里改为如下
+              // 1. 背景变为白色
+              if ( !LayerColor::initWithColor(Color4B(255, 255, 255, 255)) )
+              {
+                 return false;
+              }  
+
+———————运行—————
+    
+04. 创建小人
+	
+    4.01.  创建一个文件Hero： classes右键 -> New File -> c++ Class -> 名字为Hero-> create
+    4.02.  Hero.h
+	   #include <cocos2d.h> 导入头文件
+	   USING_NS_CC;   引入命名空间
+           class Hero:public Sprite {  类叫Hero继承自精灵
+           public: 
+           virtual bool init();  重写init方法
+           CREATE_FUNC(Hero);    创建一个创建方法
+           };
+    4.03.  Hero.cpp 实现init方法
+
+	   bool Hero::init(){
+               Sprite::init();
+   
+               return true;
+           }
+    4.04.  需要一个动画的资源文件，以及一个库将FlashTool拖到工程下
+	   Hero.cpp里
+      	   #include "Hero.h"
+       （1）#include "FlashTool.h"
+           bool Hero::init(){
+           Sprite::init();
+    	
+	   运行一个Action，这个Action为FlashTool::readJsonSpriteSheet("Hero.json", 0.2f)
+       （3）runAction(RepeatForever::create(FlashTool::readJsonSpriteSheet("Hero.json", 0.2f)));
+       （4）Size s = Size(44, 52); 声明一个大小
+       （5）setPhysicsBody(PhysicsBody::createBox(s));指定物理世界的宽高
+       （6）setContentSize(s);
+
+           return true;
+           }
+
+    4.05.  HelloWorldScene.cpp
+       (1) #include "Hero.h"  导入头文件
+       (2) 添加hero到场景上 init方法里 创建边框的下面接着写
+	   auto hero = Hero::create();
+           hero -> setPosition(50,50);
+           addChild(hero);
+
+———————运行—————
+    
+  
+05. 创建移动的障碍物
+
+    5.01.  创建一个文件Block： classes右键 -> New File -> c++ Class -> 名字为Block-> create
+    5.02.  Block.h
+	   #include <cocos2d.h>
+           USING_NS_CC;
+           class Block:public Sprite {
+           public:
+               virtual bool init();
+               CREATE_FUNC(Block);
+	       virtual void update(float dt);重写update方法=
+           };
+
+    5.03.  Block.cpp 具体实现
+ 
+ 	   实现初始化方法
+           bool Block::init(){
+   	   Sprite::init();
+    
+           Size size = Size((rand()%20)+5, (rand()%30)+10); 生成随机的大小
+           Size visibleSize = Director::getInstance()->getVisibleSize();获取屏幕宽高
+    
+           setPhysicsBody(PhysicsBody::createBox(size));设置物理世界的大小
+           setTextureRect(Rect(0, 0, size.width, size.height));
+           setColor(Color3B(0, 0, 0)); 设置块的颜色
+           setContentSize(size);
+    
+           setPositionX(visibleSize.width); 设置开始位置
+           scheduleUpdate();
+
+           return true;
+           }
+           实现update方法
+           void Block::update(float dt){
+    
+           this->setPositionX(getPositionX()-4);
+    
+           if (getPositionX()<0) {
+              unscheduleUpdate();
+              removeFromParent();
+              }
+           }
+
+    5.04.  在HelloWorldScene.cpp里添加障碍物
+           首先导入头文件 #include "Block.h"
+           然后init 方法里在创建小人后面写
+    
+           auto block = Block::create();
+           addChild(block);
+           block -> setPositionY(block -> getContentSize().height/2);
+
+—————————————运行——————————
+
+    5.05.  发现运行的时候遇到人没有继续往前走
+           Block.cpp init方法里添加
+           getPhysicsBody()->setDynamic(false);
+
+—————————————运行——————————
+           发现碰撞之后人是会有旋转的，我们不让他旋转
+
+           Hero.cpp init方法里添加
+           getPhysicsBody()->setDynamic(false);
+ 
+
+06.  添加游戏控制器
+           如果我们想要添加多个主角进来的话，在HelloWorldScene.cpp里写的话会比较麻烦的
+           我们需要添加一个游戏的控制器来组织这些基本元素的添加
+    6.01. 
+           classes右键 -> New File -> c++ Class -> 名字为GameController-> create
+           GameController.h 里写
+
+           #include <cocos2d.h>
+
+           USING_NS_CC;
+
+           class GameController:public Ref {    为了能让它自动释放，继承于Ref
+           private:
+               Layer * _layer;
+               float _positionY;
+               Size visibleSize;
+               int currentFrameIndex;
+               int nextFrameCount;
+               Edge * edge;
+               Hero * hero;
+    
+           private:
+               void resetFrames();
+               void addBlock();
+    
+           public:
+              virtual bool init(Layer * layer,float positionY);
+              static GameController* create(Layer * layer,float positionY);
+           };
+
+    6.02.  GameController.cpp实现init方法
+           
+           bool GameController::init(cocos2d::Layer *layer, float positionY){
+           _layer = layer;
+           _positionY = positionY;
+     
+           return true;
+           }
+
+    6.03.  GameController.cpp实现create方法
+
+           GameController* GameController::create(cocos2d::Layer *layer, float positionY){
+    
+           auto _ins = new GameController();
+           _ins->init(layer, positionY);
+           _ins->autorelease();
+           return _ins;
+           }
+
+    6.04.  GameController.h里导入头文件
+           #include "Edge.h"
+           #include "Hero.h"
+           #include "Block.h"
+           然后把HelloWorldScene.cpp里的
+           auto edge = Edge::create();
+           edge -> setPosition(visibleSize.width/2,visibleSize.height/2)
+           addChild(edge);
+   
+           auto hero = Hero::create();
+           hero -> setPosition(50,50);
+           addChild(hero);
+
+           这个剪切到GameController.cpp的init里
+
+           然后发现visibleSize的地方都报错
+           接着在GameController.h的private里写Size visibleSize;
+
+           .cpp init里写一个获得屏幕大小的size
+           visibleSize = Director::getInstance()->getVisibleSize();
+
+           然后接着修改一下Y的位置，添加到当前layer上，如下：
+           //add edge 
+           Edge* edge = Edge::create();
+       （3）edge->setPosition(visibleSize.width/2, visibleSize.height/2+positionY);
+           edge->setContentSize(visibleSize);
+       （1）layer->addChild(edge);
+    
+           //add hero
+           Hero * hero = Hero::create();
+       （4）hero->setPosition(50, hero->getContentSize().height/2+positionY);
+       （2）layer->addChild(hero);
+
+           最好是把它俩都变成成员
+           在GameController.h的private里声明
+           Edge * edge;
+           Hero * hero;
+           再将GameController.cpp里的删掉  如下： 
+           //add edge
+       （1）edge = Edge::create();
+           edge->setPosition(visibleSize.width/2, visibleSize.height/2+positionY);
+           edge->setContentSize(visibleSize);
+           layer->addChild(edge);
+    
+       （2）//add hero
+           hero = Hero::create();
+           hero->setPosition(50, hero->getContentSize().height/2+positionY);
+           layer->addChild(hero);
+
+    6.05.  将GameController添加到helloworld场景里
+
+           HelloWorldScene.h 里导入头文件
+           #include "GameController.h"
+           添加一个数组
+           private:
+               cocos2d::Vector<GameController*> gcs;
+
+           HelloWorldScene.cpp 的init方法里删掉原来写的创建的小人边框黑块的代码写一句：
+
+           gcs.insert(0, GameController::create(this, 30));
+
+
+———————运行————
+发现小人和边框都在就对了
+
+    6.06.  添加地板
+
+           首先把HelloWorldScene.cpp的createScene方法里的
+           scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);注释
+
+———————运行————
+
+           发现小人跑在半空中
+           所以要添加地板
+           在GameController.cpp的init方法里添加
+    
+           //add ground
+           auto ground = Sprite::create();
+           ground->setColor(Color3B(0, 0, 0));
+           ground->setTextureRect(Rect(0, 0, visibleSize.width, 3));
+           ground->setPosition(visibleSize.width/2,1.5+positionY);
+           layer->addChild(ground);
+    
+
+———————运行————  会有地板了————————
+
+
+    6.07.  添加障碍物 
+
+           因为添加障碍物是随机的。所以我们可以写一个Timer来进行添加
+
+           我们先在HelloWorldScene里面写一个update方法，由一个update方法来控制所有的随机添加方块的操作
+           首先在HelloWorldScene.h里写一个方法：
+           virtual void update(float dt);
+
+           然后HelloWorldScene.cpp里实现
+           void HelloWorld::update(float dt){
+
+           }
+           接着在HelloWorldScene.cpp的init方法里写
+           scheduleUpdate();
+           然后我们想在HelloWorldScene的update方法里面执行GameController里的update方法。
+           所以在GameController.h里写一个公开的方法
+           void onUpdate(float dt);
+
+           在GameController.cpp里实现
+           void GameController::onUpdate(float dt){
+
+           }
+
+           然后我们就可以在HelloWorldScene.cpp的update里来执行它了
+           如下：
+           void HelloWorld::update(float dt){
+    
+            （1）   for (auto it = gcs.begin(); it!=gcs.end(); it++) {
+            （2）     (*it)->onUpdate(dt);
+            （3）   }
+    
+           }
+
+           通过这种方式呢我们就可以对每一个游戏的控制器的update方法来进行执行了
+           然后我们打开GameController.cpp的onUpdate方法
+           我们在这里呢可以设定一个随机数，这个随机数呢我们可以设定为在多少帧之后呢让他去执行一个添加方块的操作。
+           首先在GameController.h的private：里写一个
+           int currentFrameIndex; 当前的帧数
+           然后再写一个
+           int nextFrameCount;  下一个触发事件的帧数是多少
+
+           然后再写一个private的方法
+
+           private:
+               void resetFrames();
+               void addBlock(); 添加障碍物的操作
+
+           接着在GameController.cpp里实现这两个方法
+           void GameController::resetFrames(){
+               currentFrameIndex = 0;
+               nextFrameCount = (rand()%120) + 100;
+           }
+
+           void GameController::addBlock(){
+           auto b = Block::create();
+           _layer->addChild(b);
+           b->setPositionY(b->getContentSize().height/2+_positionY);
+           }
+
+
+           然后再具体实现onUpdate方法
+           void GameController::onUpdate(float dt){
+               currentFrameIndex++; 
+               if (currentFrameIndex>=nextFrameCount) {
+                   resetFrames();   
+                   addBlock();
+               }
+           }
+
+——————  运 行  ———————
+好了。这样障碍物就可以添加了
+
+
+           那么如果你想添加多个场景怎么办呢。很简单。打开HelloWorldScene.cpp
+           在init方法里添加一句
+           gcs.insert(0, GameController::create(this, 250));
+
+——--------—运行————— 
+
+           然后呢他就添加了两个主角。遇到的障碍物也是不同的。
+           为了方便游戏的开发呢我们把
+           //gcs.insert(0, GameController::create(this, 250));
+           注释掉。先完成一个就好。
+
+07. 测试碰撞
+
+           只要人碰撞到障碍物我们就认为游戏失败了
+
+    7.01.  打开HelloWorldScene.cpp的init方法
+
+           要让他能进行碰撞检测，首先要给他设定一个碰撞标识，
+           Hero.cpp  init里
+           getPhysicsBody()->setContactTestBitmask(1);
+
+           Block.cpp init里
+           getPhysicsBody()->setContactTestBitmask(1);
+
+
+           创建一个listener 
+
+          （1）auto listener = EventListenerPhysicsContact::create();
+          （2）listener->onContactBegin = [this](PhysicsContact & contact){
+
+           如果检测到碰撞了，我们先把定时器关了，再呈现一个结束页面
+          （6）this->unscheduleUpdate();
+       
+        
+         （4）return true;
+         （3）};
+         （5）Director::getInstance()->getEventDispatcher()-                                                                      >addEventListenerWithSceneGraphPriority(listener, this);
+    
+
+08. 结束界面
+
+
+    8.01.  创建一个GameOverScene.h
+           classes右键 -> New File -> c++ Class -> 名字为GameOverScene-> create
+    8.02.  我们可以把声明和实现的代码都写在.h里
+
+           using namespace cocos2d;  导入命名空间
+
+           class GameOver:public LayerColor {
+    
+           private:
+               Size visibleSize;获取系统屏幕大小
+    
+           public:
+           virtual bool init(){
+           LayerColor::initWithColor(Color4B::WHITE); 白色背景
+        
+           visibleSize = Director::getInstance()->getVisibleSize();屏幕大小
+        
+           auto label = Label::create(); 创建一个标签
+           label->setString("Game Over”);设置文字
+           label->setSystemFontSize(40); 字体大小
+           label->setColor(Color3B::BLACK);字体颜色
+           addChild(label);
+           label->setPosition(visibleSize.width/2, visibleSize.height/2);位置
+        
+           return true;
+           };
+    
+           CREATE_FUNC(GameOver);
+           创建场景的方法
+           static Scene* createScene(){
+           auto s = Scene::create();
+           auto l = GameOver::create();
+           s->addChild(l);
+           return s;
+           };
+           };
+
+    8.03.  启动GameOver
+           首先在HelloWorldScene.cpp里导入头文件
+           #include "GameOverScene.h"
+           然后在HelloWorldScene.cpp的init方法里的listener->onContactBegin 里面调用。如下：
+
+           listener->onContactBegin = [this](PhysicsContact & contact){
+           this->unscheduleUpdate();
+        
+       （1）Director::getInstance()->replaceScene(GameOver::createScene());
+        
+           return true;
+           };
+
+—————————— 运行 ————————— 当小人碰撞到黑块的时候提示游戏结束
+
+
+09.游戏交互事件
+   我们要让这个人往上跳啊，要不一出来直接撞死有毛意思
+
+    9.01.  HelloWorldScene.cpp  init方法里添加一个事件让屏幕可以点击
+
+           auto touchListener = EventListenerTouchOneByOne::create();
+           touchListener->onTouchBegan = [this](Touch * t,Event * e){
+        
+           for (auto it = gcs.begin(); it!=gcs.end(); it++) {
+           
+           }
+           return false;
+           };
+           Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
+
+    9.02.  在GameController.h  public里写两个方法
+           bool hitTestPoint(Vec2 point);//是否与某个特定的触摸点碰撞了
+           void onUserTouch(); 用户触摸时要执行的方法
+
+
+           GameController.cpp 实现
+
+           bool GameController::hitTestPoint(cocos2d::Vec2 point){
+               return edge->getBoundingBox().containsPoint(point);如果边框里包括这个点
+           }
+
+           void GameController::onUserTouch(){
+               hero->getPhysicsBody()->setVelocity(Vec2(0, 400));给hero有一个向上的速度
+           }
+
+    9.03.  循环里调用方法
+
+           HelloWorldScene.cpp  init里的 touchListener->onTouchBegan里
+            for (auto it = gcs.begin(); it!=gcs.end(); it++) {
+                      （1） if ((*it)->hitTestPoint(t->getLocation())) {
+                      （2） (*it)->onUserTouch();
+                      （3）    break;
+                       }
+            }
+
+
+—————运行—————点击屏幕小人可以跳跃了
+
+
+
+
+
+
+
+
+

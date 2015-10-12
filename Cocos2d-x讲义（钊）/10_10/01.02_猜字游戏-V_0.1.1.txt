@@ -1,0 +1,200 @@
+
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Description:
+ *     This file describe 猜数字游戏.
+ *
+ * Original Date:
+ *     2015 - 09 -22 
+ *
+ * Modified Date:
+ *
+ * Authors:
+ *	lizhao   
+ * Current Version:
+ *      0.1.0
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Table of Contents
+=================
+
+    01. 环境
+    02. 创建工程，搭建页面
+    03. 给文本添加点击事件
+    04. 实现点击方法addListen
+    05. 游戏逻辑判断
+
+
+01. 环境
+
+    1.01  Building Environment
+
+          01. Xcode 5.1 需要 Mac OS X 10.9 或更高版本；
+          02. Xcode 6.0 需要 Mac OS X 10.9.x 或更高版本；
+          03. Xcode 6.1 需要 Mac OS X 10.10 或更高版本；
+          04. windows上使用vs2012
+
+    1.02  Programming Language
+
+
+    1.03  Whole Day Introduction
+
+          01. 首先，我们要创建一个程序；
+          02. 然后，我们创建游戏需要的视图；
+          03. 接着，我们实现游戏逻辑；
+
+    1.04  Conclusion
+
+          01. 本文档所使用的代码是在 Xcode-5.1 的版本下编译通过的；
+          02. 如果有版本不一至，需要对比调试和修改，或查看官方文档。
+
+02. 创建工程，搭建页面
+
+    2.01  New Project
+    
+          01. 打开 终端;
+          02. 找到cocos2d-x-3.5的位置（例如我的放在了桌面，则输入cd Desktop/cocos2d-x-3.5）；
+          03. 输入cd tools/cocos2d-console/bin；
+          04. cocos new（这里是项目名字） -p （这里是包名） -l （语言类型cpp是c++） -d （工程存放的位置，我是在cocos2d-x-3.5里建了一个WorkSpace文件夹）
+          05. 例如输入cocos new NumberRiddle -p com.history.www -l cpp -d /Users/ms/Desktop/cocos2d-x-3.5/WorkSpace/
+          06. 回车后，会出现Running command: new…… 接着就是等待，当最终回到bin路径下时才成功，然后关闭终端
+          07. 找到存放工程的文件夹
+     
+    2.02  创建一个 标签
+    
+          01. "HelloWorldScene.cpp” init方法里删掉自动生成的创建代码
+ 
+	  02. //创建一个 标签
+  		 auto label = Label::create();
+    		 label->setString("Please input a num betweetn 0 -100");
+  	         addChild(label);
+    	         label -> setSystemFontSize(30);
+   	         label->setPosition(visibleSize.width/2,visibleSize.height-label->getContentSize().height/2-20);
+    2.03  创建一个输入框
+        01.
+        	auto tf =TextFieldTTF::textFieldWithPlaceHolder("input sth", "Helvetica", 30);
+        	tf -> setColor(Color3B::BLUE);
+   	        tf->setPosition(visibleSize.width/2,label->getPositionY()-50);
+        	addChild(tf);
+
+
+
+    2.04  创建一个按键
+
+          01.//创建一个按键
+    		auto  submitBtn = Label::create();
+    		submitBtn->setPosition(visibleSize.width/2, tf->getPositionY()-50);
+   	        submitBtn ->setSystemFontSize(30);
+   	        submitBtn->setString("Submit");
+  		addChild(submitBtn);
+
+    2.05  创建显示结果的标签
+
+          01.
+       	        auto  messageLabel = Label::create();
+                addChild(messageLabel);
+                messageLabel -> setSystemFontSize(30);
+                messageLabel ->setPosition(visibleSize.width/2,submitBtn->getPositionY()-50);
+
+    2.05 随机种子
+
+	01.  helloworld.h
+		 int RandomNum;
+	02.初始化init方法里写
+    		//设置随机数
+    		RandomNum = rand()%100;
+    		log("%d",RandomNum);
+	03.设置随机种子
+   		 srand(time(NULL));
+
+
+03.  给文本添加点击事件
+
+    3.01. 先把tf 变成全局的在helloworld.h里写
+  	   cocos2d::TextFieldTTF *tf;
+   
+    3.02. 再写一个方法
+	   //添加监听器
+  	  void addListen();
+
+    3.03  调用方法 init里写
+	   addListen();
+          
+   
+04. 实现点击方法addListen();
+	
+     //添加输入框的监听器
+    void  HelloWorld::addListen(){
+    
+    auto director = Director::getInstance();
+    //创建闭包函数
+    auto handler = [this](Touch*t,Event*e){
+        
+        auto target = e->getCurrentTarget();
+        auto point = t->getLocation();
+        
+        if (target->getBoundingBox().containsPoint(point)) {
+            if (target ==tf) {
+                tf->attachWithIME();
+                
+            }elseif (target == submitBtn){
+                tf->detachWithIME();
+//                log("submit");
+            }
+        }
+        else
+        {
+            tf -> detachWithIME();
+        }
+        
+        returnfalse;
+    };
+    //给输入框添加事件监听器
+    auto l = EventListenerTouchOneByOne::create();
+    l->onTouchBegan = handler;
+    director->getEventDispatcher()->addEventListenerWithSceneGraphPriority(l, tf);
+    
+    //按键添加事件监听器
+    auto subBtnListener = EventListenerTouchOneByOne::create();
+    subBtnListener->onTouchBegan = handler;
+    director->getEventDispatcher()->addEventListenerWithSceneGraphPriority(subBtnListener, submitBtn);
+    }
+
+
+
+05. 游戏逻辑判断
+
+   elseif (target == submitBtn){
+                tf->detachWithIME();
+
+     首先要获取到文本的值
+    （1） int inputValue = __String::create(tf->getString())->intValue();
+    （2） if (inputValue>RandomNum)
+    （3） {
+    （4） messageLabel->setString("你输入的大了");
+    （5） } 
+    （6） else if(inputValue<RandomNum)
+    （7） {
+    （8） messageLabel->setString("你输入的小了");
+    （9） }
+    （10）else
+    （11）{
+    （12）messageLabel->setString("我勒个去   终于对了");
+    （13）}
+
+     }
+
+  
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,592 @@
+
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Description:
+ *     This file describe 别踩白块.
+ *
+ * Original Date:
+ *     2015 - 09 -22 
+ *
+ * Modified Date:
+ *  // 这里是修改日期
+ *
+ * Authors:
+ *	lizhao   
+ * Current Version:
+ *      0.1.0
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Table of Contents
+=================
+
+    01. 环境
+    02. 新建工程
+    03. 添加开始行和结束行
+    04. 添加普通行
+    05. 识别当前处于哪一行
+    06. 事件交互
+    07. 游戏逻辑
+    08. 判断游戏结束
+    09. 添加时间
+
+
+01. 环境
+
+    1.01  Building Environment
+
+          01. Xcode 5.1 需要 Mac OS X 10.9 或更高版本；
+          02. Xcode 6.0 需要 Mac OS X 10.9.x 或更高版本；
+          03. Xcode 6.1 需要 Mac OS X 10.10 或更高版本；
+          04. windows上使用vs2012
+
+    1.02  Programming Language
+
+    1.03  Whole Day Introduction
+
+          01. 首先，我们要创建一个工程；
+          02. 然后，我们创建一个Block类；
+	  03. 然后，创建初始化方法
+	  04. 调用Block创建块
+
+    1.04  Conclusion
+
+          01. 本文档所使用的代码是在 Xcode-5.1 的版本下编译通过的；
+          02. 如果有版本不一至，需要对比调试和修改，或查看官方文档。
+
+02. 新建工程
+
+    2.01  New Project
+    
+          01. 打开 终端;
+          02. 找到cocos2d-x-3.5的位置（例如我的放在了桌面，则输入cd Desktop/cocos2d-x-3.5）；
+          03. 输入cd tools/cocos2d-console/bin；
+          04. cocos new（这里是项目名字） -p （这里是包名） -l （语言类型cpp是c++） -d （工程存放的位置，我是在cocos2d-x-3.5里建了一个WorkSpace文件夹）
+          05. 例如输入cocos new Block -p com.history.www -l cpp -d /Users/ms/Desktop/cocos2d-x-3.5/WorkSpace/
+          06. 回车后，会出现Running command: new…… 接着就是等待，当最终回到bin路径下时才成功，然后关闭终端
+          07. 找到存放工程的文件夹
+     
+    2.02  创建一个 Block类
+    
+          01. Classes —> new File -> iOS 里 c and c++ -> c++ Class -> next ->Save As: Block 注意！！（存储的地方为Classes里面）-> create
+	  02. 如果学生用的是vs，就让他把我们xcode上自动生成的代码.h和.CPP里的都抄下来
+
+    2.03  声明两个方法
+          01. 在Block.h里导入头文件#include <cocos2d.h> 添加命名空间 USING_NS_CC;
+	  02. 创建一个类
+	    class Block:public Sprite {
+	    public:
+	    //提供给外界调用此方法创建块
+  	    static Block* createWithArgs(Color3B color,Size size,std::string label,float fontSize,Color4B textColor);
+    
+   	    //这里进行块的初始化
+            virtual bool initWithArgs(Color3B color,Size size,std::string label,float fontSize,Color4B textColor);
+    
+            };
+	  03. 在.cpp里实现这两个方法
+            
+	   Block* Block::createWithArgs(Color3B color,Size size,std::string label,float fontSize,Color4B textColor)
+	   {
+    
+  	   auto b= new Block();
+    
+  	   b -> initWithArgs(color, size, label, fontSize, textColor);
+    
+     	   b -> autorelease();
+  
+	   return b;
+	   }
+
+	   bool Block::initWithArgs(Color3B color,Size size,std::string label,float fontSize,Color4B textColor)
+		
+           {
+           Sprite::init();
+    
+           lineIndex = 0;
+    
+   	   setContentSize(size);//设置块的大小
+    
+	   setAnchorPoint(Point::ZERO);//左下角对齐
+    
+       	   setTextureRect(Rect(0, 0,size.width , size.height));
+    
+     	   setColor(color);//设置块的颜色
+    
+	
+   	   auto l = Label::create();
+      	   l -> setString(label);
+   	   l -> setSystemFontSize(fontSize);
+   	   l -> setTextColor(textColor);
+   	   addChild(l);
+   	   l -> setPosition(size.width/2,size.height/2);      
+	   return true;
+	   
+	   }
+
+
+    2.04  创建一个存储块的Vector集合
+
+         01. 在Block.h里
+	   class Block:public Sprite {
+
+  	  （1）private:
+
+ 	  （2）static Vector<Block*> * blocks;
+
+	      public:
+  	      。。。。。。。    
+      	   };
+
+ 	 02. 在Block.cpp里找个地儿写
+
+	    Vector <Block*> * Block::blocks = new Vector<Block*>();
+
+03. 添加开始行和结束行
+
+         3.01  到HelloWorld.cpp里将init方法删为以下样子
+	     bool HelloWorld::init()
+	     {
+              // 1. super init first
+             if ( !Layer::init() )
+             {
+             return false;
+             }
+
+             。。。。 这中间的都删掉。。。。。
+		
+             return true;
+             }
+	3.02. HelloWorld.cpp里导入Block的头文件
+
+	    （1） #include "Block.h"
+	    （2） USING_NS_CC;
+   
+	3.03.  到HelloWorld.h里public中声明一个方法，再将visibleSize设置为全局的
+
+	     class HelloWorld : public cocos2d::Layer
+	     {
+		   (1）private:
+   
+  		   （2）Size visibleSize;
+   
+		public:
+                  。。。。。。。。
+  		  （3）  void addStartLine();
+                  。。。。。。。
+		};
+             再将init里的改为 visibleSize = Director::getInstance() -> getVisibleSize();
+
+	3.04.  实现这个方法
+	     void HelloWorld::addStartLine()
+	     {
+ 		   auto b = Block::createWithArgs(Color3B::YELLOW,Size(visibleSize.width,visibleSize.height/4), "Start", 				   			   20,Color4B::BLACK);
+   	       	   addChild(b);
+	     }
+	3.05.  在init方法里调用
+	     bool HelloWorld::init()
+	     {
+             if ( !Layer::init() )
+             {
+             return false;
+             }
+
+            （1）  addStartLine();
+		
+             return true;
+             }
+
+	——————————   运行一下看看   ——————————
+
+      3.06.   添加结束行
+
+		************HelloWorldScene.h*********************
+
+ 		void addEndLine();
+
+		************HelloWorldScene.cpp*******************
+
+		void HelloWorld::addEndLine(){
+    
+ 		   auto b = EndLine::createWithContext(this);
+   		   b->setPositionY(b->getLineIndex()*visibleSize.height/4);
+   		   addChild(b);
+		}
+      3.07  调用并运行
+     	      init 里将addStartLine()注释;
+	     （1） //addStartLine();
+  	     （2）   addEndLine();
+
+   	————————   运行一下看看  ———————————
+  
+   
+04. 添加普通行
+       4.01   声明一个方法
+ 		************HelloWorldScene.h***********************
+
+		void addNormalLine(int lineIndex);
+
+ 		************HelloWorldScene.cpp*********************
+
+		void HelloWorld::addNormalLine(int lineIndex){
+    
+  		  Block *b;
+  		  int blackIndex = rand()%4;
+    
+  		  for (int i=0; i<4; i++) {
+  		      b = Block::createWithArgs(blackIndex==i?Color3B::BLACK:Color3B::WHITE,Size(visibleSize.width/4-1, 							      visibleSize.height/4-1),"",20,Color4B::BLACK);
+  		      addChild(b);
+      		  b->setPosition(i*visibleSize.width/4, lineIndex*visibleSize.height/4);
+  		  }
+		}
+
+
+	4.02  init方法里注释addEndLine，再加上普通行 如下：
+
+   	 addStartLine();
+	 //addEndLine();
+   	 addNormalLine(1);
+   	 addNormalLine(2);
+   	 addNormalLine(3);
+    
+——————————    运行一下看看    ——————
+
+05. 识别当前处于哪一行
+
+	5.01. 创建两个方法
+
+ 	    ************Block.h*********************
+
+	    class Block:public Sprite {
+
+            private:
+    
+           （1） int lineIndex;
+    
+            public:
+            。。。。。。。。。。。
+
+           （2） int getLineIndex();
+    
+           （3） void setLindex(int lineIndex);
+            };
+
+        ************Block.cpp*********************
+
+	bool Block::initWithArgs(Color3B color,Size size,std::string label,float fontSize,Color4B textColor)
+	{
+	。。。。。。。。。
+  	  （1）lineIndex = 0;
+	。。。。。。。。。
+	}
+
+	(2)
+	void Block::setLineIndex(int v){
+  	  this->lineIndex = v;
+	}
+
+	(3)
+	int Block::getLineIndex(){
+   	 return this->lineIndex;
+
+	}
+
+
+	5.02  设置处于哪一行
+
+ 	************HelloWorldScene.cpp*********************
+	(1)开始行设置为第0行
+	void HelloWorld::addStartLine(){
+ 	   b->setLineIndex(0);
+
+	}
+	(2)结束行设置为第4行
+	void HelloWorld::addEndLine(){
+
+  	  b->setLineIndex(4);
+
+	}
+	(3)普通行依次增加
+	void HelloWorld::addNormalLine(int lineIndex){
+
+	...
+  	  for (int i=0; i<4; i++) {
+       ...
+        b->setLineIndex(lineIndex);
+        }
+       ...
+ 	}
+
+
+06. 事件交互
+
+	6.01 init方法里 添加事件监听器
+ 	auto listener = EventListenerTouchOneByOne::create();
+        listener->onTouchBegan = [this](Touch* t,Event* e){
+
+    	log("on Touch”);
+        return false;
+        };
+
+ 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
+	6.02 首先要获取到所有的块
+
+ 	************Block.h public里*********************
+	static Vector<Block*> * getBlocks();
+
+	Block.app实现方法
+	Vector<Block*> * Block::getBlocks(){
+        return Block::blocks;
+	}
+
+	6.03 onTouchBegan方法里具体实现， 如下：
+
+ 	auto listener = EventListenerTouchOneByOne::create();
+        listener->onTouchBegan = [this](Touch* t,Event* e){
+
+	要添加以下代码
+  
+ 	auto bs = Block::getBlocks(); 获取到所有的块
+        Block *b;
+        
+        for (auto it = bs->begin(); it!=bs->end(); it++) {
+            
+            b = *it;
+            
+            if (b->getLineIndex()==1&&
+                b->getBoundingBox().containsPoint(t->getLocation())) {
+                
+                if (b->getColor()==Color3B::BLACK) {
+
+                    b->setColor(Color3B::GRAY);
+
+                }else if(b->getColor()==Color3B::GREEN){
+                    
+                }else{
+                    MessageBox("GameOver", "失败");
+                }
+                
+                break;
+  	 }
+	}
+
+	添加代码结束
+
+	log("on Touch”);
+	return false;
+	};
+
+07. 游戏逻辑
+
+	7.01  Block类里具体实现一下如何下移
+	创建  moveDown方法
+	************Block.h public里*********************
+	void moveDown();
+
+	************Block.cpp里*********************
+
+	实现moveDown方法
+	void Block::moveDown(){
+    
+        this->lineIndex--;
+    
+        Size visibleSize = Director::getInstance()->getVisibleSize();
+    
+        runAction(Sequence::create(MoveTo::create(0.1f, Point(getPositionX(), lineIndex*visibleSize.height/4)),
+                               CallFunc::create([this](){
+        
+        if (lineIndex<0) {
+
+   	removeFromParent();
+    
+	//Blocks 数组里面移除
+   	 blocks -> eraseObject(this);
+
+        }
+        
+       }), NULL));
+       }
+
+
+	7.02  helloworld 里具体如何调用下移方法
+
+ 	************HelloWorldScene.h*********************
+
+        void moveDown();
+
+ 	************HelloWorldScene.cpp*********************
+       void HelloWorld::moveDown(){
+       //添加第四行
+       addNormalLine(4);
+       auto bs = Block::getBlocks(); 获取到所有的块
+       for (auto it = bs->begin(); it!=bs->end(); it++) { 
+         (*it)->moveDown();
+
+       }
+       }
+
+
+	7.03  事件监听里调用moveDown方法
+
+  	if (b ->getColor() == Color3B::BLACK)
+ 	{
+          if (!timerRuning) {
+             this -> startTimer();
+          }
+                    
+             b -> setColor(Color3B::GRAY);
+       （1）  this -> moveDown();
+               
+   	}
+
+08.   判断游戏结束
+
+	8.01   添加走过的行数
+ 	************HelloWorldScene.h*********************
+
+   	  初始化一个行数和是否显示结束行了
+   	  int linesCount;
+   	  bool ShowEnd;
+
+ 	************HelloWorldScene.cpp init方法里写*******************
+
+   	 linesCount = 0;
+   	 showEnd = false;
+
+ 	************HelloWorldScene.cpp moveDown方法里*******************
+
+	void HelloWorld::moveDown()
+	{
+   	 if (lineCount<50)
+   	 {
+   	     addNormalLine(4);
+    	}
+    
+   	 else if (!ShowEnd)
+    	{
+    	    addEndLine();
+    	    ShowEnd = true;
+  	  }
+  	  auto bs = Block::getBlocks();
+    
+   	 for (auto it = bs -> begin(); it != bs -> end(); it++)
+  	  {
+  	      (*it) -> moveDown();
+   	 }
+	}
+
+
+09  添加时间
+	9.01  初始化时间标签等
+ 	************HelloWorldScene.h*********************
+
+ 	   Label *timerLabel; 显示时间的标签
+  	   Node *gameLayer;   新建一个层
+   	   bool timerRunning; 时间是否运行
+   	   long startTime;    开始时间
+
+ 	************HelloWorldScene.cpp********************* 
+	  在init方法里初始化一下
+	  bool HelloWorld::init()
+	  {
+  	  //////////////////////////////
+  	  // 1. super init first
+   	  if ( !Layer::init() )
+   	  {
+  	      return false;
+  	  }
+ 
+   	  visibleSize = Director::getInstance() -> getVisibleSize();
+    	  一定要写在这，写在init方法最后面会不显示
+    	 （1）gameLayer = Node::create();
+   	 （2）addChild(gameLayer);
+    
+   	 （3）timeLabel = Label::create();
+     	 （4）timeLabel -> setTextColor(Color4B::BLUE);
+    	 （5）timeLabel -> setSystemFontSize(48);
+   	 （6）timeLabel -> setPosition(visibleSize.width/2, visibleSize.height-100);
+   	 （7）timeLabel -> setString("0.000000");
+   	 （8）addChild(timeLabel);
+    
+   	 （9）timerRuning = false;
+    
+
+    	 return true;
+	 }
+
+
+	9.02 将块都添加到gameLayer上
+		（1） 首先addStartLine方法里
+		将addChild(b)；修改为 gameLayer -> addChild(b);
+
+		（2） 首先addNormalLine方法里
+		将addChild(b)；修改为 gameLayer -> addChild(b);
+
+		（3） 首先addEndLine方法里
+		将addChild(b)；修改为 gameLayer -> addChild(b);
+
+	9.03   添加开始计时和结束计时的方法
+		 ************HelloWorldScene.h********************* 
+
+ 		   void startTimer();
+  		   void stopTimer();
+ 		   virtual void update(float dt); 重写刷新方法
+
+ 		************HelloWorldScene.cpp********************* 	
+	9.04   实现这三个方法
+
+		void HelloWorld::startTimer()
+		{
+ 		   if (!timerRuning) {
+  		      scheduleUpdate();//更新
+   		     startTime = clock();
+   		     timerRuning = true;
+  		  }
+		}
+
+		void HelloWorld::stopTimer()
+		{
+  		  if (timerRuning) {
+        
+    		    unscheduleUpdate();
+	   	    timerRuning = false;
+   		 }		
+		}
+
+		void HelloWorld::update(float dt)
+		{
+ 		  long offset = clock() - startTime;
+ 	   
+  		  timeLabel -> setString(StringUtils::format("%g",((double)offset)/1000000));
+    
+		}
+
+	9.04  调用开始和结束计时方法
+ 		************HelloWorldScene.cpp  init的事件监听里********************* 
+
+ 		if (b->getColor()==Color3B::BLACK) {
+                  （1）  if (!timerRunning) {
+                  （2）   this->startTimer();
+                  （3）  }
+                    
+                    b->setColor(Color3B::GRAY);
+                    this->moveDown();
+                }else if(b->getColor()==Color3B::GREEN){                    
+                   
+		 （4） this->stopTimer();
+                
+ 		}else{
+                    MessageBox("GameOver", "失败");
+                }
+		}
+
+
+
+
+
+
+
+
+
+
+

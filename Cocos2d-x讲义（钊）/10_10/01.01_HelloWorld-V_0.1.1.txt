@@ -1,0 +1,310 @@
+
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Description:
+ *     This file describe HelloWorld详解.
+ *
+ * Original Date:
+ *     2015 - 09 -22 
+ *
+ * Modified Date:
+ *
+ * Authors:
+ *	lizhao   
+ * Current Version:
+ *      0.1.0
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Table of Contents
+=================
+
+    01. 环境
+    02. 我的第一个工程
+    03. Action 的基本使用
+    04. Action 的特效
+    05. 场景切换特效 
+
+=================
+
+01. 环境
+
+    1.01  Building Environment
+
+          01. Xcode 5.1 需要 Mac OS X 10.9 或更高版本；
+          02. Xcode 6.0 需要 Mac OS X 10.9.x 或更高版本；
+          03. Xcode 6.1 需要 Mac OS X 10.10 或更高版本；
+          04. windows上使用vs2012
+
+    1.02  Programming Language
+
+
+    1.03  Whole Day Introduction
+
+          01. 首先，编出一个计算机编程的经典 "Hello World"；
+          02. 然后，我们看代码来学习一下程序的运行流程；
+          03. 接着，我们创建一个自己的 Scene；
+          04. 接着，我们的重点，Sprite 动作和特效的学习；
+          05. 接着，来一个课堂练习；
+
+    1.04  Conclusion
+
+          01. 本文档所使用的代码是在 Xcode-5.1 的版本下编译通过的；
+          02. 如果有版本不一至，需要对比调试和修改，或查看官方文档。
+
+02. 我的第一个工程
+
+    2.01  New Project
+    
+          01. 打开 终端;
+          02. 找到cocos2d-x-3.5的位置（例如我的放在了桌面，则输入cd Desktop/cocos2d-x-3.5）；
+          03. 输入cd tools/cocos2d-console/bin；
+          04. cocos new（这里是项目名字） -p （这里是包名） -l （语言类型cpp是c++） -d （工程存放的位置，我是在cocos2d-x-3.5里建了一个WorkSpace文件夹）
+          05. 例如输入cocos new HelloWorld -p com.history.www -l cpp -d /Users/ms/Desktop/cocos2d-x-3.5/WorkSpace/
+          06. 回车后，会出现Running command: new…… 接着就是等待，当最终回到bin路径下时才成功，然后关闭终端
+          07. 找到存放工程的文件夹
+     
+    2.02  介绍工程里面各个文件的作用
+    
+          01. "resource"
+	      该文件夹主要用于存放游戏中需要的图片、音频和配置等资源文件。
+              为了方便管理，可以在其中创建子文件夹。
+              在不同平台下，对于文件路径的定义是不一致的，但实际接口大同小异。
+              Cocos2d-x 为我们屏蔽了这些差异，其中"resource"文件夹可以默认为游戏运行时的目录。
+	  02. "Classes"和“proj.XXXX” 文件夹
+	      这两个文件夹用于放置游戏头文件和源代码文件。
+              可以看到，项目模板为我们添加的三个文件分别为"main.h"、"main.cpp"和"resource.h"，
+              它们是平台相关的程序文件，为 Windows 专有。
+              通常情况下，程序入口与资源文件管理在不同平台下是不同的，
+              但是 Cocos2d-x 的模板已经基本为我们处理好了这些细节，不需要对它们进行修改。
+	  03. macs上打开proj.ios_mac.windows上打开 proj.win32
+
+    2.03  打开工程后classes介绍AppDelegate
+
+          01. ”AppDelegate.h" 和 "AppDelegate.cpp" 文件
+	      这两个文件是 Cocos2d-x 游戏的通用入口文件，
+              类似于一般 Windows 工程中主函数所在的文件。
+              接触过 iOS 开发的应会觉得这两个文件的名字似曾相识，
+              其实 AppDelegate 在 iOS 工程中就是程序的入口文件
+
+          02. bool applicationDidFinishLaunching()。
+
+	      应用程序启动后将调用这个方法。默认的实现中已经包含了游戏启动后的必要准备：
+	      bool AppDelegate::applicationDidFinishLaunching() 
+	      {
+	      //创建一个导演 getInstance 是 构造方法
+    	      auto director = Director::getInstance();
+    
+	      //设置了一个游戏要呈现的视图
+    	      auto glview = director->getOpenGLView();
+   	      if(!glview) {
+    	      glview = GLViewImpl::create("My Game");
+              director->setOpenGLView(glview);
+	      }
+	      //是否呈现帧频
+   	      director->setDisplayStats(true);
+    
+	      //设置帧频多大
+   	      director->setAnimationInterval(1.0 / 60);
+    
+              //创建了一个scene
+  	      auto scene = HelloWorld::createScene();
+    
+              //通过导演执行runWithScene 来执行到场景
+   	      director->runWithScene(scene);
+              return true;
+	      }
+
+	  03. void applicationDidEnterBackground()
+	      当应用程序将要进入后台时，会调用这个方法。
+	      具体来说，当用户把程序切换到后台，或手机接到电话或短信后程序被系统切换到后台时，会调用这个方法。
+	      此时，应该暂停游戏中正在播放的音乐或音效。
+	      动作激烈的游戏通常也应该在此时进行暂停操作，以便玩家暂时离开游戏时不会遭受重大损失。
+
+	  04. void applicationWillEnterForeground()。
+	      该方法与 applicationDidEnterBackground()成对出现，在应用程序回到前台 时被调用。
+              相对地，我们通常在这里继续播放刚才暂停的音乐，显示游戏暂停菜单等。
+
+    2.04  介绍HelloWorldScene
+
+          01. "HelloWorldScene.h"与"HelloWorldScene.cpp"文件。这两个文件定义了 Hello World 项目中默认的游戏场景。
+	      Cocos2d 的游戏结构可以简单地概括为场景、层、精灵，而这两个文件就是 Hello World 场景的实现文件。
+	      每个游戏组件都可以添加到另一个组件中，形成层次关系，例如场景中可以包含多个层，层中可以包含多个精灵。
+	      在后续文章中，我们将详细讲解Cocos2d 游戏元素的概念，此处将不详细说明是如何创建出 Hello World 场景的。
+
+    2.05  重新实现以下HelloWorld的基础控件
+
+         01：appdelegate：再创建一个scene场景
+	    只有在第一次创建场景的时候才用runWithScene
+	    //创建了一个scene 把原来的scene注释掉 如下：
+
+            //auto scene = HelloWorld::createScene();
+	    再写一个自己新建的场景
+	    Scene *scene = Scene ::create();
+	    Layer * layer = Layer ::create();
+	    scene -> addChild(layer);
+
+——————————————————运行——————————————————————
+
+	   //自己再添加一个精灵
+	   Sprite * s = Sprite::create(“helloworld.png");
+	   s -> setAnchorPoint(Point(0,0));
+	   s -> setPosition(Point(100,50));
+	   layer -> addChild(s);
+
+———————————————--—运行———————————————
+
+	  添加一个提示框
+     	  MessageBox("Hello MM ”,“hehe”);
+
+——————————————————运行——————————————————————
+
+	 带他们添加一个label
+	 Label * label = Label::create();
+	 label -> setString("hello,MM");
+	 label -> setPosition(Point(100,200));
+	 label -> setSystemFontSize(20);
+	 layer -> addChild(label);
+——————————————————运行——————————————————————
+
+03.  Action 的基本使用
+
+    3.01  New Project - Day01_02_Action
+    3.02  他可以非常简单的实现物体的旋转、移动
+          Action 特效、可以做出一些特别酷炫的动作
+	  场景切换特效、用于衔接两个场景，让游戏更加丰满
+
+    3.03  HelloWorldScene.cpp
+          //--------创建吴亦凡
+	  auto aFan = Sprite::create("1.png");
+ 	  addChild(aFan);
+  	  aFan -> setPosition(visibleSize/2);
+  	  aFan -> setScale(0.5);//缩放
+
+——————————————————运行——————————————————————
+
+	 //--------移动吴亦凡
+
+         aFan -> setPositionX(100);
+         aFan -> runAction(MoveTo::create(2, Vec2(visibleSize.width/2-100,visibleSize.height/2)));
+
+——————————————————运行——————————————————————
+
+         //--------把上面的runAction注释掉  写两个move 利用Sequence做出组合动作
+         auto move1 = MoveTo::create(2,Vec2(visibleSize.width/2-100,visibleSize.height/2));
+         //当前基础上一动一定的距离
+         auto move2 = MoveBy::create(2, Vec2(-1000,0));
+         //Sequence  可以让多个动作顺序的进行组合  最后一个参数为空
+         aFan -> runAction(Sequence::create(move1,move2, NULL));
+
+——————————————————运行——————————————————————
+
+	//---------我们当然有更简单的方法  把上面的动作都注释掉
+        auto move1 = MoveBy::create(2, Vec2(1000,0));
+        auto move2 =  move1 -> reverse();//调用move1反转函数
+        aFan -> runAction(Sequence::create(move1,move2, NULL));
+——————————————————运行——————————————————————
+
+	//---------action可以顺序执行   可不可以并列呢？移动和缩放
+        auto move = MoveBy::create(2, Vec2(800,0));
+        auto scale = ScaleTo::create(2, 1);
+        aFan -> runAction(Spawn::create(move,scale, NULL));
+——————————————————运行——————————————————————
+	
+	//----------添加回调函数
+        aFan -> runAction(Sequence::create(Spawn::create(move,scale, NULL), CallFunc::create([](){
+    
+        CCLOG("Play");
+
+        } ),NULL));
+——————————————————运行——————————————————————
+
+
+04. Action 的特效
+
+     接下来我们给吴亦凡添加一下炫酷的特效
+     4.01 振动特效
+       //把上面代码全部注释
+       //首先我们要用NodeGrid包装一下的话就可以使用特效了
+       auto role = NodeGrid::create();
+       role -> setScale(0.5);
+       role -> addChild(Sprite::create("1.png"));
+       role  -> setPosition(visibleSize/2);
+       addChild(role);
+       //振动特效    
+       //第一个参数是秒数   第二个参数是大小50*50份  第三个是震动幅度 第四个是Z轴的深度
+       role  -> runAction(Shaky3D::create(10,Size(50, 50),5, false));
+       //一般这种特效用于角色吃到某种食物  获得巨大的能量所发生的抖动，或者怪物被打击所发生的震动或者愤怒等
+
+——————————————————运行——————————————————————
+     4.02 分割
+       //这个特效和上个特效的区别是角色完全被切割成了50* 50份
+       //一般用于显示怪物被打击时的前奏破碎效果
+      上面runAction注释掉写：
+      role -> runAction(ShakyTiles3D::create(10,Size(50, 50),5, false));
+
+——————————————————运行——————————————————————
+
+     4.03 爆炸效果 
+     上面runAction注释掉写：
+     role -> runAction(ShuffleTiles::create(1, Size(50,50), 5));
+
+——————————————————运行——————————————————————
+
+     4.04 先抖动后爆炸
+     上面runAction注释掉写：
+
+     auto shaky = ShakyTiles3D::create(1, Size(50,50), 5, false);
+     auto shuffle = ShuffleTiles::create(0.5, Size(50,50), 5);
+     role -> runAction(Sequence::create(shaky,shuffle, NULL));
+——————————————————运行——————————————————————
+
+    4.05 消失
+    上面runAction注释掉写：
+
+    role -> runAction(TurnOffTiles::create(1,Size(50,50), 25));
+ ——————————————————运行——————————————————————
+
+    4.06 // 2秒，大小，波痕和幅度
+    上面runAction注释掉写：
+    role -> runAction(Waves3D::create(2, Size(15,10), 5, 40));
+——————————————————运行——————————————————————
+
+    4.07 //还原到原来的效果
+    上面runAction注释掉写：
+
+    auto w1 = Waves3D::create(2, Size(15,10), 5, 50);
+    auto w2 = Waves3D::create(2, Size(15,10), 5, 0);
+    role -> runAction(Sequence::create(w1,w2, NULL));
+——————————————————运行——————————————————————
+
+05. 场景切换特效    
+
+    5.01  上面代码全部注释掉
+    auto background = Sprite::create("a.jpg");
+    background -> setPosition(visibleSize/2);
+    addChild(background);
+    
+    //首先，什么是定时器呢？或许你有时候会想让某个函数不断的去执行，
+      或许只是执行一次，获取你想让他每隔几秒执行一次，ok，这些都可以统统交给定时器来解决。
+      cocos2dx中有三种定时器:schedule，scheduleUpdate，scheduleOnce。
+   // 1、scheduleUpdate
+   //加入当前节点后，程序会每帧都会自动执行一次默认的Update函数。（注：一定是Update函数哦，若想调用其他自己命名的函数则使用schedule）
+    
+    scheduleOnce([visibleSize](float f){
+    
+        auto newScene = Scene::create();
+        auto newBackGround = Sprite::create("b.jpg");
+        newBackGround -> setPosition(visibleSize/2);
+        
+        newScene -> addChild(newBackGround);        
+        auto transition = TransitionCrossFade::create(1, newScene);//淡入淡出
+//        auto transition = TransitionZoomFlipAngular::create(1, newScene);//翻转
+//        auto transition = TransitionPageTurn::create(1, newScene,true);//翻页效果
+//        auto transition = TransitionProgressRadialCW::create(1, newScene);//顺时针
+//        auto transition = TransitionSplitRows::create(1, newScene);//顺时针
+//        auto transition = TransitionJumpZoom::create(2, newScene);//跳动
+        
+    Director :: getInstance() -> replaceScene(transition);
+    },2 ,"Test");
